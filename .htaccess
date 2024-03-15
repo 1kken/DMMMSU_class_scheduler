@@ -1,0 +1,7 @@
+RewriteEngine on
+
+# Check if the request is for the "private" directory
+RewriteCond %{REQUEST_URI} ^/private/
+
+# Redirect to index if it is
+RewriteRule ^.*$ /index [L]
