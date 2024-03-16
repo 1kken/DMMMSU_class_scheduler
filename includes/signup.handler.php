@@ -26,7 +26,7 @@
         $errors["passwords_unequal"] = "Passwords do not match.";
     }
 
-    if(is_email_taken($pdo,$email)){
+    if(is_email_not_existing($pdo,$email)){
 
     }
 

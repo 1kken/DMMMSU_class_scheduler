@@ -17,7 +17,7 @@ function is_email_invalid(string $email)
     return false;
 }
 
-function is_email_taken(object $pdo,string $email){
+function is_email_not_existing(object $pdo,string $email){
 
 }
 
