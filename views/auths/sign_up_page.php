@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="../../public/css/output.css">
+<link rel="stylesheet" href="/DMMMSU_class_scheduler/public/css/output.css">
 <div class="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
     <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md">
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-xl">
