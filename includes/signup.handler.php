@@ -1,33 +1,48 @@
 <?php
-    if(!$_SERVER['REQUEST_METHOD'] !== "POST"){
-        header("LOCATION: /DMMMSU_class_scheduler/index.php");
-        exit();
-    }
+if ($_SERVER['REQUEST_METHOD'] !== "POST") {
+    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    exit();
+}
 
-    $email = $_POST['email'];
+try {
+    $id_number = $_POST['id-number'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm-password'];
-
+    $user_type = $_POST['user-type'];
     require_once("./database_header.php");
     require_once('./signup/signup_model.php');
     require_once("./signup/signup_controller.php");
-    
+
     $errors = [];
 
-    if(is_input_empty($password, $confirm_password, $email)){
+    if (is_input_empty($password, $confirm_password, $id_number, $user_type)) {
         $errors["empty_input"] = "Please fill in all fields.";
     }
 
-    if(is_email_invalid($email)){
-        $errors["invalid_email"] = "Please enter a valid email.";
-    }
-
-    if(is_passwords_unequal($password,$confirm_password)){
+    if (is_passwords_unequal($password, $confirm_password)) {
         $errors["passwords_unequal"] = "Passwords do not match.";
     }
 
-    if(is_email_not_existing($pdo,$email)){
-
+    if (is_user_type_invalid($user_type)) {
+        $errors["invalid_user_type"] = "Invalid user type.";
     }
 
+    if (is_user_id_not_available($pdo, $user_type, $id_number)) {
+        $errors["user_id_not_available"] = "User ID is not available.";
+    }
 
+    if ($errors) {
+        require_once("./config_session.inc.php");
+        $_SESSION["errors_signup"] = $errors;
+        header("LOCATION: /DMMMSU_class_scheduler/views/auths/sign_up_page.php");
+        exit();
+    }
+
+    create_user($pdo,$user_type,$id_number,$password);
+    header("LOCATION: /DMMMSU_class_scheduler/views/auths/log_in_page.php?signup=success");
+
+    $pdo = null;
+    $stmt = null;
+} catch (PDOException $e) {
+    die("Sign up failed" . $e->getMessage());
+}

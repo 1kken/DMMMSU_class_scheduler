@@ -5,10 +5,10 @@
             <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Create an Account
             </h1>
-            <form class="space-y-4 md:space-y-6" action="/DMMMSU_class_scheduler/includes/signup.handler.php">
+            <form class="space-y-4 md:space-y-6" action="/DMMMSU_class_scheduler/includes/signup.handler.php" method="post">
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your email</label>
-                    <input type="email" name="email" id="email" class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="name@dmmmsu.edu.ph" required="">
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your ID Number</label>
+                    <input type="number" name="id-number" id="id-number" class="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="21111111" required="">
                 </div>
                 <div class="mb-4">
                     <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
