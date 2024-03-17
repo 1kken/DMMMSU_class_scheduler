@@ -1,7 +1,6 @@
 <?php
     declare(strict_types=1);
 
-use function PHPSTORM_META\type;
 
     function get_user_id_by_user_typer(object $pdo,string $user_type,string $user_id){
         if($user_type === "student"){
@@ -27,7 +26,7 @@ use function PHPSTORM_META\type;
         $password = password_hash($password,PASSWORD_BCRYPT,["cost"=>12]);
         //if student put into student pass
         if($user_type === "student"){
-            $sql = "INSERT INTO student(student_id,user_type,pwd) VALUES(:id_number,:user_type,:password)";
+            $sql = "INSERT INTO user(student_id,user_type,pwd) VALUES(:id_number,:user_type,:password)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(":user_type",$user_type);
             $stmt->bindParam(":id_number",$id_number);
@@ -35,7 +34,7 @@ use function PHPSTORM_META\type;
             $stmt->execute();
         }
         if($user_type === "instructor"){
-            $sql = "INSERT INTO instructor(instructor_id,user_type,pwd) VALUES(:id_number,:user_type,:password)";
+            $sql = "INSERT INTO user(instructor_id,user_type,pwd) VALUES(:id_number,:user_type,:password)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(":user_type",$user_type);
             $stmt->bindParam(":id_number",$id_number);

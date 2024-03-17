@@ -16,7 +16,7 @@ try {
     $errors = [];
 
     if (is_input_empty($password, $confirm_password, $id_number, $user_type)) {
-        $errors["empty_input"] = "Please fill in all fields.";
+        $errors["empty_input"] = "Please fill in all fields. $password $confirm_password $id_number $user_type";
     }
 
     if (is_passwords_unequal($password, $confirm_password)) {

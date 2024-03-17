@@ -1,3 +1,7 @@
+<?php 
+require_once("../../includes/config_session.inc.php");
+require_once("../../includes/signup/signup_view.php");
+?>
 <link rel="stylesheet" href="/DMMMSU_class_scheduler/public/css/output.css">
 <div class="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
     <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md">
@@ -33,5 +37,8 @@
                 </p>
             </form>
         </div>
+        <?php
+            check_for_signup_errors(); 
+        ?>
     </div>
 </div>
