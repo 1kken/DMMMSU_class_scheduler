@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST") {
 }
 
 try {
-    $id_number = $_POST['id-number'];
+    $user_id = $_POST['id-number'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm-password'];
     $user_type = $_POST['user-type'];
@@ -15,8 +15,8 @@ try {
 
     $errors = [];
 
-    if (is_input_empty($password, $confirm_password, $id_number, $user_type)) {
-        $errors["empty_input"] = "Please fill in all fields. $password $confirm_password $id_number $user_type";
+    if (is_input_empty($password, $confirm_password, $user_id, $user_type)) {
+        $errors["empty_input"] = "Please fill in all fields. $password $confirm_password $user_id $user_type";
     }
 
     if (is_passwords_unequal($password, $confirm_password)) {
@@ -27,7 +27,11 @@ try {
         $errors["invalid_user_type"] = "Invalid user type.";
     }
 
-    if (is_user_id_not_available($pdo, $user_type, $id_number)) {
+    if(is_user_id_taken($pdo,$user_id)){
+        $errors["id_taken"] = "ID is already taken.";
+    }
+
+    if (is_user_id_not_available($pdo, $user_type, $user_id)) {
         $errors["user_id_not_available"] = "User ID is not available.";
     }
 
@@ -38,7 +42,7 @@ try {
         exit();
     }
 
-    create_user($pdo,$user_type,$id_number,$password);
+    create_user($pdo,$user_type,$user_id,$password);
     header("LOCATION: /DMMMSU_class_scheduler/views/auths/log_in_page.php?signup=success");
 
     $pdo = null;

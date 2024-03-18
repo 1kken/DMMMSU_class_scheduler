@@ -1,7 +1,14 @@
 <?php
     declare(strict_types=1);
 
-
+    function get_user_id(object $pdo, string $user_id){
+        $sql = "SELECT * FROM user WHERE student_id = :user_id OR instructor_id = :user_id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":user_id",$user_id);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result;
+    }
     function get_user_id_by_user_typer(object $pdo,string $user_type,string $user_id){
         if($user_type === "student"){
             $sql = "SELECT student_id FROM student WHERE student_id = :user_id";
@@ -21,7 +28,7 @@
         }
     }
 
-    function create_user(object $pdo,string $user_type,string $id_number,string $password){
+    function create_user(object $pdo,string $user_type,string $user_id,string $password){
         //hashing password
         $password = password_hash($password,PASSWORD_BCRYPT,["cost"=>12]);
         //if student put into student pass
@@ -29,7 +36,7 @@
             $sql = "INSERT INTO user(student_id,user_type,pwd) VALUES(:id_number,:user_type,:password)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(":user_type",$user_type);
-            $stmt->bindParam(":id_number",$id_number);
+            $stmt->bindParam(":id_number",$user_id);
             $stmt->bindParam(":password",$password);
             $stmt->execute();
         }
@@ -37,7 +44,7 @@
             $sql = "INSERT INTO user(instructor_id,user_type,pwd) VALUES(:id_number,:user_type,:password)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(":user_type",$user_type);
-            $stmt->bindParam(":id_number",$id_number);
+            $stmt->bindParam(":id_number",$user_id);
             $stmt->bindParam(":password",$password);
             $stmt->execute();
         }

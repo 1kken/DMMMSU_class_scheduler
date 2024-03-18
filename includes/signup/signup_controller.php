@@ -1,8 +1,8 @@
 <?php
     declare(strict_types=1);
-function is_input_empty(string $password,string $confirmed_password, string $id_number,string $user_type)
+function is_input_empty(string $password,string $confirmed_password, string $user_id,string $user_type)
 {
-    if (empty($password) || empty($id_number) || empty($confirmed_password) || empty($user_type)) {
+    if (empty($password) || empty($user_id) || empty($confirmed_password) || empty($user_type)) {
         return true;
     }
 
@@ -31,3 +31,11 @@ function is_user_id_not_available(object $pdo,string $user_type,string $user_id)
     return false;
 }
 
+
+function is_user_id_taken(object $pdo,string $user_id){
+    $result = get_user_id($pdo,$user_id);
+    if($result){
+        return true;
+    }
+    return false;
+}
