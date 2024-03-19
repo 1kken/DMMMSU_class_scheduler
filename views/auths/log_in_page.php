@@ -1,10 +1,11 @@
 <?php
-require_once("../../includes/config_session.inc.php");
-require_once("../../includes/login/login_view.php");
+define('APP_NAME',dirname(__FILE__)."/../../");
+require_once(APP_NAME."includes/config_session.inc.php");
+require_once(APP_NAME."includes/login/login_view.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="/DMMMSU_class_scheduler/public/css/output.css">
+<link rel="stylesheet" href=<?php echo APP_NAME."public\css\output.css";?>>
 <div class="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
 	<div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md">
 		<h1 class="text-2xl font-bold text-center mb-4 dark:text-gray-200">Welcome User</h1>
