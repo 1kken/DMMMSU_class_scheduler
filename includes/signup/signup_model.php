@@ -33,7 +33,7 @@
         $password = password_hash($password,PASSWORD_BCRYPT,["cost"=>12]);
         //if student put into student pass
         if($user_type === "student"){
-            $sql = "INSERT INTO user(student_id,user_type,pwd) VALUES(:id_number,:user_type,:password)";
+            $sql = "INSERT INTO user(student_id,user_type,password) VALUES(:id_number,:user_type,:password)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(":user_type",$user_type);
             $stmt->bindParam(":id_number",$user_id);
@@ -41,7 +41,7 @@
             $stmt->execute();
         }
         if($user_type === "instructor"){
-            $sql = "INSERT INTO user(instructor_id,user_type,pwd) VALUES(:id_number,:user_type,:password)";
+            $sql = "INSERT INTO user(instructor_id,user_type,password) VALUES(:id_number,:user_type,:password)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(":user_type",$user_type);
             $stmt->bindParam(":id_number",$user_id);

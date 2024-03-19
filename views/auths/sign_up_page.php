@@ -38,7 +38,7 @@ require_once("../../includes/signup/signup_view.php");
             </form>
         </div>
         <?php
-            check_for_signup_errors(); 
+            check_login_errors(); 
         ?>
     </div>
 </div>
