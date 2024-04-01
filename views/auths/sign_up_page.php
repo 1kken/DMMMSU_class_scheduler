@@ -1,6 +1,7 @@
 <?php 
-require_once("../../includes/config_session.inc.php");
-require_once("../../includes/signup/signup_view.php");
+define('APP_NAME',dirname(__FILE__)."/../../");
+require_once(APP_NAME."includes/config_session.inc.php");
+require_once(APP_NAME."includes/signup/signup_view.php");
 ?>
 <link rel="stylesheet" href="/DMMMSU_class_scheduler/public/css/output.css">
 <div class="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
@@ -38,7 +39,7 @@ require_once("../../includes/signup/signup_view.php");
             </form>
         </div>
         <?php
-            check_login_errors(); 
+        check_for_signup_errors()
         ?>
     </div>
 </div>
