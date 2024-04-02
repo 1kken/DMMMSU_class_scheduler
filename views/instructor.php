@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Registration</title>
+    <title>Instructor Management</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,6 +40,7 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
+
         input[type="number"],
         input[type="text"],
         input[type="email"],
@@ -129,11 +130,11 @@
 
     <div class="container">
         <div class="form_container">
-            <h2>Student Registration</h2>
-            <form action="submit.php" method="post">
+            <h2>Create Instructor</h2>
+            <form action="submit_instructor.php" method="post">
                 <div class="form-group">
-                    <label for="student-id">Student ID:</label>
-                    <input type="number" id="student-id" name="student_id" required>
+                    <label for="instructor-id">Instructor ID:</label>
+                    <input type="number" id="instructor-id" name="instructor_id" required>
                 </div>
                 <div class="form-group">
                     <label for="last-name">Last Name:</label>
@@ -151,48 +152,38 @@
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
                 </div>
-                <div class="form-group">
-                    <label for="section-id">Section ID:</label>
-                    <select id="section-id" name="section_id">
-                        <option value="1">Section A</option>
-                        <option value="2">Section B</option>
-                        <option value="3">Section C</option>
-                    </select>
-                </div>
-                <input type="submit" value="Create Student">
+                <input type="submit" value="Create Instructor">
             </form>
         </div>
         <div class="user_table_container">
-            <h2>Student Records</h2>
+            <h2>Instructor Records</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>Student ID</th>
+                        <th>Instructor ID</th>
                         <th>Last Name</th>
                         <th>First Name</th>
                         <th>Middle Name</th>
                         <th>Email</th>
-                        <th>Section ID</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     // Mockup data array
-                    $students = array(
-                        array("id" => 1, "last_name" => "Doe", "first_name" => "John", "middle_name" => "A.", "email" => "john.doe@example.com", "section_id" => 1),
-                        array("id" => 2, "last_name" => "Smith", "first_name" => "Jane", "middle_name" => "B.", "email" => "jane.smith@example.com", "section_id" => 2),
+                    $instructors = array(
+                        array("id" => 1, "last_name" => "Doe", "first_name" => "John", "middle_name" => "A.", "email" => "john.doe@example.com"),
+                        array("id" => 2, "last_name" => "Smith", "first_name" => "Jane", "middle_name" => "B.", "email" => "jane.smith@example.com"),
                     );
 
-                    // Display student records
-                    foreach ($students as $student) {
+                    // Display instructor records
+                    foreach ($instructors as $instructor) {
                         echo "<tr>";
-                        echo "<td>" . $student['id'] . "</td>";
-                        echo "<td>" . $student['last_name'] . "</td>";
-                        echo "<td>" . $student['first_name'] . "</td>";
-                        echo "<td>" . $student['middle_name'] . "</td>";
-                        echo "<td>" . $student['email'] . "</td>";
-                        echo "<td>" . $student['section_id'] . "</td>";
+                        echo "<td>" . $instructor['id'] . "</td>";
+                        echo "<td>" . $instructor['last_name'] . "</td>";
+                        echo "<td>" . $instructor['first_name'] . "</td>";
+                        echo "<td>" . $instructor['middle_name'] . "</td>";
+                        echo "<td>" . $instructor['email'] . "</td>";
                         echo "<td class='actions'><button class='delete'>Delete</button> <button class='update'>Update</button></td>";
                         echo "</tr>";
                     }

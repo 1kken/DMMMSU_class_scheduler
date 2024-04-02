@@ -91,7 +91,10 @@ require_once(APP_NAME . "includes/login/login_view.php");
             </select>
         </div>
         <div>
-            <a href="/DMMMSU_class_scheduler/views/auths/sign_up_page.php">Create Account</a>
+            <p>
+                Dont have an account yet?
+                <a href="/DMMMSU_class_scheduler/views/auths/sign_up_page.php">Create Account</a>
+            </p>
         </div>
         <button type="submit">Login</button>
     </form>
