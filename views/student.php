@@ -40,6 +40,7 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
+
         input[type="number"],
         input[type="text"],
         input[type="email"],
@@ -76,6 +77,32 @@
         h2 {
             margin-bottom: 20px;
             color: #333;
+        }
+
+        /* search bar */
+        .search-container form {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            width: calc(100% - 100px);
+            padding: 8px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            margin-right: 10px;
+        }
+
+        .search-container button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         table {
@@ -164,6 +191,12 @@
         </div>
         <div class="user_table_container">
             <h2>Student Records</h2>
+            <div class="search-container">
+                <form action="">
+                    <input type="text" id="search-input" placeholder="Search...">
+                    <button>search</button>
+                </form>
+            </div>
             <table>
                 <thead>
                     <tr>

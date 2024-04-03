@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instructor Management</title>
+    <title>Room Management</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -65,7 +65,7 @@
             background-color: #0056b3;
         }
 
-        .user_table_container {
+        .room_table_container {
             text-align: center;
             padding: 20px;
             background-color: #fff;
@@ -104,7 +104,6 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
 
         table {
             width: 100%;
@@ -157,33 +156,29 @@
 
     <div class="container">
         <div class="form_container">
-            <h2>Create Instructor</h2>
-            <form action="submit_instructor.php" method="post">
+            <h2>Add Room</h2>
+            <form action="submit_room.php" method="post">
                 <div class="form-group">
-                    <label for="instructor-id">Instructor ID:</label>
-                    <input type="number" id="instructor-id" name="instructor_id" required>
+                    <label for="room-id">Room ID:</label>
+                    <input type="text" id="room-id" name="room_id" required>
                 </div>
                 <div class="form-group">
-                    <label for="last-name">Last Name:</label>
-                    <input type="text" id="last-name" name="last_name" required>
+                    <label for="room-type">Room Type:</label>
+                    <select id="room-type" name="room_type" required>
+                        <option value="lecture">Lecture</option>
+                        <option value="laboratory">Laboratory</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="first-name">First Name:</label>
-                    <input type="text" id="first-name" name="first_name" required>
+                    <label for="priority">Priority:</label>
+                    <input type="number" id="priority" name="priority" required>
                 </div>
-                <div class="form-group">
-                    <label for="middle-name">Middle Name:</label>
-                    <input type="text" id="middle-name" name="middle_name">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <input type="submit" value="Create Instructor">
+                <input type="submit" value="Add Room">
             </form>
         </div>
-        <div class="user_table_container">
-            <h2>Instructor Records</h2>
+
+        <div class="room_table_container">
+            <h2>Room List</h2>
             <div class="search-container">
                 <form action="">
                     <input type="text" id="search-input" placeholder="Search...">
@@ -193,30 +188,26 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Instructor ID</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Email</th>
+                        <th>Room ID</th>
+                        <th>Room Type</th>
+                        <th>Priority</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     // Mockup data array
-                    $instructors = array(
-                        array("id" => 1, "last_name" => "Doe", "first_name" => "John", "middle_name" => "A.", "email" => "john.doe@example.com"),
-                        array("id" => 2, "last_name" => "Smith", "first_name" => "Jane", "middle_name" => "B.", "email" => "jane.smith@example.com"),
+                    $rooms = array(
+                        array("id" => "LR101", "type" => "Lecture", "priority" => 1),
+                        array("id" => "CLR201", "type" => "Laboratory", "priority" => 2),
                     );
 
-                    // Display instructor records
-                    foreach ($instructors as $instructor) {
+                    // Display room records
+                    foreach ($rooms as $room) {
                         echo "<tr>";
-                        echo "<td>" . $instructor['id'] . "</td>";
-                        echo "<td>" . $instructor['last_name'] . "</td>";
-                        echo "<td>" . $instructor['first_name'] . "</td>";
-                        echo "<td>" . $instructor['middle_name'] . "</td>";
-                        echo "<td>" . $instructor['email'] . "</td>";
+                        echo "<td>" . $room['id'] . "</td>";
+                        echo "<td>" . $room['type'] . "</td>";
+                        echo "<td>" . $room['priority'] . "</td>";
                         echo "<td class='actions'><button class='delete'>Delete</button> <button class='update'>Update</button></td>";
                         echo "</tr>";
                     }

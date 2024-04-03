@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instructor Management</title>
+    <title>Subject Management</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,10 +41,8 @@
             font-weight: bold;
         }
 
-        input[type="number"],
         input[type="text"],
-        input[type="email"],
-        select {
+        input[type="number"] {
             width: 100%;
             padding: 10px;
             border-radius: 3px;
@@ -65,7 +63,7 @@
             background-color: #0056b3;
         }
 
-        .user_table_container {
+        .subject_table_container {
             text-align: center;
             padding: 20px;
             background-color: #fff;
@@ -104,7 +102,6 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
 
         table {
             width: 100%;
@@ -157,33 +154,29 @@
 
     <div class="container">
         <div class="form_container">
-            <h2>Create Instructor</h2>
-            <form action="submit_instructor.php" method="post">
+            <h2>Add Subject</h2>
+            <form action="submit_subject.php" method="post">
                 <div class="form-group">
-                    <label for="instructor-id">Instructor ID:</label>
-                    <input type="number" id="instructor-id" name="instructor_id" required>
+                    <label for="subject-id">Subject ID:</label>
+                    <input type="text" id="subject-id" name="subject_id" required>
                 </div>
                 <div class="form-group">
-                    <label for="last-name">Last Name:</label>
-                    <input type="text" id="last-name" name="last_name" required>
+                    <label for="descriptive-title">Descriptive Title:</label>
+                    <input type="text" id="descriptive-title" name="descriptive_title" required>
                 </div>
                 <div class="form-group">
-                    <label for="first-name">First Name:</label>
-                    <input type="text" id="first-name" name="first_name" required>
+                    <label for="units">Units:</label>
+                    <input type="number" id="units" name="units" required>
                 </div>
                 <div class="form-group">
-                    <label for="middle-name">Middle Name:</label>
-                    <input type="text" id="middle-name" name="middle_name">
+                    <label for="priority">Priority:</label>
+                    <input type="number" id="priority" name="priority" required>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <input type="submit" value="Create Instructor">
+                <input type="submit" value="Add Subject">
             </form>
         </div>
-        <div class="user_table_container">
-            <h2>Instructor Records</h2>
+        <div class="subject_table_container">
+            <h2>Subject List</h2>
             <div class="search-container">
                 <form action="">
                     <input type="text" id="search-input" placeholder="Search...">
@@ -193,30 +186,28 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Instructor ID</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Email</th>
+                        <th>Subject ID</th>
+                        <th>Descriptive Title</th>
+                        <th>Units</th>
+                        <th>Priority</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     // Mockup data array
-                    $instructors = array(
-                        array("id" => 1, "last_name" => "Doe", "first_name" => "John", "middle_name" => "A.", "email" => "john.doe@example.com"),
-                        array("id" => 2, "last_name" => "Smith", "first_name" => "Jane", "middle_name" => "B.", "email" => "jane.smith@example.com"),
+                    $subjects = array(
+                        array("id" => "CS101", "title" => "Introduction to Computer Science", "units" => 3, "priority" => 1),
+                        array("id" => "ENG202", "title" => "Advanced English Literature", "units" => 4, "priority" => 2),
                     );
 
-                    // Display instructor records
-                    foreach ($instructors as $instructor) {
+                    // Display subject records
+                    foreach ($subjects as $subject) {
                         echo "<tr>";
-                        echo "<td>" . $instructor['id'] . "</td>";
-                        echo "<td>" . $instructor['last_name'] . "</td>";
-                        echo "<td>" . $instructor['first_name'] . "</td>";
-                        echo "<td>" . $instructor['middle_name'] . "</td>";
-                        echo "<td>" . $instructor['email'] . "</td>";
+                        echo "<td>" . $subject['id'] . "</td>";
+                        echo "<td>" . $subject['title'] . "</td>";
+                        echo "<td>" . $subject['units'] . "</td>";
+                        echo "<td>" . $subject['priority'] . "</td>";
                         echo "<td class='actions'><button class='delete'>Delete</button> <button class='update'>Update</button></td>";
                         echo "</tr>";
                     }
