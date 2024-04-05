@@ -1,5 +1,6 @@
 <?php
-require_once("./config_session.inc.php");
+define(APP_NAME, dirname(__FILE__) . "/../");
+require_once(APP_NAME . "includes/config_session.inc.php");
 function is_logged_in()
 {
     if(isset($_SESSION["user_id"])){

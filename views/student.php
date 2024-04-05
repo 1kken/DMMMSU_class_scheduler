@@ -1,6 +1,5 @@
 <?php
     define('APP_NAME', dirname(__FILE__) . "/../");
-    require_once(APP_NAME . "includes/config_session.inc.php");
     require_once(APP_NAME . "includes/authorization.php");
 
     if (!is_logged_in()) {
