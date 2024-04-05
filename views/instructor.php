@@ -1,11 +1,13 @@
 <?php
-    define('APP_NAME', dirname(__FILE__) . "/../");
-    require_once(APP_NAME . "includes/authorization.php");
-
-    if (!is_logged_in()) {
-        header("LOCATION: /DMMMSU_class_scheduler/index.php");
-        exit();
-    }
+define('APP_NAME', dirname(__FILE__) . "/../");
+require_once(APP_NAME . "includes/authorization.php");
+require_once(APP_NAME . "includes/config_session.inc.php");
+require_once(APP_NAME . "includes/instructor_helper.php");
+require_once(APP_NAME . "includes/instructor/instructor_view.php");
+if (!is_logged_in()) {
+    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,6 +83,8 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             max-width: 1000px;
+            max-height: 500px; /* Adjust the height as needed */
+            overflow: auto;
         }
 
         h2 {
@@ -167,7 +171,7 @@
     <div class="container">
         <div class="form_container">
             <h2>Create Instructor</h2>
-            <form action="submit_instructor.php" method="post">
+            <form action="../../DMMMSU_class_scheduler\includes\instructor_handler.php" method="post">
                 <div class="form-group">
                     <label for="instructor-id">Instructor ID:</label>
                     <input type="number" id="instructor-id" name="instructor_id" required>
@@ -187,8 +191,9 @@
                 <div class="form-group">
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
+                    <input type="text" name="create_instructor" hidden >
                 </div>
-                <input type="submit" value="Create Instructor">
+                <input  type="submit" value="Create Instructor">
             </form>
         </div>
         <div class="user_table_container">
@@ -212,23 +217,7 @@
                 </thead>
                 <tbody>
                     <?php
-                    // Mockup data array
-                    $instructors = array(
-                        array("id" => 1, "last_name" => "Doe", "first_name" => "John", "middle_name" => "A.", "email" => "john.doe@example.com"),
-                        array("id" => 2, "last_name" => "Smith", "first_name" => "Jane", "middle_name" => "B.", "email" => "jane.smith@example.com"),
-                    );
-
-                    // Display instructor records
-                    foreach ($instructors as $instructor) {
-                        echo "<tr>";
-                        echo "<td>" . $instructor['id'] . "</td>";
-                        echo "<td>" . $instructor['last_name'] . "</td>";
-                        echo "<td>" . $instructor['first_name'] . "</td>";
-                        echo "<td>" . $instructor['middle_name'] . "</td>";
-                        echo "<td>" . $instructor['email'] . "</td>";
-                        echo "<td class='actions'><button class='delete'>Delete</button> <button class='update'>Update</button></td>";
-                        echo "</tr>";
-                    }
+                    display_all_instructors($instructors);
                     ?>
                 </tbody>
             </table>

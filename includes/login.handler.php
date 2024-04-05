@@ -10,7 +10,6 @@ try {
     require_once("./login/login_controller.php");
     $id_number = $_POST['id-number'];
     $password = $_POST['password'];
-    echo $password;
     $user_type = $_POST['user-type'];
 
 
