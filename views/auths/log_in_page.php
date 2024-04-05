@@ -2,9 +2,15 @@
 define('APP_NAME', dirname(__FILE__) . "/../../");
 require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/login/login_view.php");
+require_once(APP_NAME . "includes/authorization.php");
+if (is_logged_in()) {
+    header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,34 +77,36 @@ require_once(APP_NAME . "includes/login/login_view.php");
         }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <h1>Welcome User</h1>
-    <form action="/DMMMSU_class_scheduler/includes/login.handler.php" method="post">
-        <div>
-            <label for="id-number">ID number</label>
-            <input type="number" id="id-number" name="id-number" placeholder="21111111" required>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-        </div>
-        <div>
-            <label for="user-type">User Type</label>
-            <select name="user-type" id="user-type" required="">
-                <option value="student">Student</option>
-                <option value="instructor">Instructor</option>
-            </select>
-        </div>
-        <div>
-            <p>
-                Dont have an account yet?
-                <a href="/DMMMSU_class_scheduler/views/auths/sign_up_page.php">Create Account</a>
-            </p>
-        </div>
-        <button type="submit">Login</button>
-    </form>
-    <?php check_login_errors(); ?>
-</div>
+    <div class="container">
+        <h1>Welcome User</h1>
+        <form action="/DMMMSU_class_scheduler/includes/login.handler.php" method="post">
+            <div>
+                <label for="id-number">ID number</label>
+                <input type="number" id="id-number" name="id-number" placeholder="21111111" required>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <div>
+                <label for="user-type">User Type</label>
+                <select name="user-type" id="user-type" required="">
+                    <option value="student">Student</option>
+                    <option value="instructor">Instructor</option>
+                </select>
+            </div>
+            <div>
+                <p>
+                    Dont have an account yet?
+                    <a href="/DMMMSU_class_scheduler/views/auths/sign_up_page.php">Create Account</a>
+                </p>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <?php check_login_errors(); ?>
+    </div>
 </body>
+
 </html>
