@@ -2,6 +2,7 @@
 
 define('APP_NAME', dirname(__FILE__) . "/../");
 require_once(APP_NAME . "includes/config_session.inc.php");
+require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/authorization.php");
 
 require_once(APP_NAME . "includes/instructor/instructor_model.php");
@@ -68,32 +69,36 @@ if (!is_logged_in()) {
 </head>
 
 <body>
-    <div class="container">
-        
-        <h2>Update Instructor</h2>
-        <form action="update_instructor_handler.php" method="post">
-            <div class="form-group">
-                <label for="last-name">Last Name:</label>
-                <input type="text" id="last-name" name="last_name" required>
-            </div>
-            <div class="form-group">
-                <label for="first-name">First Name:</label>
-                <input type="text" id="first-name" name="first_name" required>
-            </div>
-            <div class="form-group">
-                <label for="middle-name">Middle Name:</label>
-                <input type="text" id="middle-name" name="middle_name">
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <input type="hidden" id="instructor-id" name="instructor_id" value="<?php echo $instructor_id; ?>">
-                <input type="submit" value="Update Instructor">
-            </div>
-        </form>
-    </div>
+<div class="container">
+    <h2>Update Instructor</h2>
+    <?php
+    $instructor = get_instructor($pdo, $_GET["instructor_id"]);
+    ?>
+
+    <form action="update_instructor_handler.php" method="post">
+        <div class="form-group">
+            <label for="last-name">Last Name:</label>
+            <input type="text" id="last-name" name="last_name" value="<?php echo $instructor['last_name']; ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="first-name">First Name:</label>
+            <input type="text" id="first-name" name="first_name" value="<?php echo $instructor['first_name']; ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="middle-name">Middle Name:</label>
+            <input type="text" id="middle-name" name="middle_name" value="<?php echo $instructor['middle_name']; ?>">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<?php echo $instructor['email']; ?>" required>
+        </div>
+        <div class="form-group">
+            <input type="hidden" id="instructor-id" name="instructor_id" value="<?php echo $_GET["instructor_id"]; ?>">
+            <input type="submit" value="Update Instructor">
+        </div>
+    </form>
+</div>
+
 </body>
 
 </html>

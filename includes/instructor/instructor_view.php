@@ -13,7 +13,7 @@ function display_all_instructors(array $instructors)
         echo "<td>" . $instructor['middle_name'] . "</td>";
         echo "<td>" . $instructor['email'] . "</td>";
         echo "<td class='actions'>
-            <form action='../../DMMMSU_class_scheduler\includes\instructor_handler.php' method='post'>
+            <form action='../../DMMMSU_class_scheduler/views/instructor_update.php' method='get'>
                 <input type='text' name='instructor_id' value=$instructor_id hidden>
                 <button class='delete' name='delete_instructor'>Delete</button>
                 <button class='update'>Update</button>
