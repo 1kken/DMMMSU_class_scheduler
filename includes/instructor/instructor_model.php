@@ -21,6 +21,14 @@ function get_instructors(object $pdo)
     $stmt->execute();
     return $stmt->fetchAll();
 }
+
+function get_instructor(object $pdo, string $instructor_id)
+{
+    $stmt = $pdo->prepare("SELECT * FROM instructor WHERE instructor_id = :instructor_id");
+    $stmt->bindParam(":instructor_id", $instructor_id);
+    $stmt->execute();
+    return $stmt->fetch();
+}
 function insert_instructor(object $pdo, string $instructor_id, string $first_name, string $last_name, string $middle_name, string $email)
 {
     if(!$middle_name)
@@ -34,5 +42,12 @@ function insert_instructor(object $pdo, string $instructor_id, string $first_nam
     $stmt->bindParam(":last_name", $last_name);
     $stmt->bindParam(":middle_name", $middle_name);
     $stmt->bindParam(":email", $email);
+    $stmt->execute();
+}
+
+function delete_instructor(object $pdo, string $instructor_id)
+{
+    $stmt = $pdo->prepare("DELETE FROM instructor WHERE instructor_id = :instructor_id");
+    $stmt->bindParam(":instructor_id", $instructor_id);
     $stmt->execute();
 }

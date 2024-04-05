@@ -35,3 +35,15 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_instructor"])) {
         echo "Error: " . $e->getMessage();
     }
 }
+
+if(isset($_POST["delete_instructor"]) && isset($_SESSION["user_id"])){
+    $instructor_id = $_POST["instructor_id"];
+    echo $instructor_id;
+    try{
+        delete_instructor($pdo, $instructor_id);
+    }catch(PDOException $e){
+        echo "Error: " . $e->getMessage();
+    }
+    header("LOCATION: /DMMMSU_class_scheduler/views/instructor.php");
+    exit();
+}

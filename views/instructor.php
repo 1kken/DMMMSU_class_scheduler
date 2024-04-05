@@ -147,7 +147,7 @@ if (!is_logged_in()) {
             border: none;
             border-radius: 3px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.5s ease;
         }
 
         .actions button.delete {

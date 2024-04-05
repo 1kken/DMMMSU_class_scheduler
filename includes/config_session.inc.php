@@ -3,7 +3,6 @@
     ini_set("session.use_strict_mode",1);
 
     session_set_cookie_params([
-        "lifetime" => 1800,
         "path" => "/",
         "domain" => "localhost",
         "secure" => true,
@@ -13,12 +12,6 @@
    
     session_start();
     if(!isset( $_SESSION["last_generation"] )) {
-        regenerate_session_id();
-        exit();
-    }
-
-    $interval = 60*30;
-    if(time()-$_SESSION["last_generation"] >= $interval){
         regenerate_session_id();
         exit();
     }
