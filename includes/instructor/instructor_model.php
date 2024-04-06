@@ -51,3 +51,15 @@ function delete_instructor(object $pdo, string $instructor_id)
     $stmt->bindParam(":instructor_id", $instructor_id);
     $stmt->execute();
 }
+
+function update_instructor(object $pdo,string $old_instructor_id, string $instructor_id, string $first_name, string $last_name, string $middle_name, string $email)
+{ 
+    $stmt = $pdo->prepare("UPDATE instructor SET first_name = :first_name, last_name = :last_name, middle_name = :middle_name, email = :email WHERE instructor_id = :old_instructor_id");
+    $stmt->bindParam(":old_instructor_id", $old_instructor_id);
+    $stmt->bindParam(":instructor_id", $instructor_id);
+    $stmt->bindParam(":first_name", $first_name);
+    $stmt->bindParam(":last_name", $last_name);
+    $stmt->bindParam(":middle_name", $middle_name);
+    $stmt->bindParam(":email", $email);
+    $stmt->execute();
+}

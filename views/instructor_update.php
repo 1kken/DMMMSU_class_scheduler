@@ -4,8 +4,9 @@ define('APP_NAME', dirname(__FILE__) . "/../");
 require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/authorization.php");
-
 require_once(APP_NAME . "includes/instructor/instructor_model.php");
+require_once(APP_NAME . "includes/instructor/instructor_view.php");
+
 if (!is_logged_in()) {
     header("LOCATION: /DMMMSU_class_scheduler/index.php");
     exit();
@@ -73,9 +74,17 @@ if (!is_logged_in()) {
     <h2>Update Instructor</h2>
     <?php
     $instructor = get_instructor($pdo, $_GET["instructor_id"]);
+        if(!$instructor){
+            echo "Instructor not found.";
+            exit();
+        }
     ?>
 
-    <form action="update_instructor_handler.php" method="post">
+    <form action="../../DMMMSU_class_scheduler\includes\instructor_handler.php" method="post">
+        <div class="form-group">
+            <label for="last-name">Instructor ID:</label>
+            <input type="text" id="instructor-id" name="instructor_id" value="<?php echo $instructor['instructor_id']; ?>" required>
+        </div>
         <div class="form-group">
             <label for="last-name">Last Name:</label>
             <input type="text" id="last-name" name="last_name" value="<?php echo $instructor['last_name']; ?>" required>
@@ -93,10 +102,14 @@ if (!is_logged_in()) {
             <input type="email" id="email" name="email" value="<?php echo $instructor['email']; ?>" required>
         </div>
         <div class="form-group">
-            <input type="hidden" id="instructor-id" name="instructor_id" value="<?php echo $_GET["instructor_id"]; ?>">
-            <input type="submit" value="Update Instructor">
+            <input type="hidden" id="instructor-id" name="old_instructor_email" value="<?php echo $instructor["email"]; ?>">
+            <input type="hidden" id="instructor-id" name="old_instructor_id" value="<?php echo $_GET["instructor_id"]; ?>">
+            <input type="submit" name="update_instructor" value="Update Instructor">
         </div>
     </form>
+    <?php
+        check_update_errors();
+    ?>
 </div>
 
 </body>

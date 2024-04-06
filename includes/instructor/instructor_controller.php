@@ -18,3 +18,5 @@ function is_instructor_email_taken(object $pdo, string $instructor_email)
     }
     return false;
 }
+
+

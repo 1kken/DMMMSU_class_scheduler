@@ -2,8 +2,9 @@
 define('APP_NAME', dirname(__FILE__) . "/../");
 require_once(APP_NAME . "includes/authorization.php");
 require_once(APP_NAME . "includes/config_session.inc.php");
-require_once(APP_NAME . "includes/instructor_helper.php");
-require_once(APP_NAME . "includes/instructor/instructor_view.php");
+require_once(APP_NAME . "includes/database_header.php");
+require_once(APP_NAME . "includes/instructor/instructor_model.php");
+
 if (!is_logged_in()) {
     header("LOCATION: /DMMMSU_class_scheduler/index.php");
     exit();
@@ -83,7 +84,8 @@ if (!is_logged_in()) {
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             max-width: 1000px;
-            max-height: 500px; /* Adjust the height as needed */
+            max-height: 500px;
+            /* Adjust the height as needed */
             overflow: auto;
         }
 
@@ -191,9 +193,9 @@ if (!is_logged_in()) {
                 <div class="form-group">
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
-                    <input type="text" name="create_instructor" hidden >
+                    <input type="text" name="create_instructor" hidden>
                 </div>
-                <input  type="submit" value="Create Instructor">
+                <input type="submit" value="Create Instructor">
             </form>
         </div>
         <div class="user_table_container">
@@ -217,7 +219,30 @@ if (!is_logged_in()) {
                 </thead>
                 <tbody>
                     <?php
-                    display_all_instructors($instructors);
+                    $instructors = get_instructors($pdo);
+                    if(!$instructors){
+                        echo "<tr><td colspan='6'>No records found.</td></tr>";
+                    }
+                    foreach ($instructors as $instructor) {
+                        $instructor_id = $instructor['instructor_id'];
+                        echo "<tr>";
+                        echo "<td>" . $instructor['instructor_id'] . "</td>";
+                        echo "<td>" . $instructor['last_name'] . "</td>";
+                        echo "<td>" . $instructor['first_name'] . "</td>";
+                        echo "<td>" . $instructor['middle_name'] . "</td>";
+                        echo "<td>" . $instructor['email'] . "</td>";
+                        echo "<td class='actions'>
+                                <form action='../../DMMMSU_class_scheduler\includes\instructor_handler.php' method='post'>
+                                    <input type='text' name='instructor_id' value=$instructor_id hidden>
+                                    <button class='delete' name='delete_instructor'>Delete</button>
+                                </form>
+                                <form action='../../DMMMSU_class_scheduler/views/instructor_update.php' method='get'>
+                                    <input type='text' name='instructor_id' value=$instructor_id hidden>
+                                    <button class='update'>Update</button>
+                                </form>
+                                </td>";
+                        echo "</tr>";
+                    }
                     ?>
                 </tbody>
             </table>
