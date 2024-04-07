@@ -12,6 +12,7 @@ if (!is_logged_in()) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,78 +20,119 @@ if (!is_logged_in()) {
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
         }
+
         .container {
-            width: 50%;
-            margin: auto;
+            max-width: 800px;
+            margin: 50px auto;
             padding: 20px;
-            border: 1px solid #ccc;
+            background-color: #fff;
             border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
+
         label {
             display: block;
             font-weight: bold;
         }
+
         input[type="text"],
-        input[type="email"],
-        select {
+        input[type="email"] {
             width: 100%;
             padding: 8px;
-            border-radius: 5px;
+            border-radius: 3px;
             border: 1px solid #ccc;
             box-sizing: border-box;
         }
-        input[type="submit"] {
+
+        select {
+            width: 100%;
             padding: 10px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 3px;
             cursor: pointer;
         }
+
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
     </style>
+
 </head>
+
 <body>
     <div class="container">
+        <?php
+        if (!isset($_GET["student_id"])) {
+            echo "Student ID not found.";
+            exit();
+        }
+        $student = get_student($pdo, $_GET["student_id"]);
+        if (empty($student)) {
+            echo "Student not found.";
+            exit();
+        }
+        ?>
         <h2>Update Student</h2>
-        <form action="update_student_handler.php" method="POST">
+        <form action="../../DMMMSU_class_scheduler\includes\student_handler.php" method="post">
             <div class="form-group">
                 <label for="student-id">Student ID:</label>
-                <input type="text" id="student-id" name="student_id" value="12345" required>
+                <input type="text" id="student-id" name="student_id" value="<?php echo $student['student_id']; ?>" required>
             </div>
             <div class="form-group">
                 <label for="last-name">Last Name:</label>
-                <input type="text" id="last-name" name="last_name" value="Doe" required>
+                <input type="text" id="last-name" name="last_name" value="<?php echo $student['last_name']; ?>" required>
             </div>
             <div class="form-group">
                 <label for="first-name">First Name:</label>
-                <input type="text" id="first-name" name="first_name" value="John" required>
+                <input type="text" id="first-name" name="first_name" value="<?php echo $student['first_name']; ?>" required>
             </div>
             <div class="form-group">
                 <label for="middle-name">Middle Name:</label>
-                <input type="text" id="middle-name" name="middle_name" value="A." required>
+                <input type="text" id="middle-name" name="middle_name" value="<?php echo $student['middle_name']; ?>">
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="john.doe@example.com" required>
+                <input type="email" id="email" name="email" value="<?php echo $student['email']; ?>" required>
             </div>
             <div class="form-group">
-                <label for="section-id">Section:</label>
+                <label for="section-id">Section ID:</label>
                 <select id="section-id" name="section_id">
-                    <option value="1A">1A</option>
-                    <option value="1B">1B</option>
-                    <option value="2A">2A</option>
-                    <option value="2B">2B</option>
+                    <?php
+                    $sections = get_sections($pdo);
+                    foreach ($sections as $section) {
+                        echo "<option value='" . $section['section_id'] . "'";
+                        if ($student['section_id'] == $section['section_id']) {
+                            echo " selected";
+                        }
+                        echo ">" . $section['section_id'] . "</option>";
+                    } ?>
                 </select>
             </div>
-            <input type="submit" value="Update Student">
+            <div class="form-group">
+                <input type="hidden" id="student-id" name="old_student_email" value="<?php echo $student['email']; ?>">
+                <input type="hidden" id="student-id" name="old_student_id" value="<?php echo $_GET["student_id"]; ?>">
+                <input type="submit" name="update_student" value="Update Student">
+            </div>
         </form>
+
     </div>
 </body>
+
 </html>

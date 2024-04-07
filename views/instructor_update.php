@@ -73,6 +73,11 @@ if (!is_logged_in()) {
 <div class="container">
     <h2>Update Instructor</h2>
     <?php
+    if(!isset($_GET["instructor_id"])){
+        echo "Instructor ID not found.";
+        exit();
+    }
+
     $instructor = get_instructor($pdo, $_GET["instructor_id"]);
         if(!$instructor){
             echo "Instructor not found.";

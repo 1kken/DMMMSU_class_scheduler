@@ -13,6 +13,13 @@
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    function get_student(object $pdo, string $student_id)
+    {
+        $stmt = $pdo->prepare("SELECT * FROM student WHERE student_id = :student_id");
+        $stmt->bindParam(":student_id", $student_id);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
 
     function get_student_id(object $pdo, string $student_id)
     {
@@ -46,5 +53,17 @@
     {
         $stmt = $pdo->prepare("DELETE FROM student WHERE student_id = :student_id");
         $stmt->bindParam(":student_id", $student_id);
+        $stmt->execute();
+    }
+
+    function update_student(object $pdo, string $student_id, string $first_name, string $last_name, string $middle_name, string $email, string $section_id)
+    {
+        $stmt = $pdo->prepare("UPDATE student SET first_name = :first_name, last_name = :last_name, middle_name = :middle_name, email = :email, section_id = :section_id WHERE student_id = :student_id");
+        $stmt->bindParam(":student_id", $student_id);
+        $stmt->bindParam(":first_name", $first_name);
+        $stmt->bindParam(":last_name", $last_name);
+        $stmt->bindParam(":middle_name", $middle_name);
+        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":section_id", $section_id);
         $stmt->execute();
     }

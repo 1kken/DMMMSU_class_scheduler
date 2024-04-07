@@ -28,6 +28,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_instructor"])) {
     $middle_name = htmlspecialchars($middle_name);
 
     //check if email is valid
+    $_SESSION["errors_instructor"] = [];
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION["errors_instructor"] = ["invalid_email" => "Invalid email."];
     }

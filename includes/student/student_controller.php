@@ -19,4 +19,10 @@
         return false;
     }
 
-    
+    function check_student_id_format(string $student_id)
+    {
+        if (preg_match("/^[0-9]{4}-[0-9]{5}$/", $student_id) && strlen($student_id) == 8){
+            return true;
+        }
+        return false;
+    }
