@@ -14,6 +14,24 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_instructor"])) {
     $middle_name = $_POST["middle_name"];
     $email = $_POST["email"];
 
+    //sanitize
+    $instructor_id = $_POST["instructor_id"];
+    $first_name = $_POST["first_name"];
+    $last_name = $_POST["last_name"];
+    $middle_name = $_POST["middle_name"];
+    $email = $_POST["email"];
+
+    //filter
+    $instructor_id = htmlspecialchars($instructor_id);
+    $first_name = htmlspecialchars($first_name);
+    $last_name = htmlspecialchars($last_name);
+    $middle_name = htmlspecialchars($middle_name);
+
+    //check if email is valid
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION["errors_instructor"] = ["invalid_email" => "Invalid email."];
+    }
+
     //check if the instructor_id is already in the database
     if (is_instructor_id_taken($pdo, $instructor_id)) {
         $_SESSION["errors_instructor"] = ["instructor_id_taken" => "Instructor ID is already taken."];
@@ -53,6 +71,17 @@ if(isset($_POST["update_instructor"]) && isset($_SESSION["user_id"])){
     $last_name = $_POST["last_name"];
     $middle_name = $_POST["middle_name"];
     $email = $_POST["email"];
+
+    //filter
+    $instructor_id = htmlspecialchars($instructor_id);
+    $first_name = htmlspecialchars($first_name);
+    $last_name = htmlspecialchars($last_name);
+    $middle_name = htmlspecialchars($middle_name);
+
+    //check if email is valid
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION["errors_instructor"] = ["invalid_email" => "Invalid email."];
+    }
 
     //Old values
     $old_instructor_email = $_POST["old_instructor_email"];

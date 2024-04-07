@@ -1,11 +1,14 @@
 <?php
-    define('APP_NAME', dirname(__FILE__) . "/../");
-    require_once(APP_NAME . "includes/authorization.php");
+define('APP_NAME', dirname(__FILE__) . "/../");
+require_once(APP_NAME . "includes/authorization.php");
+require_once(APP_NAME . "includes/config_session.inc.php");
+require_once(APP_NAME . "includes/database_header.php");
+require_once(APP_NAME . "includes/student/student_model.php");
 
-    if (!is_logged_in()) {
-        header("LOCATION: /DMMMSU_class_scheduler/index.php");
-        exit();
-    }
+if (!is_logged_in()) {
+    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,6 +84,9 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             max-width: 1000px;
+            max-height: 600px;
+            /* Adjust the height as needed */
+            overflow: auto;
         }
 
         h2 {
@@ -166,7 +172,7 @@
     <div class="container">
         <div class="form_container">
             <h2>Student Registration</h2>
-            <form action="submit.php" method="post">
+            <form action="../../DMMMSU_class_scheduler\includes\student_handler.php" method="post">
                 <div class="form-group">
                     <label for="student-id">Student ID:</label>
                     <input type="number" id="student-id" name="student_id" required>
@@ -190,12 +196,15 @@
                 <div class="form-group">
                     <label for="section-id">Section ID:</label>
                     <select id="section-id" name="section_id">
-                        <option value="1">Section A</option>
-                        <option value="2">Section B</option>
-                        <option value="3">Section C</option>
+                        <?php
+                            $sections = get_sections($pdo);
+                            foreach ($sections as $section) {
+                                echo "<option value='" . $section['section_id'] . "'>" . $section['section_id'] . "</option>";
+                            }
+                        ?>
                     </select>
                 </div>
-                <input type="submit" value="Create Student">
+                <input type="submit" value="create_student" name="create_student">
             </form>
         </div>
         <div class="user_table_container">
@@ -221,21 +230,28 @@
                 <tbody>
                     <?php
                     // Mockup data array
-                    $students = array(
-                        array("id" => 1, "last_name" => "Doe", "first_name" => "John", "middle_name" => "A.", "email" => "john.doe@example.com", "section_id" => 1),
-                        array("id" => 2, "last_name" => "Smith", "first_name" => "Jane", "middle_name" => "B.", "email" => "jane.smith@example.com", "section_id" => 2),
-                    );
+                    $students = get_students($pdo);
 
                     // Display student records
                     foreach ($students as $student) {
+                        $student_id = $student['student_id'];
                         echo "<tr>";
-                        echo "<td>" . $student['id'] . "</td>";
+                        echo "<td>" . $student['student_id'] . "</td>";
                         echo "<td>" . $student['last_name'] . "</td>";
                         echo "<td>" . $student['first_name'] . "</td>";
                         echo "<td>" . $student['middle_name'] . "</td>";
                         echo "<td>" . $student['email'] . "</td>";
                         echo "<td>" . $student['section_id'] . "</td>";
-                        echo "<td class='actions'><button class='delete'>Delete</button> <button class='update'>Update</button></td>";
+                        echo "<td class='actions'>
+                                <form action='../../DMMMSU_class_scheduler\includes\student_handler.php' method='post'>
+                                    <input type='text' name='student_id' value=$student_id hidden>
+                                    <button class='delete' name='delete_student'>Delete</button>
+                                </form>
+                                <form action='../../DMMMSU_class_scheduler/views/student_update.php' method='get'>
+                                    <input type='text' name='student_id' value=$student_id hidden>
+                                    <button class='update'>Update</button>
+                                </form>
+                                </td>";
                         echo "</tr>";
                     }
                     ?>

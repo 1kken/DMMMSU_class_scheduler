@@ -193,9 +193,8 @@ if (!is_logged_in()) {
                 <div class="form-group">
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
-                    <input type="text" name="create_instructor" hidden>
                 </div>
-                <input type="submit" value="Create Instructor">
+                <input type="submit" value="create_instructor" name="create_instructor">
             </form>
         </div>
         <div class="user_table_container">
