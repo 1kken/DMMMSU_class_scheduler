@@ -38,7 +38,6 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
         $_SESSION["errors_students"] = ["invalid_email" => "Invalid email."];
     }
 
-
      //check if the instructor_id is already in the database
     if(is_student_id_taken($pdo, $student_id)){
         $_SESSION["errors_students"] = ["instructor_id_taken" => "Instructor ID is already taken."];
