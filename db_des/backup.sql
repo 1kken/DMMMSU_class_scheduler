@@ -74,21 +74,10 @@ CREATE TABLE `student` (
   `first_name` varchar(50) NOT NULL,
   `middle_name` varchar(50) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
-  PRIMARY KEY (`student_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Table structure for table `student_record` */
-
-CREATE TABLE `student_record` (
-  `student_record_id` int(11) NOT NULL AUTO_INCREMENT,
-  `student_id` varchar(10) NOT NULL,
-  `section_id` varchar(2) DEFAULT NULL,
-  `sy` varchar(9) NOT NULL,
-  PRIMARY KEY (`student_record_id`),
-  KEY `student_id` (`student_id`),
+  `section_id` varchar(2) NOT NULL,
+  PRIMARY KEY (`student_id`),
   KEY `section_id` (`section_id`),
-  CONSTRAINT `student_record_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `student_record_ibfk_2` FOREIGN KEY (`section_id`) REFERENCES `section` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `student_ibfk_1` FOREIGN KEY (`section_id`) REFERENCES `section` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Table structure for table `subject` */
