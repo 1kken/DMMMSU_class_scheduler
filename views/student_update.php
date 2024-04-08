@@ -4,6 +4,7 @@ require_once(APP_NAME . "includes/authorization.php");
 require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/student/student_model.php");
+require_once(APP_NAME . "includes/student/student_view.php");
 
 if (!is_logged_in()) {
     header("LOCATION: /DMMMSU_class_scheduler/index.php");
@@ -131,7 +132,7 @@ if (!is_logged_in()) {
                 <input type="submit" name="update_student" value="Update Student">
             </div>
         </form>
-
+        <?php check_student_update_errors()?>
     </div>
 </body>
 

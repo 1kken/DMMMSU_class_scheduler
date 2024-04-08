@@ -21,12 +21,6 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_instructor"])) {
     $middle_name = strtolower(trim($middle_name));
     $email = strtolower(trim($email));
 
-    //sanitize
-    $instructor_id = $_POST["instructor_id"];
-    $first_name = $_POST["first_name"];
-    $last_name = $_POST["last_name"];
-    $middle_name = $_POST["middle_name"];
-    $email = $_POST["email"];
 
     //filter
     $instructor_id = htmlspecialchars($instructor_id);
@@ -37,11 +31,11 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_instructor"])) {
     //check if email is valid
     $errors = [];
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors["invalid_email"] ="Invalid email.";
+        $errors["invalid_email"] = "Invalid email.";
     }
 
     //instructor id check
-    if(!check_instructor_id_format($instructor_id)){
+    if (!check_instructor_id_format($instructor_id)) {
         $errors["id_format"] = "Invalid instructor ID.";
     }
 
@@ -55,8 +49,10 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_instructor"])) {
     }
 
     //check email format
-    if (!check_email_format_instructor($instructor_id, $first_name, $last_name, $email)
-    && $errors["id_format"] == null && $errors["invalid_email"] == null && $errors["id_taken"] == null && $errors["email_taken"] == null) {
+    if (
+        !check_email_format_instructor($instructor_id, $first_name, $last_name, $email)
+        && $errors["id_format"] == null && $errors["invalid_email"] == null && $errors["id_taken"] == null && $errors["email_taken"] == null
+    ) {
         $suggested_email = suggest_email_instructor($instructor_id, $first_name, $last_name);
         $errors["invalid_email"] = "Invalid email. suggestion: $suggested_email";
     }
@@ -75,18 +71,18 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_instructor"])) {
     }
 }
 
-if(isset($_POST["delete_instructor"]) && isset($_SESSION["user_id"])){
+if (isset($_POST["delete_instructor"]) && isset($_SESSION["user_id"])) {
     $instructor_id = $_POST["instructor_id"];
-    try{
+    try {
         delete_instructor($pdo, $instructor_id);
-    }catch(PDOException $e){
+    } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
     header("LOCATION: /DMMMSU_class_scheduler/views/instructor.php");
     exit();
 }
 
-if(isset($_POST["update_instructor"]) && isset($_SESSION["user_id"])){
+if (isset($_POST["update_instructor"]) && isset($_SESSION["user_id"])) {
     $instructor_id = $_POST["instructor_id"];
     $first_name = $_POST["first_name"];
     $last_name = $_POST["last_name"];
@@ -112,17 +108,23 @@ if(isset($_POST["update_instructor"]) && isset($_SESSION["user_id"])){
         $errors["invalid_email"] = "Invalid email.";
     }
 
+    //check email format
+    if (!check_email_format_instructor($instructor_id, $first_name, $last_name, $email)) {
+        $suggested_email = suggest_email_instructor($instructor_id, $first_name, $last_name);
+        $errors["invalid_email"] = "Invalid email. suggestion: $suggested_email";
+    }
+
     //Old values
     $old_instructor_email = $_POST["old_instructor_email"];
     $old_instructor_id = $_POST["old_instructor_id"];
     //check if the instructor_id is already in the database
-    if($old_instructor_id != $instructor_id){
+    if ($old_instructor_id != $instructor_id) {
         if (is_instructor_id_taken($pdo, $instructor_id)) {
             $errors["id_taken"] = "Instructor ID is already taken.";
         }
     }
     //check email if already in the database
-    if($old_instructor_email != $email){
+    if ($old_instructor_email != $email) {
         if (is_instructor_email_taken($pdo, $email)) {
             $errors["email_taken"] = "Email is already taken.";
         }
@@ -135,10 +137,10 @@ if(isset($_POST["update_instructor"]) && isset($_SESSION["user_id"])){
         exit();
     }
 
-    try{
+    try {
         $email = suggest_email_instructor($instructor_id, $first_name, $last_name);
-        update_instructor($pdo,$old_instructor_id, $instructor_id, $first_name, $last_name, $middle_name, $email);
-    }catch(PDOException $e){
+        update_instructor($pdo, $old_instructor_id, $instructor_id, $first_name, $last_name, $middle_name, $email);
+    } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
         exit();
     }

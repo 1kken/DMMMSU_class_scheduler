@@ -56,14 +56,15 @@
         $stmt->execute();
     }
 
-    function update_student(object $pdo, string $student_id, string $first_name, string $last_name, string $middle_name, string $email, string $section_id)
+    function update_student(object $pdo, string $student_id, string $first_name, string $last_name, string $middle_name, string $email, string $section_id, string $old_student_id)
     {
-        $stmt = $pdo->prepare("UPDATE student SET first_name = :first_name, last_name = :last_name, middle_name = :middle_name, email = :email, section_id = :section_id WHERE student_id = :student_id");
+        $stmt = $pdo->prepare("UPDATE student SET student_id = :student_id, first_name = :first_name, last_name = :last_name, middle_name = :middle_name, email = :email, section_id = :section_id WHERE student_id = :old_student_id");
         $stmt->bindParam(":student_id", $student_id);
         $stmt->bindParam(":first_name", $first_name);
         $stmt->bindParam(":last_name", $last_name);
         $stmt->bindParam(":middle_name", $middle_name);
         $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":old_student_id", $old_student_id);
         $stmt->bindParam(":section_id", $section_id);
         $stmt->execute();
     }
