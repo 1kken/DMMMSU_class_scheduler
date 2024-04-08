@@ -9,7 +9,7 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MariaDB",
-            "name": "class_sched xampp",
+            "name": "class_schedule_xamppp",
             "database": "class_schedule",
             "username": "root",
             "password": ""

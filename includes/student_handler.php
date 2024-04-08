@@ -33,9 +33,13 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
     }
 
     //check if email is valid
-    $_SESSION["errors_students"] = [];
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION["errors_students"] = ["invalid_email" => "Invalid email."];
+    }
+
+    if(!check_email_format($student_id, $first_name, $last_name, $email)){
+        $suggested_email = suggest_email($student_id, $first_name, $last_name);
+        $_SESSION["errors_students"] = ["invalid_email_format" => "Invalid email. suggestion: $suggested_email"];
     }
 
      //check if the instructor_id is already in the database
