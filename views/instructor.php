@@ -165,6 +165,10 @@ if (!is_logged_in()) {
         .actions button:hover {
             filter: brightness(0.9);
         }
+
+        .errors{
+            color: red;
+        }
     </style>
 </head>
 

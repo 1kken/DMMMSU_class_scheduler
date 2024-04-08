@@ -26,33 +26,36 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
     $middle_name = htmlspecialchars($middle_name);
     $section_id = htmlspecialchars($section_id);
 
-    $_SESSION["errors_students"] = [];
+    $errors = [];
     //check if student_id is valid
     if(!check_student_id_format($student_id)){
-        $_SESSION["errors_students"] = ["invalid_student_id" => "Invalid student ID."];
+        $errors["id_format"] = "Invalid student ID.";
     }
 
     //check if email is valid
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $_SESSION["errors_students"] = ["invalid_email" => "Invalid email."];
-    }
-
-    if(!check_email_format($student_id, $first_name, $last_name, $email)){
-        $suggested_email = suggest_email($student_id, $first_name, $last_name);
-        $_SESSION["errors_students"] = ["invalid_email_format" => "Invalid email. suggestion: $suggested_email"];
-    }
-
-     //check if the instructor_id is already in the database
-    if(is_student_id_taken($pdo, $student_id)){
-        $_SESSION["errors_students"] = ["instructor_id_taken" => "Instructor ID is already taken."];
+        $errors["email_invalid"] = "Invalid email.";
     }
 
     // //check email if already in the database
     if(is_student_email_taken($pdo, $email)){
-        $_SESSION["errors_students"] = ["email_taken" => "Email is already taken."];
+        $errors["email_taken"] =  "Email is already taken.";
     }
 
-    if ($_SESSION["errors_students"]) {
+    if(!check_email_format($student_id, $first_name, $last_name, $email) && $errors["id_format"] == null && $errors["email_invalid"] == null){
+        $suggested_email = suggest_email($student_id, $first_name, $last_name);
+        $errors["email_format"] = "Invalid email. suggestion: $suggested_email";
+    }
+
+     //check if the instructor_id is already in the database
+    if(is_student_id_taken($pdo, $student_id)){
+        $errors["id_taken"] =  "Student ID is already taken.";
+    }
+
+
+    
+    if ($errors) {
+        $_SESSION["errors_students"] = $errors;
         header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
         exit();
     }

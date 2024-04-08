@@ -4,6 +4,7 @@ require_once(APP_NAME . "includes/authorization.php");
 require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/student/student_model.php");
+require_once(APP_NAME . "includes/student/student_view.php");
 
 if (!is_logged_in()) {
     header("LOCATION: /DMMMSU_class_scheduler/index.php");
@@ -164,6 +165,9 @@ if (!is_logged_in()) {
         .actions button:hover {
             filter: brightness(0.9);
         }
+        .errors{
+            color: tomato;
+        }
     </style>
 </head>
 
@@ -203,6 +207,7 @@ if (!is_logged_in()) {
                             }
                         ?>
                     </select>
+                        <?php check_student_errors()?>
                 </div>
                 <input type="submit" value="create_student" name="create_student">
             </form>
