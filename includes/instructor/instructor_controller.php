@@ -21,6 +21,7 @@ function is_instructor_email_taken(object $pdo, string $instructor_email)
 
 function check_email_format_instructor(string $instructor_id, string $first_name, string $last_name, string $email)
 {
+    $last_name = str_replace(' ', '', $last_name);
     $name_exploded = explode(" ", $first_name);
     $generated_email = implode("", array_map(function ($name) {
         return $name[0];

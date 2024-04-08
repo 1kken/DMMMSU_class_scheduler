@@ -12,6 +12,13 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
     $email = $_POST["email"];
     $section_id = $_POST["section_id"];
 
+    //trim and lowercase
+    $student_id = trim(strtolower($student_id));
+    $first_name = trim(strtolower($first_name));
+    $last_name = trim(strtolower($last_name));
+    $middle_name = trim(strtolower($middle_name));
+    $email = trim(strtolower($email));
+
     //sanitize
     $student_id = $_POST["student_id"];
     $first_name = $_POST["first_name"];
@@ -88,6 +95,12 @@ if (isset($_SESSION["user_id"]) && isset($_POST["update_student"])) {
     $middle_name = $_POST["middle_name"];
     $email = $_POST["email"];
     $section_id = $_POST["section_id"];
+    //trim and lowercase
+    $student_id = trim(strtolower($student_id));
+    $first_name = trim(strtolower($first_name));
+    $last_name = trim(strtolower($last_name));
+    $middle_name = trim(strtolower($middle_name));
+    $email = trim(strtolower($email));
 
     //sanitize
     $student_id = $_POST["student_id"];

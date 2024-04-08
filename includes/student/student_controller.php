@@ -30,6 +30,7 @@ function check_student_id_format(string $student_id)
 
 function check_email_format(string $student_id, string $first_name, string $last_name, string $email)
 {
+    $last_name = str_replace(' ', '', $last_name);
     $name_exploded = explode(" ", $first_name);
     $generated_email = implode("", array_map(function ($name) {
         return $name[0];
@@ -49,6 +50,7 @@ function check_email_format(string $student_id, string $first_name, string $last
 
 function suggest_email(string $student_id, string $first_name, string $last_name)
 {
+    $last_name = str_replace(' ', '', $last_name);
     $name_exploded = explode(" ", $first_name);
     $generated_email = implode("", array_map(function ($name) {
         return $name[0];
