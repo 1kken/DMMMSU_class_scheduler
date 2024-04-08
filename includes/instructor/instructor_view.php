@@ -9,3 +9,13 @@ function check_update_errors(){
     }
     unset($_SESSION["errors_instructor"]);
 }
+
+function check_create_instructor_error(){
+    if(isset($_SESSION["errors_instructor"])){
+        $errors = $_SESSION["errors_instructor"];
+        foreach($errors as $error){
+            echo "<p style='color:red;'>$error</p>";
+        }
+    }
+    unset($_SESSION["errors_instructor"]);
+}

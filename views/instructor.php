@@ -4,7 +4,7 @@ require_once(APP_NAME . "includes/authorization.php");
 require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/instructor/instructor_model.php");
-
+require_once(APP_NAME . "includes/instructor/instructor_view.php");
 if (!is_logged_in()) {
     header("LOCATION: /DMMMSU_class_scheduler/index.php");
     exit();
@@ -166,7 +166,7 @@ if (!is_logged_in()) {
             filter: brightness(0.9);
         }
 
-        .errors{
+        .errors {
             color: red;
         }
     </style>
@@ -198,8 +198,11 @@ if (!is_logged_in()) {
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
                 </div>
-                <input type="submit" value="create_instructor" name="create_instructor">
+                <input type="submit" value="create instructor" name="create_instructor">
             </form>
+            <?php
+            check_create_instructor_error();
+            ?>
         </div>
         <div class="user_table_container">
             <h2>Instructor Records</h2>
@@ -223,7 +226,7 @@ if (!is_logged_in()) {
                 <tbody>
                     <?php
                     $instructors = get_instructors($pdo);
-                    if(!$instructors){
+                    if (!$instructors) {
                         echo "<tr><td colspan='6'>No records found.</td></tr>";
                     }
                     foreach ($instructors as $instructor) {

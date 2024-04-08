@@ -42,7 +42,8 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
         $errors["email_taken"] =  "Email is already taken.";
     }
 
-    if(!check_email_format($student_id, $first_name, $last_name, $email) && $errors["id_format"] == null && $errors["email_invalid"] == null){
+    if(!check_email_format($student_id, $first_name, $last_name, $email) && $errors["id_format"] == null && $errors["email_invalid"] == null 
+    && $errors["email_taken"] == null && $errors["id_taken"] == null){
         $suggested_email = suggest_email($student_id, $first_name, $last_name);
         $errors["email_format"] = "Invalid email. suggestion: $suggested_email";
     }
