@@ -1,3 +1,11 @@
+<?php
+define('APP_NAME', dirname(__FILE__) . "/../");
+require_once(APP_NAME . "includes/authorization.php");
+require_once(APP_NAME . "includes/config_session.inc.php");
+require_once(APP_NAME . "includes/database_header.php");
+require_once(APP_NAME . "includes/room/room_model.php");
+require_once(APP_NAME . "includes/room/room_view.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -72,6 +80,9 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             max-width: 1000px;
+            max-height: 400px;
+            /* Adjust the height as needed */
+            overflow: auto;
         }
 
         h2 {
@@ -157,7 +168,7 @@
     <div class="container">
         <div class="form_container">
             <h2>Add Room</h2>
-            <form action="submit_room.php" method="post">
+            <form action="../../DMMMSU_class_scheduler\includes\room_handler.php" method="post">
                 <div class="form-group">
                     <label for="room-id">Room ID:</label>
                     <input type="text" id="room-id" name="room_id" required>
@@ -171,8 +182,15 @@
                 </div>
                 <div class="form-group">
                     <label for="priority">Priority:</label>
-                    <input type="number" id="priority" name="priority" required>
+                    <select id="room-priority" name="room_priority" required>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                    </select>
                 </div>
+                <input type="text" name="create_room" hidden>
                 <input type="submit" value="Add Room">
             </form>
         </div>
@@ -197,16 +215,13 @@
                 <tbody>
                     <?php
                     // Mockup data array
-                    $rooms = array(
-                        array("id" => "LR101", "type" => "Lecture", "priority" => 1),
-                        array("id" => "CLR201", "type" => "Laboratory", "priority" => 2),
-                    );
+                    $rooms = get_rooms($pdo);
 
                     // Display room records
                     foreach ($rooms as $room) {
                         echo "<tr>";
-                        echo "<td>" . $room['id'] . "</td>";
-                        echo "<td>" . $room['type'] . "</td>";
+                        echo "<td>" . $room['room_id'] . "</td>";
+                        echo "<td>" . $room['room_type'] . "</td>";
                         echo "<td>" . $room['priority'] . "</td>";
                         echo "<td class='actions'><button class='delete'>Delete</button> <button class='update'>Update</button></td>";
                         echo "</tr>";
