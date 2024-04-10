@@ -176,8 +176,8 @@ require_once(APP_NAME . "includes/room/room_view.php");
                 <div class="form-group">
                     <label for="room-type">Room Type:</label>
                     <select id="room-type" name="room_type" required>
-                        <option value="lecture">Lecture</option>
-                        <option value="laboratory">Laboratory</option>
+                        <option value="Lecture">Lecture</option>
+                        <option value="Laboratory">Laboratory</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -193,6 +193,9 @@ require_once(APP_NAME . "includes/room/room_view.php");
                 <input type="text" name="create_room" hidden>
                 <input type="submit" value="Add Room">
             </form>
+            <?php
+            check_create_room_errors();
+            ?>
         </div>
 
         <div class="room_table_container">
@@ -219,11 +222,21 @@ require_once(APP_NAME . "includes/room/room_view.php");
 
                     // Display room records
                     foreach ($rooms as $room) {
+                        $room_id = $room['room_id'];
                         echo "<tr>";
                         echo "<td>" . $room['room_id'] . "</td>";
                         echo "<td>" . $room['room_type'] . "</td>";
                         echo "<td>" . $room['priority'] . "</td>";
-                        echo "<td class='actions'><button class='delete'>Delete</button> <button class='update'>Update</button></td>";
+                        echo "<td class='actions'>
+                                <form action='../../DMMMSU_class_scheduler\includes/room_handler.php' method='post'>
+                                    <input type='text' name='room_id' value=$room_id hidden>
+                                    <button class='delete' name='delete_room'>Delete</button>
+                                </form>
+                                <form action='../../DMMMSU_class_scheduler/views/room_update.php' method='get'>
+                                    <input type='text' name='room_id' value=$room_id hidden>
+                                    <button class='update'>Update</button>
+                                </form>
+                                </td>";
                         echo "</tr>";
                     }
                     ?>
