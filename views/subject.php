@@ -1,3 +1,16 @@
+<?php
+define('APP_NAME', dirname(__FILE__) . "/../");
+require_once(APP_NAME . "includes/authorization.php");
+require_once(APP_NAME . "includes/config_session.inc.php");
+require_once(APP_NAME . "includes/database_header.php");
+require_once(APP_NAME . "includes/subject/subject_model.php");
+require_once(APP_NAME . "includes/subject/subject_view.php");
+
+if (!is_logged_in()) {
+    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,7 +55,8 @@
         }
 
         input[type="text"],
-        input[type="number"] {
+        input[type="number"],
+        select {
             width: 100%;
             padding: 10px;
             border-radius: 3px;
@@ -70,6 +84,9 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             max-width: 1000px;
+            max-height: 650px;
+            /* Adjust the height as needed */
+            overflow: auto;
         }
 
         h2 {
@@ -155,7 +172,7 @@
     <div class="container">
         <div class="form_container">
             <h2>Add Subject</h2>
-            <form action="submit_subject.php" method="post">
+            <form action="../../DMMMSU_class_scheduler\includes\subject_handler.php" method="post">
                 <div class="form-group">
                     <label for="subject-id">Subject ID:</label>
                     <input type="text" id="subject-id" name="subject_id" required>
@@ -165,15 +182,42 @@
                     <input type="text" id="descriptive-title" name="descriptive_title" required>
                 </div>
                 <div class="form-group">
-                    <label for="units">Units:</label>
-                    <input type="number" id="units" name="units" required>
+                    <label for="lecture-units">Lecture Units:</label>
+                    <select id="lecture-units" name="lecture_units" required>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="lab-units">Laboratory Units:</label>
+                    <select id="lab-units" name="laboratory_units" required>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="total-units">Total Units:</label>
+                    <input type="text" id="total-units" name="total_units" value="2" readonly>
                 </div>
                 <div class="form-group">
                     <label for="priority">Priority:</label>
-                    <input type="number" id="priority" name="priority" required>
+                    <select id="priority" name="priority" required>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                 </div>
-                <input type="submit" value="Add Subject">
+                <input type="submit" name="create_subject" value="Add Subject">
             </form>
+            <?php
+            check_subject_errors();
+            ?>
         </div>
         <div class="subject_table_container">
             <h2>Subject List</h2>
@@ -188,7 +232,9 @@
                     <tr>
                         <th>Subject ID</th>
                         <th>Descriptive Title</th>
-                        <th>Units</th>
+                        <th>Lecture Units</th>
+                        <th>Laboratory Units</th>
+                        <th>Total Units</th>
                         <th>Priority</th>
                         <th>Actions</th>
                     </tr>
@@ -196,19 +242,30 @@
                 <tbody>
                     <?php
                     // Mockup data array
-                    $subjects = array(
-                        array("id" => "CS101", "title" => "Introduction to Computer Science", "units" => 3, "priority" => 1),
-                        array("id" => "ENG202", "title" => "Advanced English Literature", "units" => 4, "priority" => 2),
-                    );
+                    $subjects = get_subjects($pdo);
+            
 
                     // Display subject records
                     foreach ($subjects as $subject) {
+                        $subject_id = $subject['subject_id'];
                         echo "<tr>";
-                        echo "<td>" . $subject['id'] . "</td>";
-                        echo "<td>" . $subject['title'] . "</td>";
-                        echo "<td>" . $subject['units'] . "</td>";
+                        echo "<td>" . $subject['subject_id'] . "</td>";
+                        echo "<td>" . $subject['descriptive_title'] . "</td>";
+                        echo "<td>" . $subject['lecture_units'] . "</td>";
+                        echo "<td>" . $subject['laboratory_units'] . "</td>";
+                        echo "<td>" . $subject['total_units'] . "</td>";
                         echo "<td>" . $subject['priority'] . "</td>";
-                        echo "<td class='actions'><button class='delete'>Delete</button> <button class='update'>Update</button></td>";
+                        echo "<td class='actions'>
+                                <form action='../../DMMMSU_class_scheduler\includes\subject_handler.php' method='post'>
+                                    <input type='text' name='subject_id' value=$subject_id hidden>
+                                    <button class='delete' name='delete_subject'>Delete</button>
+                                </form>
+                                <form action='../../DMMMSU_class_scheduler/views/subject_update.php' method='get'>
+                                    <input type='text' name='subject_id' value=$subject_id hidden>
+                                    <button class='update'>Update</button>
+                                </form>
+                                </td>";
+                        echo "</tr>";
                         echo "</tr>";
                     }
                     ?>
@@ -216,6 +273,24 @@
             </table>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lectureUnitsSelect = document.getElementById('lecture-units');
+            const labUnitsSelect = document.getElementById('lab-units');
+            const totalUnitsInput = document.getElementById('total-units');
+
+            lectureUnitsSelect.addEventListener('change', updateTotalUnits);
+            labUnitsSelect.addEventListener('change', updateTotalUnits);
+
+            function updateTotalUnits() {
+                const lectureUnits = parseInt(lectureUnitsSelect.value);
+                const labUnits = parseInt(labUnitsSelect.value);
+                const total = lectureUnits + labUnits;
+                totalUnitsInput.value = total ;
+            }
+        });
+    </script>
 
 </body>
 
