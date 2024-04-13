@@ -144,6 +144,7 @@ if (!is_logged_in()) {
             background-color: #f9f9f9;
         }
 
+
         .actions button {
             padding: 5px 10px;
             border: none;
@@ -170,12 +171,11 @@ if (!is_logged_in()) {
         }
     </style>
 </head>
-
+<script src="../jquery.js"></script>
 <body>
-
     <div class="container">
         <div class="form_container">
-            <h2>Student Registration</h2>
+            <h2 >Student Registration</h2>
             <form action="../../DMMMSU_class_scheduler\includes\student_handler.php" method="post">
                 <div class="form-group">
                     <label for="student-id">Student ID:</label>
@@ -215,10 +215,8 @@ if (!is_logged_in()) {
         <div class="user_table_container">
             <h2>Student Records</h2>
             <div class="search-container">
-                <form action="">
                     <input type="text" id="search-input" placeholder="Search...">
-                    <button>search</button>
-                </form>
+                    <button onclick="search()">search</button>
             </div>
             <table>
                 <thead>
@@ -232,7 +230,7 @@ if (!is_logged_in()) {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="student-show">
                     <?php
                     // Mockup data array
                     $students = get_students($pdo);
@@ -264,7 +262,23 @@ if (!is_logged_in()) {
             </table>
         </div>
     </div>
-
+<script>
+function search() {
+    var student_id = document.getElementById("search-input").value;
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                document.getElementById("student-show").innerHTML = xhr.responseText;
+            } else {
+                document.getElementById("student-show").innerHTML = "No Student Found" + xhr.status;
+            }
+        }
+    };
+    xhr.open("GET", "../includes/jqueries/searchStudent.php?student_id=" + encodeURIComponent(student_id), true);
+    xhr.send();
+}
+</script>
 </body>
 
 </html>

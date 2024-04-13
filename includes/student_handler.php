@@ -63,7 +63,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
         exit();
     }
     try {
-        insert_student($pdo, $instructor_id, $first_name, $last_name, $middle_name, $email,$section_id);
+        insert_student($pdo, $student_id, $first_name, $last_name, $middle_name, $email,$section_id);
         header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
         exit();
     } catch (\Throwable $th) {

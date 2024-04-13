@@ -166,7 +166,7 @@ if (!is_logged_in()) {
         }
     </style>
 </head>
-
+<script src="../jquery.js"></script>
 <body>
 
     <div class="container">

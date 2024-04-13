@@ -162,6 +162,7 @@ require_once(APP_NAME . "includes/room/room_view.php");
         }
     </style>
 </head>
+<script src="../jquery.js"></script>
 
 <body>
 

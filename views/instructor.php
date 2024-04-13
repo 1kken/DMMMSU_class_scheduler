@@ -172,6 +172,8 @@ if (!is_logged_in()) {
     </style>
 </head>
 
+<script src="../jquery.js"></script>
+
 <body>
 
     <div class="container">
@@ -207,10 +209,8 @@ if (!is_logged_in()) {
         <div class="user_table_container">
             <h2>Instructor Records</h2>
             <div class="search-container">
-                <form action="">
                     <input type="text" id="search-input" placeholder="Search...">
-                    <button>search</button>
-                </form>
+                    <button onclick="search()">search</button>
             </div>
             <table>
                 <thead>
@@ -223,7 +223,7 @@ if (!is_logged_in()) {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id = "instructor-show">
                     <?php
                     $instructors = get_instructors($pdo);
                     if (!$instructors) {
@@ -254,6 +254,23 @@ if (!is_logged_in()) {
             </table>
         </div>
     </div>
+    <script>
+        function search() {
+            var student_id = document.getElementById("search-input").value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById("instructor-show").innerHTML = xhr.responseText;
+                    } else {
+                        document.getElementById("instructor-show").innerHTML = "No Student Found" + xhr.status;
+                    }
+                }
+            };
+            xhr.open("GET", "../includes/jqueries/searchInstructor.php?instructor_id=" + encodeURIComponent(student_id), true);
+            xhr.send();
+        }
+    </script>
 
 </body>
 
