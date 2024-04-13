@@ -202,10 +202,8 @@ require_once(APP_NAME . "includes/room/room_view.php");
         <div class="room_table_container">
             <h2>Room List</h2>
             <div class="search-container">
-                <form action="">
                     <input type="text" id="search-input" placeholder="Search...">
-                    <button>search</button>
-                </form>
+                    <button onclick="search()">search</button>
             </div>
             <table>
                 <thead>
@@ -216,7 +214,7 @@ require_once(APP_NAME . "includes/room/room_view.php");
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="room-show">
                     <?php
                     // Mockup data array
                     $rooms = get_rooms($pdo);
@@ -246,6 +244,23 @@ require_once(APP_NAME . "includes/room/room_view.php");
         </div>
     </div>
 
+    <script>
+        function search() {
+            var student_id = document.getElementById("search-input").value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById("room-show").innerHTML = xhr.responseText;
+                    } else {
+                        document.getElementById("room-show").innerHTML = "No Student Found" + xhr.status;
+                    }
+                }
+            };
+            xhr.open("GET", "../includes/jqueries/searchRoom.php?room_id=" + encodeURIComponent(student_id), true);
+            xhr.send();
+        }
+    </script>
 </body>
 
 </html>

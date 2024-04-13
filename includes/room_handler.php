@@ -8,6 +8,7 @@ if (isset($_POST["create_room"]) && isset($_SESSION["user_id"])) {
     $room_id = $_POST["room_id"];
     $room_type = $_POST["room_type"];
     $room_priority = $_POST["room_priority"];
+    $room_id = strtoupper($room_id);
 
 
     $errors = [];

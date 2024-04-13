@@ -65,7 +65,6 @@
         $old_subject_id = $_POST['old_subject_id'];
 
         $errors = [];
-
         if(is_subject_id_taken($pdo, $subject_id) && $subject_id != $old_subject_id){
             $errors[] = "Subject ID is already taken.";
         }

@@ -222,9 +222,8 @@ if (!is_logged_in()) {
         <div class="subject_table_container">
             <h2>Subject List</h2>
             <div class="search-container">
-                <form action="">
                     <input type="text" id="search-input" placeholder="Search...">
-                    <button>search</button>
+                    <button onclick="search()">search</button>
                 </form>
             </div>
             <table>
@@ -239,7 +238,7 @@ if (!is_logged_in()) {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="subject-show">
                     <?php
                     // Mockup data array
                     $subjects = get_subjects($pdo);
@@ -275,6 +274,21 @@ if (!is_logged_in()) {
     </div>
 
     <script>
+        function search() {
+            var student_id = document.getElementById("search-input").value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById("subject-show").innerHTML = xhr.responseText;
+                    } else {
+                        document.getElementById("subject-show").innerHTML = "No Student Found" + xhr.status;
+                    }
+                }
+            };
+            xhr.open("GET", "../includes/jqueries/searchSubject.php?subject_id=" + encodeURIComponent(student_id), true);
+            xhr.send();
+        }
         document.addEventListener('DOMContentLoaded', () => {
             const lectureUnitsSelect = document.getElementById('lecture-units');
             const labUnitsSelect = document.getElementById('lab-units');

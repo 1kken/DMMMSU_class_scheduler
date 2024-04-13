@@ -94,7 +94,7 @@ if (!is_logged_in()) {
             <form action="../../DMMMSU_class_scheduler\includes\subject_handler.php" method="post">
                 <div class="form-group">
                     <label for="subject-id">Subject ID:</label>
-                    <input type="text" id="subject-id" name="subject_id" value="<?php echo $subject['subject_id']; ?>" readonly>
+                    <input type="text" id="subject-id" name="subject_id" value="<?php echo $subject['subject_id']; ?>">
                 </div>
                 <div class="form-group">
                     <label for="descriptive-title">Descriptive Title:</label>
