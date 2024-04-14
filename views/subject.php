@@ -214,6 +214,7 @@ if (!is_logged_in()) {
                     </select>
                 </div>
                 <input type="submit" name="create_subject" value="Add Subject">
+                <input type="submit" onclick="redirectToDashboard()" value="Back to Dashboard">
             </form>
             <?php
             check_subject_errors();
@@ -304,6 +305,10 @@ if (!is_logged_in()) {
                 totalUnitsInput.value = total ;
             }
         });
+        
+        function redirectToDashboard() {
+            window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
+        }
     </script>
 
 </body>

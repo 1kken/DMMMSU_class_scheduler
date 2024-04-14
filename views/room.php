@@ -193,6 +193,7 @@ require_once(APP_NAME . "includes/room/room_view.php");
                 </div>
                 <input type="text" name="create_room" hidden>
                 <input type="submit" value="Add Room">
+                <input type="submit" onclick="redirectToDashboard()" value="Back to Dashboard">
             </form>
             <?php
             check_create_room_errors();
@@ -202,8 +203,8 @@ require_once(APP_NAME . "includes/room/room_view.php");
         <div class="room_table_container">
             <h2>Room List</h2>
             <div class="search-container">
-                    <input type="text" id="search-input" placeholder="Search...">
-                    <button onclick="search()">search</button>
+                <input type="text" id="search-input" placeholder="Search...">
+                <button onclick="search()">search</button>
             </div>
             <table>
                 <thead>
@@ -259,6 +260,10 @@ require_once(APP_NAME . "includes/room/room_view.php");
             };
             xhr.open("GET", "../includes/jqueries/searchRoom.php?room_id=" + encodeURIComponent(student_id), true);
             xhr.send();
+        }
+
+        function redirectToDashboard() {
+            window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
         }
     </script>
 </body>

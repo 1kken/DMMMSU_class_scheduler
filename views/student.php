@@ -166,16 +166,18 @@ if (!is_logged_in()) {
         .actions button:hover {
             filter: brightness(0.9);
         }
-        .errors{
+
+        .errors {
             color: tomato;
         }
     </style>
 </head>
 <script src="../jquery.js"></script>
+
 <body>
     <div class="container">
         <div class="form_container">
-            <h2 >Student Registration</h2>
+            <h2>Student Registration</h2>
             <form action="../../DMMMSU_class_scheduler\includes\student_handler.php" method="post">
                 <div class="form-group">
                     <label for="student-id">Student ID:</label>
@@ -201,22 +203,23 @@ if (!is_logged_in()) {
                     <label for="section-id">Section ID:</label>
                     <select id="section-id" name="section_id">
                         <?php
-                            $sections = get_sections($pdo);
-                            foreach ($sections as $section) {
-                                echo "<option value='" . $section['section_id'] . "'>" . $section['section_id'] . "</option>";
-                            }
+                        $sections = get_sections($pdo);
+                        foreach ($sections as $section) {
+                            echo "<option value='" . $section['section_id'] . "'>" . $section['section_id'] . "</option>";
+                        }
                         ?>
                     </select>
-                        <?php check_student_errors()?>
+                    <?php check_student_errors() ?>
                 </div>
-                <input type="submit" value="create_student" name="create_student">
+                <input type="submit" value="Create Student" name="create_student">
+                <input type="submit" onclick="redirectToDashboard()" value="Back to Dashboard">
             </form>
         </div>
         <div class="user_table_container">
             <h2>Student Records</h2>
             <div class="search-container">
-                    <input type="text" id="search-input" placeholder="Search...">
-                    <button onclick="search()">search</button>
+                <input type="text" id="search-input" placeholder="Search...">
+                <button onclick="search()">search</button>
             </div>
             <table>
                 <thead>
@@ -262,23 +265,59 @@ if (!is_logged_in()) {
             </table>
         </div>
     </div>
-<script>
-function search() {
-    var student_id = document.getElementById("search-input").value;
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                document.getElementById("student-show").innerHTML = xhr.responseText;
-            } else {
-                document.getElementById("student-show").innerHTML = "No Student Found" + xhr.status;
-            }
+    <script>
+        function search() {
+            var student_id = document.getElementById("search-input").value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById("student-show").innerHTML = xhr.responseText;
+                    } else {
+                        document.getElementById("student-show").innerHTML = "No Student Found" + xhr.status;
+                    }
+                }
+            };
+            xhr.open("GET", "../includes/jqueries/searchStudent.php?student_id=" + encodeURIComponent(student_id), true);
+            xhr.send();
         }
-    };
-    xhr.open("GET", "../includes/jqueries/searchStudent.php?student_id=" + encodeURIComponent(student_id), true);
-    xhr.send();
-}
-</script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstNameInput = document.getElementById('first-name');
+            const lastNameInput = document.getElementById('last-name');
+            const instructorIdInput = document.getElementById('student-id');
+            const emailInput = document.getElementById('email');
+
+            firstNameInput.addEventListener('input', generateEmail);
+            lastNameInput.addEventListener('input', generateEmail);
+            instructorIdInput.addEventListener('input', generateEmail);
+
+            function generateEmail() {
+                const firstName = firstNameInput.value.trim().toLowerCase();
+                const lastName = lastNameInput.value.trim().replace(/\s/g, '').toLowerCase();
+                const instructorId = instructorIdInput.value.trim().toLowerCase();
+                let nameExploded = firstName.split(" ");
+                let generatedEmail = nameExploded.map(name => name[0]).join("");
+
+                // Add the last name
+                generatedEmail += lastName;
+                // Add the last four digits of instructorId
+                generatedEmail += instructorId.substring(4, 8);
+                // Add the suffix email format
+                generatedEmail += "@student.dmmmsu.edu.ph";
+                // Check if all inputs have values
+                if (firstName && lastName && instructorId) {
+                    ;
+                    emailInput.value = generatedEmail;
+                } else {
+                    emailInput.value = ''; // Clear the email if any input is empty
+                }
+            }
+        });
+
+        function redirectToDashboard() {
+            window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
+        }
+    </script>
 </body>
 
 </html>

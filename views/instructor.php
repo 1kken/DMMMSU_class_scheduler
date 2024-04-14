@@ -201,6 +201,7 @@ if (!is_logged_in()) {
                     <input type="email" id="email" name="email" required>
                 </div>
                 <input type="submit" value="create instructor" name="create_instructor">
+                <input type="submit" onclick="redirectToDashboard()" value="Back to Dashboard">
             </form>
             <?php
             check_create_instructor_error();
@@ -209,8 +210,8 @@ if (!is_logged_in()) {
         <div class="user_table_container">
             <h2>Instructor Records</h2>
             <div class="search-container">
-                    <input type="text" id="search-input" placeholder="Search...">
-                    <button onclick="search()">search</button>
+                <input type="text" id="search-input" placeholder="Search...">
+                <button onclick="search()">search</button>
             </div>
             <table>
                 <thead>
@@ -223,7 +224,7 @@ if (!is_logged_in()) {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id = "instructor-show">
+                <tbody id="instructor-show">
                     <?php
                     $instructors = get_instructors($pdo);
                     if (!$instructors) {
@@ -270,6 +271,41 @@ if (!is_logged_in()) {
             xhr.open("GET", "../includes/jqueries/searchInstructor.php?instructor_id=" + encodeURIComponent(student_id), true);
             xhr.send();
         }
+
+        function redirectToDashboard() {
+            window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstNameInput = document.getElementById('first-name');
+            const lastNameInput = document.getElementById('last-name');
+            const instructorIdInput = document.getElementById('instructor-id');
+            const emailInput = document.getElementById('email');
+
+            firstNameInput.addEventListener('input', generateEmail);
+            lastNameInput.addEventListener('input', generateEmail);
+            instructorIdInput.addEventListener('input', generateEmail);
+
+            function generateEmail() {
+                const firstName = firstNameInput.value.trim().toLowerCase();
+                const lastName =lastNameInput.value.trim().replace(/\s/g, '').toLowerCase();
+                const instructorId = instructorIdInput.value.trim().toLowerCase();
+                let nameExploded = firstName.split(" ");
+                let generatedEmail = nameExploded.map(name => name[0]).join("");
+
+                // Add the last name
+                generatedEmail += lastName;
+                // Add the last four digits of instructorId
+                generatedEmail += instructorId.substring(4, 8);
+                // Add the suffix email format
+                generatedEmail += "@instructor.dmmmsu.edu.ph";
+                // Check if all inputs have values
+                if (firstName && lastName && instructorId) {;
+                    emailInput.value = generatedEmail;
+                } else {
+                    emailInput.value = ''; // Clear the email if any input is empty
+                }
+            }
+        });
     </script>
 
 </body>
