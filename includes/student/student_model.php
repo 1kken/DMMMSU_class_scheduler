@@ -23,7 +23,13 @@
 
     function get_student_id(object $pdo, string $student_id)
     {
-        $stmt = $pdo->prepare("SELECT * FROM student WHERE student_id = :student_id");
+    $stmt = $pdo->prepare("SELECT 'instructor' AS TYPE, instructor_id AS id
+                            FROM instructor
+                            WHERE instructor_id = :student_id
+                            UNION
+                            SELECT 'student' AS TYPE, student_id AS id
+                            FROM student
+                            WHERE student_id =:student_id;");
         $stmt->bindParam(":student_id", $student_id);
         $stmt->execute();
         return $stmt->fetch();

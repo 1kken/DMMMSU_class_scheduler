@@ -45,7 +45,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
 
     //check if the instructor_id is already in the database
     if(is_student_id_taken($pdo, $student_id)){
-        $errors["id_taken"] =  "Student ID is already taken.";
+        $errors["id_taken"] =  "ID is already taken.";
     }
 
     if(!check_email_format($student_id, $first_name, $last_name, $email) && $errors["id_format"] == null && $errors["email_invalid"] == null 
@@ -118,7 +118,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["update_student"])) {
     }
     if($old_student_id != $student_id){
         if(is_student_id_taken($pdo, $student_id)){
-            $errors["id_taken"] = "Student ID is already taken.";
+            $errors["id_taken"] = "ID is already taken.";
         }
     }
     //check if email is valid

@@ -41,7 +41,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_instructor"])) {
 
     //check if the instructor_id is already in the database
     if (is_instructor_id_taken($pdo, $instructor_id)) {
-        $errors["id_taken"] = "Instructor ID is already taken.";
+        $errors["id_taken"] = " ID is already taken.";
     }
     //check email if already in the database
     if (is_instructor_email_taken($pdo, $email)) {
@@ -120,7 +120,7 @@ if (isset($_POST["update_instructor"]) && isset($_SESSION["user_id"])) {
     //check if the instructor_id is already in the database
     if ($old_instructor_id != $instructor_id) {
         if (is_instructor_id_taken($pdo, $instructor_id)) {
-            $errors["id_taken"] = "Instructor ID is already taken.";
+            $errors["id_taken"] = "ID is already taken.";
         }
     }
     //check email if already in the database
