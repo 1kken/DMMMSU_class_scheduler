@@ -2,6 +2,8 @@
 define('APP_NAME', dirname(__FILE__) . "/../");
 require_once(APP_NAME . "includes/authorization.php");
 require_once(APP_NAME . "includes/config_session.inc.php");
+require_once(APP_NAME . "includes/dashboard_model.php");
+
 
 if (!is_logged_in()) {
     header("LOCATION: /DMMMSU_class_scheduler/index.php");
@@ -161,25 +163,25 @@ if (!is_logged_in()) {
                 <h1>Dashboard</h1>
                 <div class="user-icon" onclick="location.href='user.php'">
                     <img src="../source/user-icon.png" alt="User">
-                    <p>Name place Holder</p>
+                    <p><?php echo get_full_name_user($pdo,$_SESSION["user_id"])?></p>
                 </div>
             </div>
             <div class="card-container">
                 <div class="card" id="students">
                     <h2 class="card-title">Students</h2>
-                    <p>Display student count here</p>
+                    <p><?php echo get_count_students($pdo)?></p>
                 </div>
                 <div class="card" id="instructors">
                     <h2 class="card-title">Instructors</h2>
-                    <p>Display instructor count here</p>
+                    <p><?php echo get_count_instructors($pdo)?></p>
                 </div>
                 <div class="card" id="rooms">
                     <h2 class="card-title">Rooms</h2>
-                    <p>Display room count here</p>
+                    <p><?php echo get_count_rooms($pdo)?></p>
                 </div>
                 <div class="card" id="subjects">
                     <h2 class="card-title">Subjects</h2>
-                    <p>Display subject count here</p>
+                    <p><?php echo get_count_subjects($pdo)?></p>
                 </div>
             </div>
         </div>
