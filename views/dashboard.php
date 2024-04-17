@@ -1,3 +1,13 @@
+<?php
+define('APP_NAME', dirname(__FILE__) . "/../");
+require_once(APP_NAME . "includes/authorization.php");
+require_once(APP_NAME . "includes/config_session.inc.php");
+
+if (!is_logged_in()) {
+    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
