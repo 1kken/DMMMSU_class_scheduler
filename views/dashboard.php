@@ -48,21 +48,30 @@ if (!is_logged_in()) {
         }
 
         .menu-item {
+            display: flex;
             margin-bottom: 10px;
+            border-radius: 2px;
+            transition: background-color 0.3s ease;
+            /* Added transition */
+            border-bottom: transparent 1px solid;
+        }
+
+        .menu-item img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
         }
 
         .menu-item a {
-            border-bottom: transparent 1px solid;
+            padding: 100%;
             color: #fff;
             text-decoration: none;
             display: block;
             padding: 3px 0;
-            transition: background-color 0.3s ease; /* Added transition */
-            border-radius: 2px;
             margin-bottom: 30px;
         }
 
-        .menu-item a:hover {
+        .menu-item:hover {
             border-bottom: lime 1px solid;
             background-color: #555;
         }
@@ -74,7 +83,8 @@ if (!is_logged_in()) {
             margin-bottom: 20px;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
-            position: relative; /* Added positioning */
+            position: relative;
+            /* Added positioning */
         }
 
         .card-container {
@@ -84,16 +94,49 @@ if (!is_logged_in()) {
         }
 
         .card {
-            width: calc(33% - 20px); /* Adjust the width as needed */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: calc(33% - 20px);
+            /* Adjust the width as needed */
             margin-bottom: 20px;
             background-color: #f9f9f9;
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-left: lime 1px solid;
+        }
+        .card img{
+            opacity: 0.3;
+            width: 75px;
+            height: 75px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        :nth-child(1 of .card) {
+            border-left: red 3px solid;
+        }
+
+        :nth-child(2 of .card) {
+            border-left: blue 3px solid;
+        }
+
+        :nth-child(3 of .card) {
+            border-left: brown 3px solid;
+        }
+
+        :nth-child(4 of .card) {
+            border-left: tomato 3px solid;
         }
 
         .card-title {
             margin-bottom: 10px;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 35px;
         }
 
         .button-group {
@@ -119,20 +162,25 @@ if (!is_logged_in()) {
             top: 10px;
             right: 20px;
             cursor: pointer;
-            display: flex; /* Added */
-            align-items: center; /* Added */
+            display: flex;
+            /* Added */
+            align-items: center;
+            /* Added */
         }
 
         .user-icon img {
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            margin-right: 5px; /* Added */
+            margin-right: 5px;
+            /* Added */
         }
 
         .user-icon p {
-            margin: 0; /* Added */
-            font-size: 14px; /* Added */
+            margin: 0;
+            /* Added */
+            font-size: 14px;
+            /* Added */
         }
     </style>
 </head>
@@ -143,18 +191,23 @@ if (!is_logged_in()) {
         <div class="sidebar">
             <h3>Menu</h3>
             <div class="menu-item">
+                <img src="../source/student.png" alt="User">
                 <a href="student.php">Students</a>
             </div>
             <div class="menu-item">
+                <img src="../source/instructor.png" alt="User">
                 <a href="instructor.php">Instructors</a>
             </div>
             <div class="menu-item">
+                <img src="../source/room.png" alt="User">
                 <a href="room.php">Rooms</a>
             </div>
             <div class="menu-item">
+                <img src="../source/subject.png" alt="User">
                 <a href="subject.php">Subjects</a>
             </div>
             <div class="menu-item">
+                <img src="../source/reports.png" alt="User">
                 <a href="#reports">Generate Reports</a>
             </div>
         </div>
@@ -163,25 +216,38 @@ if (!is_logged_in()) {
                 <h1>Dashboard</h1>
                 <div class="user-icon" onclick="location.href='user.php'">
                     <img src="../source/user-icon.png" alt="User">
-                    <p><?php echo get_full_name_user($pdo,$_SESSION["user_id"])?></p>
+                    <p><?php echo get_full_name_user($pdo, $_SESSION["user_id"]) ?></p>
                 </div>
             </div>
             <div class="card-container">
                 <div class="card" id="students">
-                    <h2 class="card-title">Students</h2>
-                    <p><?php echo get_count_students($pdo)?></p>
+                    <div>
+                        <h2 class="card-title">Number of Students</h2>
+                        <p><?php echo get_count_students($pdo) ?></p>
+                    </div>
+                    <img src="../source/student.png" alt="student">
                 </div>
                 <div class="card" id="instructors">
-                    <h2 class="card-title">Instructors</h2>
-                    <p><?php echo get_count_instructors($pdo)?></p>
+                    <div>
+                    <h2 class="card-title">Number of Instructors</h2>
+                    <p><?php echo get_count_instructors($pdo) ?></p>
+                    </div>
+                    <img src="../source/instructor.png" alt="student">
                 </div>
                 <div class="card" id="rooms">
-                    <h2 class="card-title">Rooms</h2>
-                    <p><?php echo get_count_rooms($pdo)?></p>
+                    <div>
+                    <h2 class="card-title">Number of Rooms</h2>
+                    <p><?php echo get_count_rooms($pdo) ?></p>
+                    </div>
+                    <img src="../source/room.png" alt="student">
                 </div>
                 <div class="card" id="subjects">
-                    <h2 class="card-title">Subjects</h2>
-                    <p><?php echo get_count_subjects($pdo)?></p>
+                    <div>
+                    <h2 class="card-title">Number of Subjects</h2>
+                    <p><?php echo get_count_subjects($pdo) ?></p>
+
+                    </div>
+                    <img src="../source/subject.png" alt="student">
                 </div>
             </div>
         </div>
