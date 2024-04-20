@@ -30,7 +30,7 @@ try {
     require_once("./config_session.inc.php");
     if ($errors) {
         $_SESSION["log_in_errors"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/auths/log_in_page.php");
+        header("LOCATION: /DMMMSU_class_scheduler/index.php");
         exit();
     }
     if ($user_type == "student") {

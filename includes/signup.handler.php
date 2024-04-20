@@ -38,12 +38,12 @@ try {
     if ($errors) {
         require_once("./config_session.inc.php");
         $_SESSION["errors_signup"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/auths/sign_up_page.php");
+        header("LOCATION: /DMMMSU_class_scheduler/views/sign_up_page.php");
         exit();
     }
 
     create_user($pdo,$user_type,$user_id,$password);
-    header("LOCATION: /DMMMSU_class_scheduler/views/auths/log_in_page.php?signup=success");
+    header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
 
     $pdo = null;
     $stmt = null;

@@ -1,7 +1,7 @@
 <?php
-define('APP_NAME', dirname(__FILE__) . "/../../");
+define('APP_NAME', dirname(__FILE__) . "/../");
 require_once(APP_NAME . "includes/config_session.inc.php");
-require_once(APP_NAME . "includes/login/login_view.php");
+require_once(APP_NAME . "includes/signup/signup_view.php");
 require_once(APP_NAME . "includes/authorization.php");
 if (is_logged_in()) {
     header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
@@ -14,7 +14,7 @@ if (is_logged_in()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Create an Account</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,28 +67,28 @@ if (is_logged_in()) {
             background-color: #0056b3;
         }
 
-        a {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        a:hover {
-            text-decoration: underline;
+        p {
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Welcome User</h1>
-        <form action="/DMMMSU_class_scheduler/includes/login.handler.php" method="post">
+        <h1>Create an Account</h1>
+        <form action="/DMMMSU_class_scheduler/includes/signup.handler.php" method="post">
             <div>
-                <label for="id-number">ID number</label>
-                <input type="number" id="id-number" name="id-number" placeholder="21111111" required>
+                <label for="id-number">Your ID Number</label>
+                <input type="number" name="id-number" id="id-number" placeholder="21111111" required="">
             </div>
             <div>
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <input type="password" name="password" id="password" placeholder="••••••••" required="">
+            </div>
+            <div>
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" required="">
             </div>
             <div>
                 <label for="user-type">User Type</label>
@@ -97,15 +97,12 @@ if (is_logged_in()) {
                     <option value="instructor">Instructor</option>
                 </select>
             </div>
-            <div>
-                <p>
-                    Dont have an account yet?
-                    <a href="/DMMMSU_class_scheduler/views/auths/sign_up_page.php">Create Account</a>
-                </p>
-            </div>
-            <button type="submit">Login</button>
+            <button type="submit">Create an Account</button>
+            <p>
+                Already have an account? <a href="/DMMMSU_class_scheduler/views/auths/log_in_page.php">Login here</a>
+            </p>
         </form>
-        <?php check_login_errors(); ?>
+        <?php check_for_signup_errors() ?>
     </div>
 </body>
 
