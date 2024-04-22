@@ -98,10 +98,10 @@ if (is_logged_in()) {
                 </select>
             </div>
             <button type="submit">Create an Account</button>
-            <p>
-                Already have an account? <a href="/DMMMSU_class_scheduler/views/auths/log_in_page.php">Login here</a>
-            </p>
         </form>
+        <p>
+            Already have an account? <a href="/DMMMSU_class_scheduler/index.php">Login here</a>
+        </p>
         <?php check_for_signup_errors() ?>
     </div>
 </body>

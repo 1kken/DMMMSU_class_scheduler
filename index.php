@@ -1,13 +1,3 @@
-<?php
-define('APP_NAME', dirname(__FILE__) . "/");
-require_once(APP_NAME . "includes/config_session.inc.php");
-require_once(APP_NAME . "includes/login/login_view.php");
-require_once(APP_NAME . "includes/authorization.php");
-if (is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,6 +95,16 @@ if (is_logged_in()) {
             </div>
             <button type="submit">Login</button>
         </form>
+        <?php
+        define('APP_NAME', dirname(__FILE__) . "/");
+        require_once(APP_NAME . "includes/config_session.inc.php");
+        require_once(APP_NAME . "includes/login/login_view.php");
+        require_once(APP_NAME . "includes/authorization.php");
+        if (is_logged_in()) {
+            header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
+            exit();
+        }
+        ?>
         <?php check_login_errors(); ?>
     </div>
 </body>

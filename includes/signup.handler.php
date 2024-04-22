@@ -43,10 +43,11 @@ try {
     }
 
     create_user($pdo,$user_type,$user_id,$password);
-    header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
+    header("LOCATION: /DMMMSU_class_scheduler/index.php");
 
     $pdo = null;
     $stmt = null;
+    exit();
 } catch (PDOException $e) {
     die("Sign up failed" . $e->getMessage());
 }
