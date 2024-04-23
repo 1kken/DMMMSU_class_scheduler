@@ -33,14 +33,7 @@
         $schedules = $stmt->fetchAll();
         return $schedules;
     }
-
-    //helper
-    function get_rooms_sched($pdo){
-        $stmt = $pdo->prepare('SELECT room_id FROM rooms');
-        $stmt->execute();
-        $rooms = $stmt->fetchAll();
-        return $rooms;
-    }
+    
 
     function get_schedule($pdo, $schedule_id){
         $stmt = $pdo->prepare('SELECT * FROM schedule WHERE schedule_id = :schedule_id');

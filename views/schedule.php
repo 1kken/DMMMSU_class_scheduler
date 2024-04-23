@@ -348,7 +348,6 @@ if (!is_logged_in()) {
                 let syProcessed = syInput.value.split("-");
                 syProcessed = syProcessed.map((sy) => sy.slice(2, 4));
                 syProcessed = syProcessed.join("-");
-                console.log(syProcessed)
                 const subjectId = subjectIdInput.value;
                 const sectionId = sectionIdInput.value;
                 if (subjectId && sectionId && syProcessed.length === 5) {
