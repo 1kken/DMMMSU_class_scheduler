@@ -63,3 +63,15 @@
         header("LOCATION: /DMMMSU_class_scheduler/views/schedule.php");
         exit();
     }
+
+    if(isset($_POST["delete_schedule"]) && isset($_SESSION["user_id"])){
+        $schedule_id = $_POST["schedule_id"];
+        try {
+            $stmt = $pdo->prepare("DELETE FROM schedule WHERE schedule_id = :schedule_id");
+            $stmt->execute(['schedule_id' => $schedule_id]);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        header("LOCATION: /DMMMSU_class_scheduler/views/schedule.php");
+        exit();
+    }
