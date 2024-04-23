@@ -215,11 +215,11 @@ if (!is_logged_in()) {
                 <div class="form-group">
                     <label for="day">Day:</label>
                     <select id="day" name="day" required>
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
+                        <option value="monday">Monday</option>
+                        <option value="tuesday">Tuesday</option>
+                        <option value="wednesday">Wednesday</option>
+                        <option value="thursday">Thursday</option>
+                        <option value="friday">Friday</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -263,7 +263,7 @@ if (!is_logged_in()) {
                 </div>
                 <div class="form-group">
                     <label for="section">Section:</label>
-                    <select id="section-id" name="section-id" required>
+                    <select id="section-id" name="section_id" required>
                         <?php
                         $sections = get_section_name_id($pdo);
                         foreach ($sections as $section) {
@@ -276,7 +276,7 @@ if (!is_logged_in()) {
                     <label for="sy">SY:</label>
                     <input type="text" id="sy" name="sy" required>
                 </div>
-                <input type="submit" value="Add Schedule">
+                <input type="submit" value="Add Schedule" name="create_schedule">
                 <input type="submit" onclick="redirectToDashboard()" value="Back to Dashboard">
             </form>
         </div>
@@ -298,20 +298,34 @@ if (!is_logged_in()) {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Populate table with schedule records -->
-                    <tr>
-                        <td>Code</td>
-                        <td>Start Time</td>
-                        <td>End Time</td>
-                        <td>Section</td>
-                        <td>SY</td>
-                        <td class="actions">
-                            <button class="delete">Delete</button>
-                            <button class="update">Update</button>
-                        </td>
-                    </tr>
-                    <!-- Add more rows as needed -->
+                <tbody id="schedule-id">
+                    <?php
+                    // Assuming you have fetched schedule data and stored it in an array called $schedules
+                    $schedules = get_schedules($pdo);
+
+                    // Display schedule records
+                    foreach ($schedules as $schedule) {
+                        $schedule_id = $schedule['schedule_id'];
+                        echo "<tr>";
+                        echo "<td>" . $schedule['code'] . "</td>";
+                        echo "<td>" . $schedule['start_time'] . "</td>";
+                        echo "<td>" . $schedule['end_time'] . "</td>";
+                        echo "<td>" . $schedule['section_id'] . "</td>";
+                        echo "<td>" . $schedule['sy'] . "</td>";
+                        echo "<td class='actions'>
+                                <form action='../../DMMMSU_class_scheduler\includes/schedule_handler.php' method='post'>
+                                    <input type='text' name='schedule_id' value='$schedule_id' hidden>
+                                    <button class='delete' name='delete_schedule'>Delete</button>
+                                </form>
+                                <form action='../../DMMMSU_class_scheduler/views/schedule_update.php' method='get'>
+                                    <input type='text' name='schedule_id' value='$schedule_id' hidden>
+                                    <button class='update'>Update</button>
+                                </form>
+                            </td>";
+                        echo "</tr>";
+                    }
+                    ?>
+
                 </tbody>
             </table>
         </div>
@@ -325,14 +339,13 @@ if (!is_logged_in()) {
             const sectionIdInput = document.getElementById('section-id');
             const syInput = document.getElementById('sy');
             const codeInput = document.getElementById('code');
-
             subjectIdInput.addEventListener('input', generateCode);
             sectionIdInput.addEventListener('input', generateCode);
             syInput.addEventListener('input', generateCode);
 
             function generateCode() {
                 //process sy 2023-2024 to 23-24
-                let syProcessed =syInput.value.split("-");
+                let syProcessed = syInput.value.split("-");
                 syProcessed = syProcessed.map((sy) => sy.slice(2, 4));
                 syProcessed = syProcessed.join("-");
                 console.log(syProcessed)

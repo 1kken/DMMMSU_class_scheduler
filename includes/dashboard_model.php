@@ -53,3 +53,11 @@ if(!isset($_SESSION["user_id"])){
         $result = $stmt->fetch();
         return $result['count'];
     }
+
+    function get_count_schedule($pdo){
+        $stmt = $pdo->prepare("SELECT COUNT(schedule_id) as count
+                            FROM schedule;");
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result['count'];
+    }

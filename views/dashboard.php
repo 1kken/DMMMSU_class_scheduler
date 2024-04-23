@@ -191,20 +191,24 @@ if (!is_logged_in()) {
         <div class="sidebar">
             <h3>Menu</h3>
             <div class="menu-item">
-                <img src="../source/student.png" alt="User">
+                <img src="../source/student.png" alt="student">
                 <a href="student.php">Students</a>
             </div>
             <div class="menu-item">
-                <img src="../source/instructor.png" alt="User">
+                <img src="../source/instructor.png" alt="instructor">
                 <a href="instructor.php">Instructors</a>
             </div>
             <div class="menu-item">
-                <img src="../source/room.png" alt="User">
+                <img src="../source/room.png" alt="room">
                 <a href="room.php">Rooms</a>
             </div>
             <div class="menu-item">
-                <img src="../source/subject.png" alt="User">
+                <img src="../source/subject.png" alt="subject">
                 <a href="subject.php">Subjects</a>
+            </div>
+            <div class="menu-item">
+                <img src="../source/schedule.png" alt="schedule">
+                <a href="schedule.php">Schedule</a>
             </div>
             <div class="menu-item">
                 <img src="../source/reports.png" alt="User">
@@ -232,14 +236,14 @@ if (!is_logged_in()) {
                     <h2 class="card-title">Number of Instructors</h2>
                     <p><?php echo get_count_instructors($pdo) ?></p>
                     </div>
-                    <img src="../source/instructor.png" alt="student">
+                    <img src="../source/instructor.png" alt="instructor">
                 </div>
                 <div class="card" id="rooms">
                     <div>
                     <h2 class="card-title">Number of Rooms</h2>
                     <p><?php echo get_count_rooms($pdo) ?></p>
                     </div>
-                    <img src="../source/room.png" alt="student">
+                    <img src="../source/room.png" alt="source">
                 </div>
                 <div class="card" id="subjects">
                     <div>
@@ -247,7 +251,15 @@ if (!is_logged_in()) {
                     <p><?php echo get_count_subjects($pdo) ?></p>
 
                     </div>
-                    <img src="../source/subject.png" alt="student">
+                    <img src="../source/subject.png" alt="subject">
+                </div>
+                <div class="card" id="schedules">
+                    <div>
+                    <h2 class="card-title">Number of Schedules</h2>
+                    <p><?php echo get_count_schedule($pdo) ?></p>
+
+                    </div>
+                    <img src="../source/schedule.png" alt="schedule">
                 </div>
             </div>
         </div>

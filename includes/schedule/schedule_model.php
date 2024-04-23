@@ -26,3 +26,10 @@
         $subjects = $stmt->fetchAll();
         return $subjects;
     }
+
+    function get_schedules($pdo){
+        $stmt = $pdo->prepare('SELECT * FROM schedule');
+        $stmt->execute();
+        $schedules = $stmt->fetchAll();
+        return $schedules;
+    }
