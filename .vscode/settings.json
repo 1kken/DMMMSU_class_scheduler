@@ -9,9 +9,9 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MariaDB",
-            "name": "class_schedule_xamppp",
-            "database": "class_schedule",
+            "name": "class_schedule",
             "username": "root",
+            "database": "class_schedule",
             "password": ""
         }
     ]
