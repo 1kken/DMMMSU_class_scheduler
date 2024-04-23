@@ -40,11 +40,12 @@ CREATE TABLE `rooms` (
 
 CREATE TABLE `schedule` (
   `schedule_id` int(11) NOT NULL AUTO_INCREMENT,
-  `code_no` text NOT NULL,
+  `code` text NOT NULL,
   `room_id` varchar(25) NOT NULL,
   `instructor_id` varchar(10) NOT NULL,
   `day` varchar(20) NOT NULL,
-  `time` time NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
   `subject_id` varchar(20) NOT NULL,
   `section_id` varchar(2) NOT NULL,
   `sy` varchar(9) NOT NULL,
@@ -85,8 +86,10 @@ CREATE TABLE `student` (
 CREATE TABLE `subject` (
   `subject_id` varchar(20) NOT NULL,
   `descriptive_title` text NOT NULL,
-  `units` int(10) NOT NULL,
-  `priority` int(10) NOT NULL,
+  `lecture_units` int(3) NOT NULL,
+  `laboratory_units` int(6) NOT NULL,
+  `total_units` int(10) NOT NULL,
+  `priority` int(3) NOT NULL,
   PRIMARY KEY (`subject_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -103,7 +106,7 @@ CREATE TABLE `user` (
   KEY `instructor_id` (`instructor_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_ibfk_2` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`instructor_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
