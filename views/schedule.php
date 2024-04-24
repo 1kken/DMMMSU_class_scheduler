@@ -4,7 +4,7 @@ require_once(APP_NAME . "includes/authorization.php");
 require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/schedule/schedule_model.php");
-//require_once(APP_NAME . "includes/student/student_view.php");
+require_once(APP_NAME . "includes/schedule/schedule_view.php");
 
 if (!is_logged_in()) {
     header("LOCATION: /DMMMSU_class_scheduler/index.php");
@@ -274,11 +274,19 @@ if (!is_logged_in()) {
                 </div>
                 <div class="form-group">
                     <label for="sy">SY:</label>
-                    <input type="text" id="sy" name="sy" required>
+                    <input type="text" id="sy" name="sy" value="<?php
+                                                                $current_year = date("Y");
+                                                                $next_year = date("Y", strtotime("+1 year"));
+                                                                $academic_year = $current_year . "-" . $next_year;
+                                                                echo $academic_year;
+                                                                ?>" required>
                 </div>
                 <input type="submit" value="Add Schedule" name="create_schedule">
                 <input type="submit" onclick="redirectToDashboard()" value="Back to Dashboard">
             </form>
+            <?php
+            check_schedule_errors();
+            ?>
         </div>
 
         <div class="schedule-table-container">
@@ -339,10 +347,7 @@ if (!is_logged_in()) {
             const sectionIdInput = document.getElementById('section-id');
             const syInput = document.getElementById('sy');
             const codeInput = document.getElementById('code');
-            subjectIdInput.addEventListener('input', generateCode);
-            sectionIdInput.addEventListener('input', generateCode);
-            syInput.addEventListener('input', generateCode);
-
+            generateCode();
             function generateCode() {
                 //process sy 2023-2024 to 23-24
                 let syProcessed = syInput.value.split("-");
@@ -351,6 +356,9 @@ if (!is_logged_in()) {
                 const subjectId = subjectIdInput.value;
                 const sectionId = sectionIdInput.value;
                 if (subjectId && sectionId && syProcessed.length === 5) {
+                    subjectIdInput.addEventListener('input', generateCode);
+                    sectionIdInput.addEventListener('input', generateCode);
+                    syInput.addEventListener('input', generateCode);
                     let generatedCode = `${subjectId}${sectionId}${syProcessed}`;
                     codeInput.value = generatedCode;
                     return;

@@ -5,6 +5,7 @@ require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/schedule/schedule_model.php");
 require_once(APP_NAME . "includes/schedule/schedule_view.php");
+require_once(APP_NAME . "includes/schedule/schedule_view.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,14 +95,14 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
         }
         ?>
         <h2>Update Schedule</h2>
-        <form action="update_schedule_handler.php" method="post">
+        <form action="../../DMMMSU_class_scheduler\includes\schedule_handler.php" method="post">
             <div class="form-group">
                 <label for="code">Code:</label>
                 <input type="text" id="code" name="code" readonly value = <?php echo $schedule['code'] ?> required>
             </div>
             <div class="form-group">
                 <label for="room">Room:</label>
-                <select id="room" name="room" required>
+                <select id="room" name="room_id" required>
                     <?php
                     $rooms = get_classroom_name_id($pdo);
                     foreach ($rooms as $room) {
@@ -113,10 +114,11 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
+                    <input type="text" name="old_room_id" id="old_room_id" value = <?php echo $schedule["room_id"]?> hidden>
             </div>
             <div class="form-group">
                 <label for="instructor">Instructor:</label>
-                <select id="instructor" name="instructor" required>
+                <select id="instructor" name="instructor_id" required>
                     <?php
                     $instructors = get_instructor_name_id($pdo);
                     foreach ($instructors as $instructor) {
@@ -128,6 +130,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
+                <input type="text" name="old_instructor_id" id="old_instructor_id" value = <?php echo $schedule["instructor_id"]?> hidden>
             </div>
             <div class="form-group">
                 <label for="day">Day:</label>
@@ -145,6 +148,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
+                <input type="text" name="old_day" id="old_day" value = <?php echo $schedule["day"]?> hidden>
             </div>
             <div class="form-group">
                 <label for="start-time">Start Time:</label>
@@ -163,6 +167,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
+                <input type="text" name="old_start_time" id="old_start_time" value = <?php echo $schedule["start_time"]?> hidden>
             </div>
             <div class="form-group">
                 <label for="end-time">End Time:</label>
@@ -181,10 +186,11 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
+                <input type="text" id="old_end_time" name = "old_end_time" value = <?php echo $schedule["end_time"]?> hidden>
             </div>
             <div class="form-group">
                 <label for="subject">Subject:</label>
-                <select id="subject-id" name="subject" required>
+                <select id="subject-id" name="subject_id" required>
                     <?php
                     $subjects = get_subject_name_id($pdo);
                     foreach ($subjects as $subject) {
@@ -196,10 +202,11 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
+                <input type="text" id="old_subject_id" name="old_subject_id" value = <?php echo $schedule["subject_id"]?> hidden>
             </div>
             <div class="form-group">
                 <label for="section">Section:</label>
-                <select id="section-id" name="section" required>
+                <select id="section-id" name="section_id" required>
                 <?php
                     $sections = get_section_name_id($pdo);
                     foreach ($sections as $section) {
@@ -211,13 +218,20 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                 ?>
                 </select>
+                <input type="text" id="old_section_id" name="old_section_id" value = <?php echo $schedule["section_id"]?> hidden>
             </div>
             <div class="form-group">
                 <label for="sy">School Year:</label>
                 <input type="text" id="sy" name="sy" placeholder="YYYY-YYYY" value=<?php echo $schedule["sy"]; ?> required>
+                <input type="text" id="old_sy" name="old_sy" value = <?php echo $schedule["sy"]?> hidden>
             </div>
-            <input type="submit" value="Update Schedule">
+            <input type="submit" value="Update Schedule" name="update_schedule">
+            <input type="text" name= "old_schedule_code" value = <?php echo $schedule["code"] ?> hidden>
+            <input type="text" name= "schedule_id" value = <?php echo $_GET["schedule_id"]?> hidden>
         </form>
+        <?php
+        check_schedule_errors();
+        ?>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
