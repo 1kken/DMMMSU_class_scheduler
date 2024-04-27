@@ -179,6 +179,7 @@ if (!is_logged_in()) {
         }
     </style>
 </head>
+<script src="../jquery.js"></script>
 
 <body>
 
@@ -191,23 +192,25 @@ if (!is_logged_in()) {
                     <input type="text" id="code" name="code" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="room-id">Room ID:</label>
-                    <select id="room-id" name="room_id" required>
+                    <label for="instructor">Instructor:</label>
+                    <select id="instructor-id" name="instructor_id" required>
                         <?php
-                        $classrooms = get_classroom_name_id($pdo);
-                        foreach ($classrooms as $classroom) {
-                            echo '<option value="' . $classroom['room_id'] . '">' . $classroom['room_id'] . '</option>';
+                        $instructors = get_instructor_name_id($pdo);
+                        echo "<option disabled selected value> -- select an option -- </option>";
+                        foreach ($instructors as $instructor) {
+                            echo '<option value="' . $instructor['instructor_id'] . '">' . $instructor['fullname'] . '</option>';
                         }
                         ?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="instructor">Instructor:</label>
-                    <select id="instructor" name="instructor_id" required>
+                    <label for="room-id">Room ID:</label>
+                    <select id="room-id" name="room_id" required>
                         <?php
-                        $instructors = get_instructor_name_id($pdo);
-                        foreach ($instructors as $instructor) {
-                            echo '<option value="' . $instructor['instructor_id'] . '">' . $instructor['fullname'] . '</option>';
+                        $classrooms = get_classroom_name_id($pdo);
+                        echo "<option disabled selected value> -- select an option -- </option>";
+                        foreach ($classrooms as $classroom) {
+                            echo '<option value="' . $classroom['room_id'] . '">' . $classroom['room_id'] . '</option>';
                         }
                         ?>
                     </select>
@@ -255,6 +258,7 @@ if (!is_logged_in()) {
                     <select id="subject-id" name="subject_id" required>
                         <?php
                         $subjects = get_subject_name_id($pdo);
+                        echo "<option disabled selected value> -- select an option -- </option>";
                         foreach ($subjects as $subject) {
                             echo '<option value="' . $subject['subject_id'] . '">' . $subject['descriptive_title'] . '</option>';
                         }
@@ -266,6 +270,7 @@ if (!is_logged_in()) {
                     <select id="section-id" name="section_id" required>
                         <?php
                         $sections = get_section_name_id($pdo);
+                        echo "<option disabled selected value> -- select an option -- </option>";
                         foreach ($sections as $section) {
                             echo '<option value="' . $section['section_id'] . '">' . $section['section_id'] . '</option>';
                         }
@@ -348,6 +353,7 @@ if (!is_logged_in()) {
             const syInput = document.getElementById('sy');
             const codeInput = document.getElementById('code');
             generateCode();
+
             function generateCode() {
                 //process sy 2023-2024 to 23-24
                 let syProcessed = syInput.value.split("-");
@@ -364,6 +370,37 @@ if (!is_logged_in()) {
                     return;
                 }
                 codeInput.value = '';
+            }
+
+            let instructorIdInput = document.getElementById('instructor-id');
+            let endTimeInput = document.getElementById('end-time');
+            let startTimeInput = document.getElementById('start-time');
+            let dayInput = document.getElementById('day');
+
+            endTimeInput.addEventListener('change', getSubject);
+            startTimeInput.addEventListener('change', getSubject);
+            dayInput.addEventListener('change', getSubject);
+            instructorIdInput.addEventListener('change', getSubject);
+
+            function getSubject() {
+                let instructor_id = document.getElementById("instructor-id").value;
+                let day = document.getElementById("day").value;
+                let start_time = document.getElementById("start-time").value;
+                let end_time = document.getElementById("end-time").value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("subject-id").innerHTML = '';
+                            document.getElementById("subject-id").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/subject_instructor.php?instructor_id=${instructor_id}&day=${day}&start_time=${start_time}&end_time=${end_time}`, true);
+                xhr.send();
             }
         });
 
