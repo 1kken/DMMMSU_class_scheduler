@@ -137,6 +137,28 @@ if (!is_logged_in()) {
                         ?>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="year-level">Year level:</label>
+                    <select id="year-level" name="year_level" required>
+                        <?php
+                        for ($i = 1; $i <= 4; $i++) {
+                            $selected = ($i == $subject['year_level']) ? 'selected' : '';
+                            echo "<option value='$i' $selected>$i</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="semester">Semester:</label>
+                    <select id="semester" name="semester" required>
+                        <?php
+                        for ($i = 1; $i <= 2; $i++) {
+                            $selected = ($i == $subject['semester']) ? 'selected' : '';
+                            echo "<option value='$i' $selected>$i</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
                 <input type="text" name="old_subject_id" value=<?php echo $subject_id?> hidden>
                 <input type="submit" name="update_subject" value="Update Subject">
             </form>

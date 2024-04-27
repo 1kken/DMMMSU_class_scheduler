@@ -13,8 +13,26 @@
         $laboratory_units = $_POST['laboratory_units'];
         $total_units = $_POST['total_units'];
         $priority = $_POST['priority'];
+        $year_level = $_POST['year_level'];
+        $semester = $_POST['semester'];
 
         $errors = [];
+        if(empty($subject_id) && empty($descriptive_title) && empty($lecture_units) && empty($laboratory_units) && empty($total_units) && empty($priority) && empty($year_level) && empty($semester)){
+            $errors[] = "Please fill up all fields.";
+        }
+
+        if($year_level == 0 || $semester == 0){
+            $errors[] = "Please select year level and semester.";
+        }
+
+        if($year_level > 4){
+            $errors[] = "Year level must not be greater than 4.";
+        }
+
+        if($semester > 2){
+            $errors[] = "Semester must not be greater than 2.";
+        }
+
         if(is_subject_id_taken($pdo, $subject_id)){
             $errors[] = "Subject ID is already taken.";
         }
@@ -34,7 +52,7 @@
         }
        
         try {
-            insert_subject($pdo, $subject_id, $descriptive_title, $lecture_units, $laboratory_units, $total_units, $priority);
+            insert_subject($pdo, $subject_id, $descriptive_title, $lecture_units, $laboratory_units, $total_units, $priority,$year_level,$semester);
             header("LOCATION: /DMMMSU_class_scheduler/views/subject.php");
             exit();
             
@@ -64,7 +82,26 @@
         $priority = $_POST['priority'];
         $old_subject_id = $_POST['old_subject_id'];
 
+        $year_level = $_POST['year_level'];
+        $semester = $_POST['semester'];
+
         $errors = [];
+        if(empty($subject_id) && empty($descriptive_title) && empty($lecture_units) && empty($laboratory_units) && empty($total_units) && empty($priority) && empty($year_level) && empty($semester)){
+            $errors[] = "Please fill up all fields.";
+        }
+
+        if($year_level == 0 || $semester == 0){
+            $errors[] = "Please select year level and semester.";
+        }
+
+        if($year_level > 4){
+            $errors[] = "Year level must not be greater than 4.";
+        }
+
+        if($semester > 2){
+            $errors[] = "Semester must not be greater than 2.";
+        }
+
         if(is_subject_id_taken($pdo, $subject_id) && $subject_id != $old_subject_id){
             $errors[] = "Subject ID is already taken.";
         }
@@ -84,7 +121,7 @@
         }
 
         try {
-            update_subject($pdo, $subject_id, $descriptive_title, $lecture_units, $laboratory_units, $total_units, $priority,$old_subject_id);
+            update_subject($pdo, $subject_id, $descriptive_title, $lecture_units, $laboratory_units, $total_units, $priority,$old_subject_id,$year_level,$semester);
             header("LOCATION: /DMMMSU_class_scheduler/views/subject.php");
             exit();
         } catch (PDOException $th) {

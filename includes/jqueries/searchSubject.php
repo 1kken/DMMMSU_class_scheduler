@@ -17,6 +17,8 @@ if (isset($_GET['subject_id'])) {
         echo "<td>" . $subject['laboratory_units'] . "</td>";
         echo "<td>" . $subject['total_units'] . "</td>";
         echo "<td>" . $subject['priority'] . "</td>";
+        echo "<td>" . $subject['year_level'] . "</td>";
+        echo "<td>" . $subject['semester'] . "</td>";
         echo "<td class='actions'>
                 <form action='../../DMMMSU_class_scheduler\includes/subject_handler.php' method='post'>
                     <input type='text' name='subject_id' value='" . $subject['subject_id'] . "' hidden>

@@ -15,15 +15,17 @@
         return $stmt->fetch();
     }
 
-    function insert_subject(object $pdo, string $subject_id, string $descriptive_title, string $lecture_units, string $laboratory_units, string $total_units, string $priority)
+    function insert_subject(object $pdo, string $subject_id, string $descriptive_title, string $lecture_units, string $laboratory_units, string $total_units, string $priority,string $year_level,string $semester)
     {
-        $stmt = $pdo->prepare("INSERT INTO subject(subject_id, descriptive_title, lecture_units, laboratory_units, total_units, priority) VALUES(:subject_id, :descriptive_title, :lecture_units, :laboratory_units, :total_units, :priority)");
+        $stmt = $pdo->prepare("INSERT INTO subject (subject_id, descriptive_title, lecture_units, laboratory_units, total_units, priority, year_level, semester) VALUES (:subject_id, :descriptive_title, :lecture_units, :laboratory_units, :total_units, :priority, :year_level, :semester)");
         $stmt->bindParam(':subject_id', $subject_id,PDO::PARAM_STR);
         $stmt->bindParam(':descriptive_title', $descriptive_title,PDO::PARAM_STR);
         $stmt->bindParam(':lecture_units', $lecture_units,PDO::PARAM_INT);
         $stmt->bindParam(':laboratory_units', $laboratory_units,PDO::PARAM_INT);
         $stmt->bindParam(':total_units', $total_units,PDO::PARAM_INT);
         $stmt->bindParam(':priority', $priority,PDO::PARAM_INT);
+        $stmt->bindParam(':year_level', $year_level,PDO::PARAM_INT);
+        $stmt->bindParam(':semester', $semester,PDO::PARAM_INT);
         $stmt->execute();
     }
 
@@ -42,9 +44,9 @@
         return $stmt->fetch();
     }
 
-    function update_subject(object $pdo, string $subject_id, string $descriptive_title, string $lecture_units, string $laboratory_units, string $total_units, string $priority, string $old_subject_id)
+    function update_subject(object $pdo, string $subject_id, string $descriptive_title, string $lecture_units, string $laboratory_units, string $total_units, string $priority, string $old_subject_id, string $year_level, string $semester)
     {
-        $stmt = $pdo->prepare("UPDATE subject SET subject_id = :subject_id, descriptive_title = :descriptive_title, lecture_units = :lecture_units, laboratory_units = :laboratory_units, total_units = :total_units, priority = :priority WHERE subject_id = :old_subject_id");
+        $stmt = $pdo->prepare("UPDATE subject SET subject_id = :subject_id, descriptive_title = :descriptive_title, lecture_units = :lecture_units, laboratory_units = :laboratory_units, total_units = :total_units, priority = :priority, year_level = :year_level, semester = :semester WHERE subject_id = :old_subject_id");
         $stmt->bindParam(':subject_id', $subject_id,PDO::PARAM_STR);
         $stmt->bindParam(':descriptive_title', $descriptive_title,PDO::PARAM_STR);
         $stmt->bindParam(':lecture_units', $lecture_units,PDO::PARAM_INT);
@@ -52,6 +54,8 @@
         $stmt->bindParam(':total_units', $total_units,PDO::PARAM_INT);
         $stmt->bindParam(':priority', $priority,PDO::PARAM_INT);
         $stmt->bindParam(':old_subject_id', $old_subject_id,PDO::PARAM_STR);
+        $stmt->bindParam(':year_level', $year_level,PDO::PARAM_INT);
+        $stmt->bindParam(':semester', $semester,PDO::PARAM_INT);
         $stmt->execute();
     }
 

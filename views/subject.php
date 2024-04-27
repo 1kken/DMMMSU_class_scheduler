@@ -213,6 +213,22 @@ if (!is_logged_in()) {
                         <option value="5">5</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="year-level">Year level:</label>
+                    <select id="year-level" name="year_level" required>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="semester">Semester:</label>
+                    <select id="semester" name="semester" required>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
                 <input type="submit" name="create_subject" value="Add Subject">
                 <input type="submit" onclick="redirectToDashboard()" value="Back to Dashboard">
             </form>
@@ -237,6 +253,8 @@ if (!is_logged_in()) {
                         <th>Total Units</th>
                         <th>Priority</th>
                         <th>Actions</th>
+                        <th>Year level</th>
+                        <th>Semester</th>
                     </tr>
                 </thead>
                 <tbody id="subject-show">
@@ -255,6 +273,8 @@ if (!is_logged_in()) {
                         echo "<td>" . $subject['laboratory_units'] . "</td>";
                         echo "<td>" . $subject['total_units'] . "</td>";
                         echo "<td>" . $subject['priority'] . "</td>";
+                        echo "<td>" . $subject['year_level'] . "</td>";
+                        echo "<td>" . $subject['semester'] . "</td>";
                         echo "<td class='actions'>
                                 <form action='../../DMMMSU_class_scheduler\includes\subject_handler.php' method='post'>
                                     <input type='text' name='subject_id' value=$subject_id hidden>
