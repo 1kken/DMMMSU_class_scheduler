@@ -5,6 +5,10 @@ require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/room/room_model.php");
 require_once(APP_NAME . "includes/room/room_view.php");
+if (!is_logged_in()) {
+    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
