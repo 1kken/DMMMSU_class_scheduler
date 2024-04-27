@@ -192,7 +192,7 @@ require_once(APP_NAME . "includes/subject_instructor/subject_instructor_view.php
                         echo "<td>" . $subject_instructor['instructor_name'] . "</td>";
                         echo "<td class='actions'>
                                 <form action='../../DMMMSU_class_scheduler/includes/subject_instructor_handler.php' method='post'>
-                                    <input type='hidden' name='subject_id' value='" . $subject_instructor['si_id'] . "'>
+                                    <input type='hidden' name='si_id' value='" . $subject_instructor['si_id'] . "'>
                                     <input type='hidden' name='delete_si'>
                                     <button class='delete' name='delete_subject_instructor'>Delete</button>
                                 </form>

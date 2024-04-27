@@ -48,3 +48,16 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_subject_instructor"])) {
         exit();
     }
 }
+
+if(isset($_SESSION["user_id"]) && isset($_POST["delete_si"])){
+    $si_id = $_POST["si_id"];
+    $si_id = trim($si_id);
+
+    try {
+        delete_subject_instructor($pdo, $si_id);
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+    header("LOCATION: /DMMMSU_class_scheduler/views/subject_instructor.php");
+    exit();
+}
