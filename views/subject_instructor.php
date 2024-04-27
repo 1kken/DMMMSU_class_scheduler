@@ -199,7 +199,7 @@ require_once(APP_NAME . "includes/subject_instructor/subject_instructor_view.php
                                 <form action='../../DMMMSU_class_scheduler/views/subject_instructor_update.php' method='get'>
                                     <button class='update'>Update</button>
                                 </form>
-        </td>";
+                            </td>";
                         echo "</tr>";
                     }
 
