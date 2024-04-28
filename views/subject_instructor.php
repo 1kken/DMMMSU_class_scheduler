@@ -149,10 +149,10 @@ if (!is_logged_in()) {
                     <label for="subject">Subject Name:</label>
                     <select id="subject" name="subject_id" required>
                         <?php
-                            $subjects = get_subjects($pdo);
-                            foreach ($subjects as $subject) {
-                                echo "<option value='" . $subject['subject_id'] . "'>" . $subject['subject_id'] . "</option>";
-                            }
+                        $subjects = get_subjects($pdo);
+                        foreach ($subjects as $subject) {
+                            echo "<option value='" . $subject['subject_id'] . "'>" . $subject['subject_id'] . "</option>";
+                        }
                         ?>
                     </select>
                 </div>
@@ -160,16 +160,17 @@ if (!is_logged_in()) {
                     <label for="instructor">Instructor Name:</label>
                     <select id="instructor" name="instructor_id" required>
                         <?php
-                            $instructors = get_instructors($pdo);
-                            foreach ($instructors as $instructor) {
-                                echo "<option value='" . $instructor['instructor_id'] . "'>" . $instructor['instructor_name'] . "</option>";
-                            }
+                        $instructors = get_instructors($pdo);
+                        foreach ($instructors as $instructor) {
+                            echo "<option value='" . $instructor['instructor_id'] . "'>" . $instructor['instructor_name'] . "</option>";
+                        }
                         ?>
                     </select>
                 </div>
                 <input type="hidden" name="create_subject_instructor">
                 <input type="submit" value="Add Subject Instructor">
             </form>
+            <?php check_errors_si(); ?>
         </div>
 
         <div class="room_table_container">

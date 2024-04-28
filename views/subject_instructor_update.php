@@ -86,47 +86,47 @@ $instructor_id = $subject_instructor['instructor_id'];
 <body>
     <div class="container">
         <h1>Update Subject Instructor</h1>
-        <form action="" method="post">
-            <input type="hidden" name="subject_id" value="<?php echo $subject_id; ?>">
-            <input type="hidden" name="instructor_id" value="<?php echo $instructor_id; ?>">
+        <form action="../../DMMMSU_class_scheduler\includes\subject_instructor_handler.php" method="post">
+            <input type="hidden" name="si_id" value="<?php echo $si_id; ?>">
 
             <div>
                 <label for="subject_id">Subject Name:</label>
-                    <select id="subject" name="subject_id" required>
-                        <?php
-                            $subjects = get_subjects($pdo);
+                <select id="subject" name="subject_id" required>
+                    <?php
+                    $subjects = get_subjects($pdo);
+                    $select = "";
+                    foreach ($subjects as $subject) {
+                        if ($subject['subject_id'] == $subject_id) {
+                            $select = "selected";
+                        } else {
                             $select = "";
-                            foreach ($subjects as $subject) {
-                                if ($subject['subject_id'] == $subject_id) {
-                                    $select = "selected";
-                                } else {
-                                    $select = "";
-                                }
-                                echo "<option value='" . $subject['subject_id']."' $select>" . $subject['subject_id']. "</option>";
-                            }
-                        ?>
-                    </select>
+                        }
+                        echo "<option value='" . $subject['subject_id'] . "' $select>" . $subject['subject_id'] . "</option>";
+                    }
+                    ?>
+                </select>
             </div>
             <div>
                 <label for="instructor_name">Instructor Name:</label>
-                    <select id="instructor" name="instructor_id" required>
-                        <?php
-                            $instructors = get_instructors($pdo);
+                <select id="instructor" name="instructor_id" required>
+                    <?php
+                    $instructors = get_instructors($pdo);
+                    $select = "";
+                    foreach ($instructors as $instructor) {
+                        if ($instructor['instructor_id'] == $instructor_id) {
+                            $select = "selected";
+                        } else {
                             $select = "";
-                            foreach ($instructors as $instructor) {
-                                if ($instructor['instructor_id'] == $instructor_id) {
-                                    $select = "selected"; 
-                                } else {
-                                    $select = "";
-                                }
-                                echo "<option value='" . $instructor['instructor_id'] . "' $select>" . $instructor['instructor_name'] . "</option>";
-                            }
-                        ?>
-                    </select>
+                        }
+                        echo "<option value='" . $instructor['instructor_id'] . "' $select>" . $instructor['instructor_name'] . "</option>";
+                    }
+                    ?>
+                </select>
             </div>
 
             <button type="submit" name="update_subject_instructor">Update</button>
         </form>
+        <?php check_errors_si(); ?>
     </div>
 </body>
 

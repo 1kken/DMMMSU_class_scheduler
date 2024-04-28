@@ -43,3 +43,11 @@
         $stmt->bindParam(":si_id", $si_id, PDO::PARAM_INT);
         $stmt->execute();
     }
+
+    function update_subject_instructor($pdo, $si_id, $subject_id, $instructor_id) {
+        $stmt = $pdo->prepare("UPDATE subject_instructor SET subject_id = :subject_id, instructor_id = :instructor_id WHERE si_id = :si_id");
+        $stmt->bindParam(":si_id", $si_id, PDO::PARAM_INT);
+        $stmt->bindParam(":subject_id", $subject_id, PDO::PARAM_STR);
+        $stmt->bindParam(":instructor_id", $instructor_id, PDO::PARAM_STR);
+        $stmt->execute();
+    }
