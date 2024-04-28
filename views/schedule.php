@@ -216,6 +216,18 @@ if (!is_logged_in()) {
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="subject">Subject:</label>
+                    <select id="subject-id" name="subject_id" required>
+                        <?php
+                        $subjects = get_subject_name_id($pdo);
+                        echo "<option disabled selected value> -- select an option -- </option>";
+                        foreach ($subjects as $subject) {
+                            echo '<option value="' . $subject['subject_id'] . '">' . $subject['descriptive_title'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="day">Day:</label>
                     <select id="day" name="day" required>
                         <option value="monday">Monday</option>
@@ -249,18 +261,6 @@ if (!is_logged_in()) {
 
                         for ($time = $start_time; $time <= $end_time; $time += 1800) { // 1800 seconds = 30 minutes
                             echo '<option value="' . date($time_format, $time) . '">' . date($time_format, $time) . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Subject:</label>
-                    <select id="subject-id" name="subject_id" required>
-                        <?php
-                        $subjects = get_subject_name_id($pdo);
-                        echo "<option disabled selected value> -- select an option -- </option>";
-                        foreach ($subjects as $subject) {
-                            echo '<option value="' . $subject['subject_id'] . '">' . $subject['descriptive_title'] . '</option>';
                         }
                         ?>
                     </select>
@@ -352,36 +352,44 @@ if (!is_logged_in()) {
             const sectionIdInput = document.getElementById('section-id');
             const syInput = document.getElementById('sy');
             const codeInput = document.getElementById('code');
+
+            // Initial code generation
             generateCode();
 
+            // Event listeners for input changes
+            subjectIdInput.addEventListener('input', generateCode);
+            sectionIdInput.addEventListener('input', generateCode);
+            syInput.addEventListener('input', generateCode);
+
             function generateCode() {
-                //process sy 2023-2024 to 23-24
-                let syProcessed = syInput.value.split("-");
-                syProcessed = syProcessed.map((sy) => sy.slice(2, 4));
-                syProcessed = syProcessed.join("-");
                 const subjectId = subjectIdInput.value;
                 const sectionId = sectionIdInput.value;
-                if (subjectId && sectionId && syProcessed.length === 5) {
-                    subjectIdInput.addEventListener('input', generateCode);
-                    sectionIdInput.addEventListener('input', generateCode);
-                    syInput.addEventListener('input', generateCode);
-                    let generatedCode = `${subjectId}${sectionId}${syProcessed}`;
+                const syProcessed = processSy(syInput.value);
+
+                if (subjectId && sectionId && syProcessed) {
+                    const generatedCode = `${subjectId}${sectionId}${syProcessed}`;
                     codeInput.value = generatedCode;
-                    return;
+                } else {
+                    codeInput.value = '';
                 }
-                codeInput.value = '';
             }
 
+            // Process SY format from "2023-2024" to "23-24"
+            function processSy(syValue) {
+                const syParts = syValue.split("-");
+                if (syParts.length === 2) {
+                    return syParts.map(sy => sy.slice(2, 4)).join("");
+                }
+                return null;
+            }
             let instructorIdInput = document.getElementById('instructor-id');
             let endTimeInput = document.getElementById('end-time');
             let startTimeInput = document.getElementById('start-time');
             let dayInput = document.getElementById('day');
 
-            endTimeInput.addEventListener('change', getSubject);
-            startTimeInput.addEventListener('change', getSubject);
-            dayInput.addEventListener('change', getSubject);
             instructorIdInput.addEventListener('change', getSubject);
 
+            //getting the subject
             function getSubject() {
                 let instructor_id = document.getElementById("instructor-id").value;
                 let day = document.getElementById("day").value;
@@ -393,16 +401,18 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             document.getElementById("subject-id").innerHTML = '';
                             document.getElementById("subject-id").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/subject_instructor.php?instructor_id=${instructor_id}&day=${day}&start_time=${start_time}&end_time=${end_time}`, true);
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/subject_instructor.php?instructor_id=${instructor_id}`, true);
                 xhr.send();
             }
         });
+        //getting the classroom
+
+        //adjusting time
 
         function search() {
             console.log("search");
