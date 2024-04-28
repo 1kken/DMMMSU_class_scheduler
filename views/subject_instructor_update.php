@@ -85,6 +85,12 @@ $instructor_id = $subject_instructor['instructor_id'];
 
 <body>
     <div class="container">
+        <?php 
+            if($subject_instructor == null) {
+                echo "Subject Instructor not found.";
+                exit();
+            }
+        ?>
         <h1>Update Subject Instructor</h1>
         <form action="../../DMMMSU_class_scheduler\includes\subject_instructor_handler.php" method="post">
             <input type="hidden" name="si_id" value="<?php echo $si_id; ?>">

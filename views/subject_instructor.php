@@ -169,7 +169,9 @@ if (!is_logged_in()) {
                 </div>
                 <input type="hidden" name="create_subject_instructor">
                 <input type="submit" value="Add Subject Instructor">
+                <br>
             </form>
+                <input type="submit" style=" margin-top:10px" onclick="redirectToDashboard()" value="Back to Dashboard">
             <?php check_errors_si(); ?>
         </div>
 
@@ -216,6 +218,12 @@ if (!is_logged_in()) {
         </div>
     </div>
 
+    <script>
+
+        function redirectToDashboard() {
+            window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
+        }
+    </script>
 </body>
 
 </html>

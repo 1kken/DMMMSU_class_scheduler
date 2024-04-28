@@ -130,6 +130,9 @@ if (!is_logged_in()) {
             border-left: tomato 3px solid;
         }
 
+        :nth-child(5 of .card) {
+            border-left: purple 3px solid;
+        }
         .card-title {
             margin-bottom: 10px;
         }
@@ -207,6 +210,10 @@ if (!is_logged_in()) {
                 <a href="subject.php">Subjects</a>
             </div>
             <div class="menu-item">
+                <img src="../source/si.png" alt="subject_instructor">
+                <a href="subject_instructor.php">Instructor Subjects</a>
+            </div>
+            <div class="menu-item">
                 <img src="../source/schedule.png" alt="schedule">
                 <a href="schedule.php">Schedule</a>
             </div>
@@ -252,6 +259,13 @@ if (!is_logged_in()) {
 
                     </div>
                     <img src="../source/subject.png" alt="subject">
+                </div>
+                <div class="card" id="instructor-subjects">
+                    <div>
+                    <h2 class="card-title">Instructor Subjects</h2>
+                    <p><?php echo get_count_subject_instructor($pdo) ?></p>
+                    </div>
+                    <img src="../source/si.png" alt="schedule">
                 </div>
                 <div class="card" id="schedules">
                     <div>

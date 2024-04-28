@@ -61,3 +61,11 @@ if(!isset($_SESSION["user_id"])){
         $result = $stmt->fetch();
         return $result['count'];
     }
+
+    function get_count_subject_instructor($pdo){
+        $stmt = $pdo->prepare("SELECT COUNT(si_id) as count
+                            FROM subject_instructor;");
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result['count'];
+    }
