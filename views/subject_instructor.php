@@ -5,6 +5,10 @@ require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/subject_instructor/subject_instructor_model.php");
 require_once(APP_NAME . "includes/subject_instructor/subject_instructor_view.php");
+if (!is_logged_in()) {
+    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -187,6 +191,7 @@ require_once(APP_NAME . "includes/subject_instructor/subject_instructor_view.php
                     }
                     // Display subject instructor records
                     foreach ($subject_instructors as $subject_instructor) {
+                        $si_id = $subject_instructor['si_id'];
                         echo "<tr>";
                         echo "<td>" . $subject_instructor['subject_id'] . "</td>";
                         echo "<td>" . $subject_instructor['instructor_name'] . "</td>";
@@ -197,6 +202,7 @@ require_once(APP_NAME . "includes/subject_instructor/subject_instructor_view.php
                                     <button class='delete' name='delete_subject_instructor'>Delete</button>
                                 </form>
                                 <form action='../../DMMMSU_class_scheduler/views/subject_instructor_update.php' method='get'>
+                                    <input type='hidden' name='si_id' value='" . $subject_instructor['si_id'] . "'> 
                                     <button class='update'>Update</button>
                                 </form>
                             </td>";

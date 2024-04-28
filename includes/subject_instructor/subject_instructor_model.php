@@ -8,6 +8,17 @@
         return $stmt->fetchAll();
     }
 
+    function get_subject_instructor($pdo,$si_id) {
+        $stmt = $pdo->prepare("SELECT si.si_id, si.subject_id,si.instructor_id, CONCAT(i.last_name, ', ', i.first_name) AS instructor_name
+                                FROM subject_instructor si
+                                JOIN subject s ON si.subject_id = s.subject_id
+                                JOIN instructor i ON si.instructor_id = i.instructor_id
+                                WHERE si.si_id = :si_id");
+        $stmt->bindParam(":si_id", $si_id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     function get_instructors($pdo) {
         $stmt = $pdo->prepare("SELECT instructor_id, CONCAT(last_name, ', ', first_name) AS instructor_name FROM instructor");
         $stmt->execute();

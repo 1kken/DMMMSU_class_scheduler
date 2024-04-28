@@ -10,8 +10,8 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_subject_instructor"])) {
     $instructor_id = $_POST["instructor_id"];
 
     //trim and lowercase
-    $subject_id = trim(strtolower($subject_id));
-    $instructor_id = trim(strtolower($instructor_id));
+    $subject_id = trim($subject_id);
+    $instructor_id = trim($instructor_id);
 
     //filter
     $subject_id = htmlspecialchars($subject_id);
@@ -61,3 +61,5 @@ if(isset($_SESSION["user_id"]) && isset($_POST["delete_si"])){
     header("LOCATION: /DMMMSU_class_scheduler/views/subject_instructor.php");
     exit();
 }
+
+//update
