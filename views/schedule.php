@@ -204,18 +204,6 @@ if (!is_logged_in()) {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="room-id">Room ID:</label>
-                    <select id="room-id" name="room_id" required>
-                        <?php
-                        $classrooms = get_classroom_name_id($pdo);
-                        echo "<option disabled selected value> -- select an option -- </option>";
-                        foreach ($classrooms as $classroom) {
-                            echo '<option value="' . $classroom['room_id'] . '">' . $classroom['room_id'] . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="subject">Subject:</label>
                     <select id="subject-id" name="subject_id" required>
                         <?php
@@ -223,6 +211,30 @@ if (!is_logged_in()) {
                         echo "<option disabled selected value> -- select an option -- </option>";
                         foreach ($subjects as $subject) {
                             echo '<option value="' . $subject['subject_id'] . '">' . $subject['descriptive_title'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="section">Section:</label>
+                    <select id="section-id" name="section_id" required>
+                        <?php
+                        $sections = get_section_name_id($pdo);
+                        echo "<option disabled selected value> -- select an option -- </option>";
+                        foreach ($sections as $section) {
+                            echo '<option value="' . $section['section_id'] . '">' . $section['section_id'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="room-id">Room ID:</label>
+                    <select id="room-id" name="room_id" required>
+                        <?php
+                        $classrooms = get_classroom_name_id($pdo);
+                        echo "<option disabled selected value> -- select an option -- </option>";
+                        foreach ($classrooms as $classroom) {
+                            echo '<option value="' . $classroom['room_id'] . '">' . $classroom['room_id'] . '</option>';
                         }
                         ?>
                     </select>
@@ -261,18 +273,6 @@ if (!is_logged_in()) {
 
                         for ($time = $start_time; $time <= $end_time; $time += 1800) { // 1800 seconds = 30 minutes
                             echo '<option value="' . date($time_format, $time) . '">' . date($time_format, $time) . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="section">Section:</label>
-                    <select id="section-id" name="section_id" required>
-                        <?php
-                        $sections = get_section_name_id($pdo);
-                        echo "<option disabled selected value> -- select an option -- </option>";
-                        foreach ($sections as $section) {
-                            echo '<option value="' . $section['section_id'] . '">' . $section['section_id'] . '</option>';
                         }
                         ?>
                     </select>
