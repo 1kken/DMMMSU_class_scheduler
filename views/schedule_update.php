@@ -74,7 +74,8 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
             margin-bottom: 20px;
             color: #333;
         }
-        select{
+
+        select {
             text-transform: capitalize;
         }
     </style>
@@ -95,10 +96,10 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
         }
         ?>
         <h2>Update Schedule</h2>
-        <form action="../../DMMMSU_class_scheduler\includes\schedule_handler.php" method="post">
+        <form action="../../DMMMSU_class_scheduler\includes\schedule_handler.php" method="post" id="forms">
             <div class="form-group">
                 <label for="code">Code:</label>
-                <input type="text" id="code" name="code" readonly value = <?php echo $schedule['code'] ?> required>
+                <input type="text" id="code" name="code" readonly value=<?php echo $schedule['code'] ?> required>
             </div>
             <div class="form-group">
                 <label for="room">Room:</label>
@@ -114,7 +115,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
-                    <input type="text" name="old_room_id" id="old_room_id" value = <?php echo $schedule["room_id"]?> hidden>
+                <input type="text" name="old_room_id" id="old_room_id" value=<?php echo $schedule["room_id"] ?> hidden>
             </div>
             <div class="form-group">
                 <label for="instructor">Instructor:</label>
@@ -130,7 +131,39 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
-                <input type="text" name="old_instructor_id" id="old_instructor_id" value = <?php echo $schedule["instructor_id"]?> hidden>
+                <input type="text" name="old_instructor_id" id="old_instructor_id" value=<?php echo $schedule["instructor_id"] ?> hidden>
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <select id="subject-id" name="subject_id" required>
+                    <?php
+                    $subjects = get_subject_name_id($pdo);
+                    foreach ($subjects as $subject) {
+                        echo "<option value='" . $subject['subject_id'] . "'";
+                        if ($schedule['subject_id'] == $subject['subject_id']) {
+                            echo " selected";
+                        }
+                        echo ">" . $subject['descriptive_title'] . "</option>";
+                    }
+                    ?>
+                </select>
+                <input type="text" id="old_subject_id" name="old_subject_id" value=<?php echo $schedule["subject_id"] ?> hidden>
+            </div>
+            <div class="form-group">
+                <label for="type">Lecture type:</label>
+                <select id="type" name="type" required>
+                    <?php
+                        if($schedule['type'] == "lecture"){
+                            echo "<option value='lecture' selected>Lecture</option>";
+                            echo "<option value='laboratory'>Laboratory</option>";
+                        }
+                        else{
+                            echo "<option value='lecture'>Lecture</option>";
+                            echo "<option value='laboratory' selected>Laboratory</option>";
+                        }
+                    ?>
+                </select>
+                <input type="text" id="old_type" name="old_type" value=<?php echo $schedule["type"] ?> hidden>
             </div>
             <div class="form-group">
                 <label for="day">Day:</label>
@@ -148,7 +181,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
-                <input type="text" name="old_day" id="old_day" value = <?php echo $schedule["day"]?> hidden>
+                <input type="text" name="old_day" id="old_day" value=<?php echo $schedule["day"] ?> hidden>
             </div>
             <div class="form-group">
                 <label for="start-time">Start Time:</label>
@@ -159,7 +192,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     $time_format = 'H:i'; // Time format
 
                     for ($time = $start_time; $time <= $end_time; $time += 1800) { // 1800 seconds = 30 minutes
-                        if($time == strtotime($schedule['start_time'])){
+                        if ($time == strtotime($schedule['start_time'])) {
                             echo '<option value="' . date($time_format, $time) . '" selected>' . date($time_format, $time) . '</option>';
                         } else {
                             echo '<option value="' . date($time_format, $time) . '">' . date($time_format, $time) . '</option>';
@@ -167,7 +200,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
-                <input type="text" name="old_start_time" id="old_start_time" value = <?php echo $schedule["start_time"]?> hidden>
+                <input type="text" name="old_start_time" id="old_start_time" value=<?php echo $schedule["start_time"] ?> hidden>
             </div>
             <div class="form-group">
                 <label for="end-time">End Time:</label>
@@ -178,7 +211,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     $time_format = 'H:i'; // Time format
 
                     for ($time = $start_time; $time <= $end_time; $time += 1800) { // 1800 seconds = 30 minutes
-                        if($time == strtotime($schedule['end_time'])){
+                        if ($time == strtotime($schedule['end_time'])) {
                             echo '<option value="' . date($time_format, $time) . '" selected>' . date($time_format, $time) . '</option>';
                         } else {
                             echo '<option value="' . date($time_format, $time) . '">' . date($time_format, $time) . '</option>';
@@ -186,28 +219,12 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                     ?>
                 </select>
-                <input type="text" id="old_end_time" name = "old_end_time" value = <?php echo $schedule["end_time"]?> hidden>
-            </div>
-            <div class="form-group">
-                <label for="subject">Subject:</label>
-                <select id="subject-id" name="subject_id" required>
-                    <?php
-                    $subjects = get_subject_name_id($pdo);
-                    foreach ($subjects as $subject) {
-                        echo "<option value='" . $subject['subject_id'] . "'";
-                        if ($schedule['subject_id'] == $subject['subject_id']) {
-                            echo " selected";
-                        }
-                        echo ">" . $subject['descriptive_title'] . "</option>";
-                    }
-                    ?>
-                </select>
-                <input type="text" id="old_subject_id" name="old_subject_id" value = <?php echo $schedule["subject_id"]?> hidden>
+                <input type="text" id="old_end_time" name="old_end_time" value=<?php echo $schedule["end_time"] ?> hidden>
             </div>
             <div class="form-group">
                 <label for="section">Section:</label>
                 <select id="section-id" name="section_id" required>
-                <?php
+                    <?php
                     $sections = get_section_name_id($pdo);
                     foreach ($sections as $section) {
                         echo "<option value='" . $section['section_id'] . "'";
@@ -216,18 +233,18 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                         }
                         echo ">" . $section['section_id'] . "</option>";
                     }
-                ?>
+                    ?>
                 </select>
-                <input type="text" id="old_section_id" name="old_section_id" value = <?php echo $schedule["section_id"]?> hidden>
+                <input type="text" id="old_section_id" name="old_section_id" value=<?php echo $schedule["section_id"] ?> hidden>
             </div>
             <div class="form-group">
                 <label for="sy">School Year:</label>
                 <input type="text" id="sy" name="sy" placeholder="YYYY-YYYY" value=<?php echo $schedule["sy"]; ?> required>
-                <input type="text" id="old_sy" name="old_sy" value = <?php echo $schedule["sy"]?> hidden>
+                <input type="text" id="old_sy" name="old_sy" value=<?php echo $schedule["sy"] ?> hidden>
             </div>
             <input type="submit" value="Update Schedule" name="update_schedule">
-            <input type="text" name= "old_schedule_code" value = <?php echo $schedule["code"] ?> hidden>
-            <input type="text" name= "schedule_id" value = <?php echo $_GET["schedule_id"]?> hidden>
+            <input type="text" name="old_schedule_code" value=<?php echo $schedule["code"] ?> hidden>
+            <input type="text" name="schedule_id" value=<?php echo $_GET["schedule_id"] ?> hidden>
         </form>
         <?php
         check_schedule_errors();

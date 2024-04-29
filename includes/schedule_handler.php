@@ -19,9 +19,10 @@
         $subject_id = $_POST["subject_id"];
         $section_id = $_POST["section_id"];
         $sy = $_POST["sy"];
+        $type = $_POST["type"];
 
         $errors = [];
-        if(empty($code) || empty($room_id) || empty($instructor_id) || empty($day) || empty($start_time) || empty($end_time) || empty($subject_id) || empty($section_id) || empty($sy)){
+        if(empty($code) || empty($room_id) || empty($instructor_id) || empty($day) || empty($start_time) || empty($end_time) || empty($subject_id) || empty($section_id) || empty($sy) || empty($type)){
             $errors["missing_fields"] = "All fields are required.";
         }
 
@@ -54,10 +55,11 @@
         
         try {
             //create schedule
-            $stmt = $pdo->prepare("INSERT INTO schedule (code, room_id, instructor_id, day, start_time, end_time, subject_id, section_id, sy) VALUES (:code, :room_id, :instructor_id, :day, :start_time, :end_time, :subject_id, :section_id, :sy)");
-            $stmt->execute(['code' => $code, 'room_id' => $room_id, 'instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $subject_id, 'section_id' => $section_id, 'sy' => $sy]);
+            $stmt = $pdo->prepare("INSERT INTO schedule (code, room_id, instructor_id, day, start_time, end_time, subject_id, section_id, sy,type) VALUES (:code, :room_id, :instructor_id, :day, :start_time, :end_time, :subject_id, :section_id, :sy,:type)");
+            $stmt->execute(['code' => $code, 'room_id' => $room_id, 'instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $subject_id, 'section_id' => $section_id, 'sy' => $sy,'type' =>$type]);
         } catch (PDOException $e) {
             echo $e->getMessage();
+            exit();
         }
         header("LOCATION: /DMMMSU_class_scheduler/views/schedule.php");
         exit();
@@ -86,6 +88,7 @@
         $old_subject_id = $_POST["old_subject_id"];
         $old_section_id = $_POST["old_section_id"];
         $old_sy = $_POST["old_sy"];
+        $old_type = $_POST["old_type"];
 
         //new schedule
         $code = $_POST["code"];
@@ -97,13 +100,14 @@
         $subject_id = $_POST["subject_id"];
         $section_id = $_POST["section_id"];
         $sy = $_POST["sy"];
+        $type = $_POST["type"];
 
         $errors=[];
-        if(empty($code) || empty($room_id) || empty($instructor_id) || empty($day) || empty($start_time) || empty($end_time) || empty($subject_id) || empty($section_id) || empty($sy)){
+        if(empty($code) || empty($room_id) || empty($instructor_id) || empty($day) || empty($start_time) || empty($end_time) || empty($subject_id) || empty($section_id) || empty($sy) || empty($type)){
             $errors["missing_fields"] = "All fields are required.";
         }
         //check if same value
-        if($old_schedule == $code && $old_room_id == $room_id && $old_instructor_id == $instructor_id && $old_day == $day && strtotime($old_start_time) == strtotime($start_time) && strtotime($old_end_time) == strtotime($end_time) && $old_subject_id == $subject_id && $old_section_id == $section_id && $old_sy == $sy){
+        if($old_schedule == $code && $old_room_id == $room_id && $old_instructor_id == $instructor_id && $old_day == $day && strtotime($old_start_time) == strtotime($start_time) && strtotime($old_end_time) == strtotime($end_time) && $old_subject_id == $subject_id && $old_section_id == $section_id && $old_sy == $sy && $old_type == $type){
             $errors["same_values"] = "No changes were made.";
             $_SESSION["schedule_errors"] = $errors;
             $schedule_id = $_POST["schedule_id"];
@@ -144,6 +148,7 @@
             $stmt->execute(['code' => $code, 'room_id' => $room_id, 'instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $subject_id, 'section_id' => $section_id, 'sy' => $sy, 'old_schedule' => $old_schedule, 'old_room_id' => $old_room_id, 'old_instructor_id' => $old_instructor_id, 'old_day' => $old_day, 'old_start_time' => $old_start_time, 'old_end_time' => $old_end_time, 'old_subject_id' => $old_subject_id, 'old_section_id' => $old_section_id, 'old_sy' => $old_sy]);
         } catch (PDOException $e) {
             echo $e->getMessage();
+            exit();
         }
 
         header("LOCATION: /DMMMSU_class_scheduler/views/schedule.php");

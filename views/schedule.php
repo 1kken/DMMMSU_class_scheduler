@@ -228,6 +228,14 @@ if (!is_logged_in()) {
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="type">Lecture type:</label>
+                    <select id="type" name="type" required>
+                        <option disabled selected value> -- select an option -- </option>
+                        <option value="lecture">Lecture</option>
+                        <option value="laboratory">Laboratory</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="room-id">Room ID:</label>
                     <select id="room-id" name="room_id" required>
                         <?php
@@ -383,18 +391,11 @@ if (!is_logged_in()) {
                 return null;
             }
             let instructorIdInput = document.getElementById('instructor-id');
-            let endTimeInput = document.getElementById('end-time');
-            let startTimeInput = document.getElementById('start-time');
-            let dayInput = document.getElementById('day');
-
             instructorIdInput.addEventListener('change', getSubject);
 
             //getting the subject
             function getSubject() {
                 let instructor_id = document.getElementById("instructor-id").value;
-                let day = document.getElementById("day").value;
-                let start_time = document.getElementById("start-time").value;
-                let end_time = document.getElementById("end-time").value;
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -409,8 +410,29 @@ if (!is_logged_in()) {
                 xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/subject_instructor.php?instructor_id=${instructor_id}`, true);
                 xhr.send();
             }
+
         });
-        //getting the classroom
+        
+        let subjectInput = document.getElementById('subject-id');
+        subjectInput.addEventListener('change', getSection);
+        //getting the Section
+        function getSection(){
+                let instructor_id = document.getElementById("subject-id").value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("section-id").innerHTML = '';
+                            document.getElementById("section-id").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${instructor_id}`, true);
+                xhr.send();
+        }
 
         //adjusting time
 
