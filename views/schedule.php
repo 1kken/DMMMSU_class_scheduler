@@ -481,12 +481,30 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             document.getElementById("type").innerHTML = '';
                             document.getElementById("type").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
                     }
                 };
                 xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}&type=true&section_id=${section_id}&sy=${sy}`, true);
+                xhr.send();
+            }
+            typeInput.addEventListener('input', getRoom);
+            function getRoom() {
+                const type = document.getElementById('type').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("room-id").innerHTML = '';
+                            document.getElementById("room-id").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?type=${type}&get_room=true`, true);
                 xhr.send();
             }
         });

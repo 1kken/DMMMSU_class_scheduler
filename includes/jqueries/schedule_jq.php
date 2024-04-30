@@ -74,6 +74,21 @@ if(isset($_GET['subject_id']) && isset($_GET['type']) && isset($_GET['section_id
         echo "<option value='lecture'>Lecture</option>";
     }
 }
+if(isset($_GET['type']) && isset($_GET['get_room'])){
+    //get the room where the type of it correspond
+    $stmt = $pdo->prepare('SELECT * FROM rooms WHERE room_type = :type');
+    $stmt->execute(['type' => $_GET['type']]);
+    $rooms = $stmt->fetchAll();
+    if ($rooms == null) {
+        echo "<option disabled selected value> -- no available room -- </option>";
+        exit();
+    }
+    //display using option
+    echo "<option disabled selected value> -- select an option -- </option>";
+    foreach ($rooms as $room) {
+        echo "<option value='" . $room["room_id"] . "'>" . $room["room_id"] . "</option>";
+    }
+}
 
 function getSubject($pdo, $subject_id)
 {
