@@ -401,7 +401,7 @@ if (!is_logged_in()) {
                 }
             }
 
-            // Process SY format from "2023-2024" to "23-24"
+            // Process SY format from "2023-2024" to "2324"
             function processSy(syValue) {
                 const syParts = syValue.split("-");
                 if (syParts.length === 2) {
@@ -461,7 +461,6 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             document.getElementById("instructor-id").innerHTML = '';
                             document.getElementById("instructor-id").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -470,12 +469,70 @@ if (!is_logged_in()) {
                 xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}`, true);
                 xhr.send();
             }
+            instructorIdInput.addEventListener('input', getType);
+            //get type
+            function getType() {
+                const subject_id = document.getElementById('subject-id').value;
+                const section_id = document.getElementById('section-id').value;
+                const sy = processSy(syInput.value);
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("type").innerHTML = '';
+                            document.getElementById("type").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}&type=true&section_id=${section_id}&sy=${sy}`, true);
+                xhr.send();
+            }
         });
+
+
 
 
         function search() {
             console.log("search");
         }
+
+        //reset if go back
+        function handleSelectChange(inputElement, targetElements) {
+            inputElement.addEventListener('change', () => {
+                // Disable all target elements
+                targetElements.forEach(element => {
+                    element.disabled = true;
+                    element.selectedIndex = 0;
+                });
+
+                // Enable the target element based on the input element's value
+                if (inputElement.value !== '') {
+                    targetElements[0].disabled = false; // Enable the first target element
+                }
+            });
+        }
+
+        // Usage example
+        const sectionIdInput = document.getElementById('section-id');
+        const semesterInput = document.getElementById('semester');
+        const subjectIdInput = document.getElementById('subject-id');
+        const instructorIdInput = document.getElementById('instructor-id');
+        const typeInput = document.getElementById('type');
+        const roomIdInput = document.getElementById('room-id');
+        const dayInput = document.getElementById('day');
+        const startTimeInput = document.getElementById('start-time');
+        const endTimeInput = document.getElementById('end-time');
+        const syInput = document.getElementById('sy');
+
+        handleSelectChange(sectionIdInput, [semesterInput, subjectIdInput, instructorIdInput, typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(semesterInput, [subjectIdInput, instructorIdInput, typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(subjectIdInput, [instructorIdInput, typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(instructorIdInput, [typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(typeInput, [roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(roomIdInput, [dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(dayInput, [startTimeInput, endTimeInput]);
     </script>
 </body>
 
