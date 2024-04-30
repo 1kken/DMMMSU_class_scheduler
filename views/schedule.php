@@ -259,11 +259,9 @@ if (!is_logged_in()) {
                     <label for="day">Day:</label>
                     <select id="day" name="day" required disabled>
                         <option disabled selected value> -- select an option -- </option>
-                        <option value="monday">Monday</option>
-                        <option value="tuesday">Tuesday</option>
+                        <option value="monday">Monday - Thursday</option>
+                        <option value="tuesday">Tuesday - Friday</option>
                         <option value="wednesday">Wednesday</option>
-                        <option value="thursday">Thursday</option>
-                        <option value="friday">Friday</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -420,7 +418,6 @@ if (!is_logged_in()) {
             roomIdInput.addEventListener('input', enableSelects);
             dayInput.addEventListener('input', enableSelects);
             startTimeInput.addEventListener('input', enableSelects);
-            endTimeInput.addEventListener('input', enableSelects);
 
             function enableSelects() {
                 const inputs = [semesterInput, subjectIdInput, instructorIdInput, typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput];
@@ -481,7 +478,6 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             document.getElementById("type").innerHTML = '';
                             document.getElementById("type").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -490,6 +486,8 @@ if (!is_logged_in()) {
                 xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}&type=true&section_id=${section_id}&sy=${sy}`, true);
                 xhr.send();
             }
+
+            //get room
             typeInput.addEventListener('input', getRoom);
             function getRoom() {
                 const type = document.getElementById('type').value;
@@ -505,6 +503,28 @@ if (!is_logged_in()) {
                     }
                 };
                 xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?type=${type}&get_room=true`, true);
+                xhr.send();
+            }
+
+            //get day
+            roomIdInput.addEventListener('input', getDay);
+            function getDay(){
+                const room_id = document.getElementById('room-id').value;
+                const sy = processSy(syInput.value);
+                let xhr = new XMLHttpRequest();
+                console.log(`../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&get_day=true`)
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("day").innerHTML = '';
+                            document.getElementById("day").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&get_day=true`, true);
                 xhr.send();
             }
         });

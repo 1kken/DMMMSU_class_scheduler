@@ -20,9 +20,10 @@
         $section_id = $_POST["section_id"];
         $sy = $_POST["sy"];
         $type = $_POST["type"];
+        $semester = $_POST["semester"];
 
         $errors = [];
-        if(empty($code) || empty($room_id) || empty($instructor_id) || empty($day) || empty($start_time) || empty($end_time) || empty($subject_id) || empty($section_id) || empty($sy) || empty($type)){
+        if(empty($code) || empty($room_id) || empty($instructor_id) || empty($day) || empty($start_time) || empty($end_time) || empty($subject_id) || empty($section_id) || empty($sy) || empty($type) || empty($semester)){
             $errors["missing_fields"] = "All fields are required.";
         }
 
@@ -35,14 +36,14 @@
         }
 
         //check for conflicts
-        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE room_id = :room_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) OR (start_time <= :end_time AND end_time >= :end_time))");
-        $stmt->execute(['room_id' => $room_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
+        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE room_id = :room_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) OR (start_time <= :end_time AND end_time >= :end_time)) AND section_id = :section_id AND sy = :sy AND semester = :semester");
+        $stmt->execute(['room_id' => $room_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'section_id' => $section_id, 'sy' => $sy, 'semester' => $semester]);
         if($stmt->rowCount() > 0){
             $errors["room_conflict"] = "Room is already taken.";
         }
         //check for instructor conflict
-        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE instructor_id = :instructor_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) OR (start_time <= :end_time AND end_time >= :end_time))");
-        $stmt->execute(['instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
+        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE instructor_id = :instructor_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) OR (start_time <= :end_time AND end_time >= :end_time)) AND section_id = :section_id AND sy = :sy AND semester = :semester");
+        $stmt->execute(['instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'section_id' => $section_id, 'sy' => $sy, 'semester' => $semester]);
         if($stmt->rowCount() > 0){
             $errors["instructor_conflict"] = "Instructor is already taken.";
         }
@@ -55,8 +56,8 @@
         
         try {
             //create schedule
-            $stmt = $pdo->prepare("INSERT INTO schedule (code, room_id, instructor_id, day, start_time, end_time, subject_id, section_id, sy,type) VALUES (:code, :room_id, :instructor_id, :day, :start_time, :end_time, :subject_id, :section_id, :sy,:type)");
-            $stmt->execute(['code' => $code, 'room_id' => $room_id, 'instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $subject_id, 'section_id' => $section_id, 'sy' => $sy,'type' =>$type]);
+            $stmt = $pdo->prepare("INSERT INTO schedule (code, room_id, instructor_id, day, start_time, end_time, subject_id, section_id, sy,type,semester) VALUES (:code, :room_id, :instructor_id, :day, :start_time, :end_time, :subject_id, :section_id, :sy,:type,:semester)");
+            $stmt->execute(['code' => $code, 'room_id' => $room_id, 'instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $subject_id, 'section_id' => $section_id, 'sy' => $sy,'type' =>$type, 'semester' => $semester]);
         } catch (PDOException $e) {
             echo $e->getMessage();
             exit();
