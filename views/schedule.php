@@ -192,30 +192,6 @@ if (!is_logged_in()) {
                     <input type="text" id="code" name="code" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="instructor">Instructor:</label>
-                    <select id="instructor-id" name="instructor_id" required>
-                        <?php
-                        $instructors = get_instructor_name_id($pdo);
-                        echo "<option disabled selected value> -- select an option -- </option>";
-                        foreach ($instructors as $instructor) {
-                            echo '<option value="' . $instructor['instructor_id'] . '">' . $instructor['fullname'] . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Subject:</label>
-                    <select id="subject-id" name="subject_id" required>
-                        <?php
-                        $subjects = get_subject_name_id($pdo);
-                        echo "<option disabled selected value> -- select an option -- </option>";
-                        foreach ($subjects as $subject) {
-                            echo '<option value="' . $subject['subject_id'] . '">' . $subject['descriptive_title'] . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="section">Section:</label>
                     <select id="section-id" name="section_id" required>
                         <?php
@@ -228,8 +204,32 @@ if (!is_logged_in()) {
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="subject">Subject:</label>
+                    <select id="subject-id" name="subject_id" required disabled>
+                        <?php
+                        $subjects = get_subject_name_id($pdo);
+                        echo "<option disabled selected value> -- select an option -- </option>";
+                        foreach ($subjects as $subject) {
+                            echo '<option value="' . $subject['subject_id'] . '">' . $subject['descriptive_title'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="instructor">Instructor:</label>
+                    <select id="instructor-id" name="instructor_id" required disabled>
+                        <?php
+                        $instructors = get_instructor_name_id($pdo);
+                        echo "<option disabled selected value> -- select an option -- </option>";
+                        foreach ($instructors as $instructor) {
+                            echo '<option value="' . $instructor['instructor_id'] . '">' . $instructor['fullname'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="type">Lecture type:</label>
-                    <select id="type" name="type" required>
+                    <select id="type" name="type" required disabled>
                         <option disabled selected value> -- select an option -- </option>
                         <option value="lecture">Lecture</option>
                         <option value="laboratory">Laboratory</option>
@@ -237,7 +237,7 @@ if (!is_logged_in()) {
                 </div>
                 <div class="form-group">
                     <label for="room-id">Room ID:</label>
-                    <select id="room-id" name="room_id" required>
+                    <select id="room-id" name="room_id" required disabled>
                         <?php
                         $classrooms = get_classroom_name_id($pdo);
                         echo "<option disabled selected value> -- select an option -- </option>";
@@ -249,7 +249,8 @@ if (!is_logged_in()) {
                 </div>
                 <div class="form-group">
                     <label for="day">Day:</label>
-                    <select id="day" name="day" required>
+                    <select id="day" name="day" required disabled>
+                        <option disabled selected value> -- select an option -- </option>
                         <option value="monday">Monday</option>
                         <option value="tuesday">Tuesday</option>
                         <option value="wednesday">Wednesday</option>
@@ -259,7 +260,8 @@ if (!is_logged_in()) {
                 </div>
                 <div class="form-group">
                     <label for="start-time">Start Time:</label>
-                    <select id="start-time" name="start_time" required>
+                    <select id="start-time" name="start_time" required disabled>
+                        <option disabled selected value> -- select an option -- </option>
                         <?php
                         $start_time = strtotime('8:00'); // Convert start time to Unix timestamp
                         $end_time = strtotime('16:00'); // Convert end time to Unix timestamp
@@ -273,7 +275,8 @@ if (!is_logged_in()) {
                 </div>
                 <div class="form-group">
                     <label for="end-time">End Time:</label>
-                    <select id="end-time" name="end_time" required>
+                    <select id="end-time" name="end_time" required disabled>
+                        <option disabled selected value> -- select an option -- </option>
                         <?php
                         $start_time = strtotime('9:00'); // Convert start time to Unix timestamp
                         $end_time = strtotime('17:00'); // Convert end time to Unix timestamp
@@ -292,7 +295,7 @@ if (!is_logged_in()) {
                                                                 $next_year = date("Y", strtotime("+1 year"));
                                                                 $academic_year = $current_year . "-" . $next_year;
                                                                 echo $academic_year;
-                                                                ?>" required>
+                                                                ?>" required readonly>
                 </div>
                 <input type="submit" value="Add Schedule" name="create_schedule">
                 <input type="submit" onclick="redirectToDashboard()" value="Back to Dashboard">
@@ -356,6 +359,7 @@ if (!is_logged_in()) {
             window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
         }
         document.addEventListener('DOMContentLoaded', () => {
+            //SY
             const subjectIdInput = document.getElementById('subject-id');
             const sectionIdInput = document.getElementById('section-id');
             const syInput = document.getElementById('sy');
@@ -390,51 +394,58 @@ if (!is_logged_in()) {
                 }
                 return null;
             }
-            let instructorIdInput = document.getElementById('instructor-id');
-            instructorIdInput.addEventListener('change', getSubject);
 
-            //getting the subject
-            function getSubject() {
-                let instructor_id = document.getElementById("instructor-id").value;
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            document.getElementById("subject-id").innerHTML = '';
-                            document.getElementById("subject-id").innerHTML = xhr.responseText;
-                        } else {
-                            console.log("There was a problem with the request.");
-                        }
-                    }
-                };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/subject_instructor.php?instructor_id=${instructor_id}`, true);
-                xhr.send();
+            //readonly froms when the pre requisite is empty
+            const instructorIdInput = document.getElementById('instructor-id');
+            const typeInput = document.getElementById('type');
+            const roomIdInput = document.getElementById('room-id');
+            const dayInput = document.getElementById('day');
+            const startTimeInput = document.getElementById('start-time');
+            const endTimeInput = document.getElementById('end-time');
+
+            sectionIdInput.addEventListener('input', enableSelects);
+            subjectIdInput.addEventListener('input', enableSelects);
+            instructorIdInput.addEventListener('input', enableSelects);
+            typeInput.addEventListener('input', enableSelects);
+            roomIdInput.addEventListener('input', enableSelects);
+            dayInput.addEventListener('input', enableSelects);
+            startTimeInput.addEventListener('input', enableSelects);
+            endTimeInput.addEventListener('input', enableSelects);
+
+            function enableSelects() {
+                let  sectionHasValue = sectionIdInput.value !== "";
+                let subjectHasValue = subjectIdInput.value !== "";
+                let instructorHasValue = instructorIdInput.value !== "";
+                let typeHasValue = typeInput.value !== "";
+                let roomIdHasValue = roomIdInput.value !== "";
+                let dayHasValue = dayInput.value !== "";
+                let startTimeHasValue = startTimeInput.value !== "";
+                let endTimeHasValue = endTimeInput.value !== "";
+
+                if(sectionHasValue){
+                    subjectIdInput.disabled = false;
+                }
+                if(sectionHasValue && subjectHasValue){
+                    console.log("e");
+                    instructorIdInput.disabled = false;
+                }
+                if(sectionHasValue && subjectHasValue && instructorHasValue){
+                    typeInput.disabled = false;
+                }
+                if(sectionHasValue && subjectHasValue && instructorHasValue && typeHasValue){
+                    roomIdInput.disabled = false;
+                }
+                if(sectionHasValue && subjectHasValue && instructorHasValue && typeHasValue && roomIdHasValue){
+                    dayInput.disabled = false;
+                }
+                if(sectionHasValue && subjectHasValue && instructorHasValue && typeHasValue && roomIdHasValue && dayHasValue){
+                    startTimeInput.disabled = false;
+                }
+                if(sectionHasValue && subjectHasValue && instructorHasValue && typeHasValue && roomIdHasValue && dayHasValue && startTimeHasValue){
+                    endTimeInput.disabled = false;
+                }
             }
-
         });
-        
-        let subjectInput = document.getElementById('subject-id');
-        subjectInput.addEventListener('change', getSection);
-        //getting the Section
-        function getSection(){
-                let instructor_id = document.getElementById("subject-id").value;
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            document.getElementById("section-id").innerHTML = '';
-                            document.getElementById("section-id").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText);
-                        } else {
-                            console.log("There was a problem with the request.");
-                        }
-                    }
-                };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${instructor_id}`, true);
-                xhr.send();
-        }
-
-        //adjusting time
 
         function search() {
             console.log("search");
