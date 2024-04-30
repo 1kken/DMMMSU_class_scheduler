@@ -48,38 +48,3 @@
         function search() {
             console.log("search");
         }
-            //SY
-            const subjectIdInput = document.getElementById('subject-id');
-            const sectionIdInput = document.getElementById('section-id');
-            const syInput = document.getElementById('sy');
-            const codeInput = document.getElementById('code');
-
-            // Initial code generation
-            generateCode();
-
-            // Event listeners for input changes
-            subjectIdInput.addEventListener('input', generateCode);
-            sectionIdInput.addEventListener('input', generateCode);
-            syInput.addEventListener('input', generateCode);
-
-            function generateCode() {
-                const subjectId = subjectIdInput.value;
-                const sectionId = sectionIdInput.value;
-                const syProcessed = processSy(syInput.value);
-
-                if (subjectId && sectionId && syProcessed) {
-                    const generatedCode = `${subjectId}${sectionId}${syProcessed}`;
-                    codeInput.value = generatedCode;
-                } else {
-                    codeInput.value = '';
-                }
-            }
-
-            // Process SY format from "2023-2024" to "23-24"
-            function processSy(syValue) {
-                const syParts = syValue.split("-");
-                if (syParts.length === 2) {
-                    return syParts.map(sy => sy.slice(2, 4)).join("");
-                }
-                return null;
-            }

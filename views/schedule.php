@@ -204,6 +204,14 @@ if (!is_logged_in()) {
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="section">Semester:</label>
+                    <select id="semester" name="semester" required disabled>
+                        <option disabled selected value> -- select an option -- </option>
+                        <option value="1">1st</option>
+                        <option value="2">2nd</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="subject">Subject:</label>
                     <select id="subject-id" name="subject_id" required disabled>
                         <?php
@@ -360,10 +368,17 @@ if (!is_logged_in()) {
         }
         document.addEventListener('DOMContentLoaded', () => {
             //SY
-            const subjectIdInput = document.getElementById('subject-id');
-            const sectionIdInput = document.getElementById('section-id');
-            const syInput = document.getElementById('sy');
             const codeInput = document.getElementById('code');
+            const sectionIdInput = document.getElementById('section-id');
+            const semesterInput = document.getElementById('semester');
+            const subjectIdInput = document.getElementById('subject-id');
+            const instructorIdInput = document.getElementById('instructor-id');
+            const typeInput = document.getElementById('type');
+            const roomIdInput = document.getElementById('room-id');
+            const dayInput = document.getElementById('day');
+            const startTimeInput = document.getElementById('start-time');
+            const endTimeInput = document.getElementById('end-time');
+            const syInput = document.getElementById('sy');
 
             // Initial code generation
             generateCode();
@@ -396,14 +411,9 @@ if (!is_logged_in()) {
             }
 
             //readonly froms when the pre requisite is empty
-            const instructorIdInput = document.getElementById('instructor-id');
-            const typeInput = document.getElementById('type');
-            const roomIdInput = document.getElementById('room-id');
-            const dayInput = document.getElementById('day');
-            const startTimeInput = document.getElementById('start-time');
-            const endTimeInput = document.getElementById('end-time');
 
             sectionIdInput.addEventListener('input', enableSelects);
+            semesterInput.addEventListener('input', enableSelects);
             subjectIdInput.addEventListener('input', enableSelects);
             instructorIdInput.addEventListener('input', enableSelects);
             typeInput.addEventListener('input', enableSelects);
@@ -413,39 +423,55 @@ if (!is_logged_in()) {
             endTimeInput.addEventListener('input', enableSelects);
 
             function enableSelects() {
-                let  sectionHasValue = sectionIdInput.value !== "";
-                let subjectHasValue = subjectIdInput.value !== "";
-                let instructorHasValue = instructorIdInput.value !== "";
-                let typeHasValue = typeInput.value !== "";
-                let roomIdHasValue = roomIdInput.value !== "";
-                let dayHasValue = dayInput.value !== "";
-                let startTimeHasValue = startTimeInput.value !== "";
-                let endTimeHasValue = endTimeInput.value !== "";
+                const inputs = [semesterInput, subjectIdInput, instructorIdInput, typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput];
+                const currentIndex = inputs.findIndex(input => input === this);
 
-                if(sectionHasValue){
-                    subjectIdInput.disabled = false;
-                }
-                if(sectionHasValue && subjectHasValue){
-                    console.log("e");
-                    instructorIdInput.disabled = false;
-                }
-                if(sectionHasValue && subjectHasValue && instructorHasValue){
-                    typeInput.disabled = false;
-                }
-                if(sectionHasValue && subjectHasValue && instructorHasValue && typeHasValue){
-                    roomIdInput.disabled = false;
-                }
-                if(sectionHasValue && subjectHasValue && instructorHasValue && typeHasValue && roomIdHasValue){
-                    dayInput.disabled = false;
-                }
-                if(sectionHasValue && subjectHasValue && instructorHasValue && typeHasValue && roomIdHasValue && dayHasValue){
-                    startTimeInput.disabled = false;
-                }
-                if(sectionHasValue && subjectHasValue && instructorHasValue && typeHasValue && roomIdHasValue && dayHasValue && startTimeHasValue){
-                    endTimeInput.disabled = false;
+                if (currentIndex < inputs.length - 1 && this.value !== "") {
+                    inputs[currentIndex + 1].disabled = false;
                 }
             }
+
+            semesterInput.addEventListener('input', getSubjects);
+            // Find the available subjects for the year level based on the section
+            function getSubjects() {
+                const section_id = sectionIdInput.value;
+                const semester = semesterInput.value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("subject-id").innerHTML = '';
+                            document.getElementById("subject-id").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?section_id=${section_id}&semester=${semester}`, true);
+                xhr.send();
+            }
+            //get instructor
+            subjectIdInput.addEventListener('input', getInstructors);
+
+            function getInstructors() {
+                const subject_id = document.getElementById('subject-id').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("instructor-id").innerHTML = '';
+                            document.getElementById("instructor-id").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}`, true);
+                xhr.send();
+            }
         });
+
 
         function search() {
             console.log("search");
