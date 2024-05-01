@@ -177,6 +177,9 @@ if (!is_logged_in()) {
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+        select {
+            text-transform: capitalize;
+        }
     </style>
 </head>
 <script src="../jquery.js"></script>
@@ -207,8 +210,8 @@ if (!is_logged_in()) {
                     <label for="section">Semester:</label>
                     <select id="semester" name="semester" required disabled>
                         <option disabled selected value> -- select an option -- </option>
-                        <option value="1">1st</option>
-                        <option value="2">2nd</option>
+                        <option value="1">First Semester</option>
+                        <option value="2">Second Semester</option>
                     </select>
                 </div>
                 <div class="form-group">

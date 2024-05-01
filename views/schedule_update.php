@@ -20,12 +20,15 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
             background-color: #f0f0f0;
             display: flex;
             justify-content: center;
+            /* Center horizontally */
             align-items: center;
+            /* Center vertically */
             height: 100vh;
             margin: 0;
         }
 
         .container {
+            margin-top: 200px;
             width: 100%;
             max-width: 500px;
             background-color: #fff;
@@ -53,6 +56,8 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
             border: 1px solid #ccc;
             box-sizing: border-box;
             margin-top: 5px;
+            font-family: inherit;
+            /* Maintain font family */
         }
 
         input[type="text"][readonly] {
@@ -102,40 +107,32 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                 <input type="text" id="code" name="code" readonly value=<?php echo $schedule['code'] ?> required>
             </div>
             <div class="form-group">
-                <label for="room">Room:</label>
-                <select id="room" name="room_id" required>
+                <label for="section">Section:</label>
+                <select id="section-id" name="section_id" required>
                     <?php
-                    $rooms = get_classroom_name_id($pdo);
-                    foreach ($rooms as $room) {
-                        echo "<option value='" . $room['room_id'] . "'";
-                        if ($schedule['room_id'] == $room['room_id']) {
+                    $sections = get_section_name_id($pdo);
+                    foreach ($sections as $section) {
+                        echo "<option value='" . $section['section_id'] . "'";
+                        if ($schedule['section_id'] == $section['section_id']) {
                             echo " selected";
                         }
-                        echo ">" . $room['room_id'] . "</option>";
+                        echo ">" . $section['section_id'] . "</option>";
                     }
                     ?>
                 </select>
-                <input type="text" name="old_room_id" id="old_room_id" value=<?php echo $schedule["room_id"] ?> hidden>
+                <input type="text" id="old_section_id" name="old_section_id" value=<?php echo $schedule["section_id"] ?> hidden>
             </div>
             <div class="form-group">
-                <label for="instructor">Instructor:</label>
-                <select id="instructor" name="instructor_id" required>
-                    <?php
-                    $instructors = get_instructor_name_id($pdo);
-                    foreach ($instructors as $instructor) {
-                        echo "<option value='" . $instructor['instructor_id'] . "'";
-                        if ($schedule['instructor_id'] == $instructor['instructor_id']) {
-                            echo " selected";
-                        }
-                        echo ">" . $instructor['fullname'] . "</option>";
-                    }
-                    ?>
+                <label for="section">Semester:</label>
+                <select id="semester" name="semester" required disabled>
+                    <option disabled selected value> -- select an option -- </option>
+                    <option value="1" <?php if ($schedule['semester'] == 1) echo "selected"; ?>>First Semester</option>
+                    <option value="2" <?php if ($schedule['semester'] == 2) echo "selected"; ?>>Second Semester</option>
                 </select>
-                <input type="text" name="old_instructor_id" id="old_instructor_id" value=<?php echo $schedule["instructor_id"] ?> hidden>
             </div>
             <div class="form-group">
                 <label for="subject">Subject:</label>
-                <select id="subject-id" name="subject_id" required>
+                <select id="subject-id" name="subject_id" required disabled>
                     <?php
                     $subjects = get_subject_name_id($pdo);
                     foreach ($subjects as $subject) {
@@ -150,24 +147,69 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                 <input type="text" id="old_subject_id" name="old_subject_id" value=<?php echo $schedule["subject_id"] ?> hidden>
             </div>
             <div class="form-group">
-                <label for="type">Lecture type:</label>
-                <select id="type" name="type" required>
+                <label for="instructor">Instructor:</label>
+                <select id="instructor-id" name="instructor_id" required disabled>
                     <?php
-                        if($schedule['type'] == "lecture"){
-                            echo "<option value='lecture' selected>Lecture</option>";
-                            echo "<option value='laboratory'>Laboratory</option>";
+                    $instructors = get_instructor_name_id($pdo);
+                    foreach ($instructors as $instructor) {
+                        echo "<option value='" . $instructor['instructor_id'] . "'";
+                        if ($schedule['instructor_id'] == $instructor['instructor_id']) {
+                            echo " selected";
                         }
-                        else{
-                            echo "<option value='lecture'>Lecture</option>";
-                            echo "<option value='laboratory' selected>Laboratory</option>";
+                        echo ">" . $instructor['fullname'] . "</option>";
+                    }
+                    ?>
+                </select>
+                <input type="text" name="old_instructor_id" id="old_instructor_id" value=<?php echo $schedule["instructor_id"] ?> hidden>
+            </div>
+            <div class="form-group">
+                <label for="type">Lecture type:</label>
+                <select id="type" name="type" required disabled>
+                    <?php
+                    if ($schedule['type'] == "lecture") {
+                        echo "<option value='lecture' selected>Lecture</option>";
+                        echo "<option value='laboratory'>Laboratory</option>";
+                    } else {
+                        echo "<option value='lecture'>Lecture</option>";
+                        echo "<option value='laboratory' selected>Laboratory</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="room">Room:</label>
+                <select id="room-id" name="room_id" required disabled>
+                    <?php
+                    $rooms = get_classroom_name_id($pdo);
+                    foreach ($rooms as $room) {
+                        echo "<option value='" . $room['room_id'] . "'";
+                        if ($schedule['room_id'] == $room['room_id']) {
+                            echo " selected";
                         }
+                        echo ">" . $room['room_id'] . "</option>";
+                    }
+                    ?>
+                </select>
+                <input type="text" name="old_room_id" id="old_room_id" value=<?php echo $schedule["room_id"] ?> hidden>
+            </div>
+            <div class="form-group">
+                <label for="type">Lecture type:</label>
+                <select id="type" name="type" required disabled>
+                    <?php
+                    if ($schedule['type'] == "lecture") {
+                        echo "<option value='lecture' selected>Lecture</option>";
+                        echo "<option value='laboratory'>Laboratory</option>";
+                    } else {
+                        echo "<option value='lecture'>Lecture</option>";
+                        echo "<option value='laboratory' selected>Laboratory</option>";
+                    }
                     ?>
                 </select>
                 <input type="text" id="old_type" name="old_type" value=<?php echo $schedule["type"] ?> hidden>
             </div>
             <div class="form-group">
                 <label for="day">Day:</label>
-                <select id="day" name="day" required>
+                <select id="day" name="day" required disabled>
                     <?php
                     $days = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
                     foreach ($days as $day) {
@@ -185,7 +227,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
             </div>
             <div class="form-group">
                 <label for="start-time">Start Time:</label>
-                <select id="section" name="start_time" required>
+                <select id="start-time" name="start_time" required disabled>
                     <?php
                     $start_time = strtotime('8:00'); // Convert start time to Unix timestamp
                     $end_time = strtotime('16:00'); // Convert end time to Unix timestamp
@@ -204,7 +246,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
             </div>
             <div class="form-group">
                 <label for="end-time">End Time:</label>
-                <select id="section" name="end_time" required>
+                <select id="end-time" name="end_time" required disabled>
                     <?php
                     $start_time = strtotime('9:00'); // Convert start time to Unix timestamp
                     $end_time = strtotime('17:00'); // Convert end time to Unix timestamp
@@ -222,22 +264,6 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                 <input type="text" id="old_end_time" name="old_end_time" value=<?php echo $schedule["end_time"] ?> hidden>
             </div>
             <div class="form-group">
-                <label for="section">Section:</label>
-                <select id="section-id" name="section_id" required>
-                    <?php
-                    $sections = get_section_name_id($pdo);
-                    foreach ($sections as $section) {
-                        echo "<option value='" . $section['section_id'] . "'";
-                        if ($schedule['section_id'] == $section['section_id']) {
-                            echo " selected";
-                        }
-                        echo ">" . $section['section_id'] . "</option>";
-                    }
-                    ?>
-                </select>
-                <input type="text" id="old_section_id" name="old_section_id" value=<?php echo $schedule["section_id"] ?> hidden>
-            </div>
-            <div class="form-group">
                 <label for="sy">School Year:</label>
                 <input type="text" id="sy" name="sy" placeholder="YYYY-YYYY" value=<?php echo $schedule["sy"]; ?> required>
                 <input type="text" id="old_sy" name="old_sy" value=<?php echo $schedule["sy"] ?> hidden>
@@ -252,29 +278,255 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const subjectIdInput = document.getElementById('subject-id');
-            const sectionIdInput = document.getElementById('section-id');
-            const syInput = document.getElementById('sy');
+            //SY
             const codeInput = document.getElementById('code');
+            const sectionIdInput = document.getElementById('section-id');
+            const semesterInput = document.getElementById('semester');
+            const subjectIdInput = document.getElementById('subject-id');
+            const instructorIdInput = document.getElementById('instructor-id');
+            const typeInput = document.getElementById('type');
+            const roomIdInput = document.getElementById('room-id');
+            const dayInput = document.getElementById('day');
+            const startTimeInput = document.getElementById('start-time');
+            const endTimeInput = document.getElementById('end-time');
+            const syInput = document.getElementById('sy');
+
+            // Initial code generation
+            generateCode();
+
+            // Event listeners for input changes
             subjectIdInput.addEventListener('input', generateCode);
             sectionIdInput.addEventListener('input', generateCode);
             syInput.addEventListener('input', generateCode);
 
             function generateCode() {
-                //process sy 2023-2024 to 23-24
-                let syProcessed = syInput.value.split("-");
-                syProcessed = syProcessed.map((sy) => sy.slice(2, 4));
-                syProcessed = syProcessed.join("-");
                 const subjectId = subjectIdInput.value;
                 const sectionId = sectionIdInput.value;
-                if (subjectId && sectionId && syProcessed.length === 5) {
-                    let generatedCode = `${subjectId}${sectionId}${syProcessed}`;
+                const syProcessed = processSy(syInput.value);
+
+                if (subjectId && sectionId && syProcessed) {
+                    const generatedCode = `${subjectId}${sectionId}${syProcessed}`;
                     codeInput.value = generatedCode;
-                    return;
+                } else {
+                    codeInput.value = '';
                 }
-                codeInput.value = '';
+            }
+
+            // Process SY format from "2023-2024" to "2324"
+            function processSy(syValue) {
+                const syParts = syValue.split("-");
+                if (syParts.length === 2) {
+                    return syParts.map(sy => sy.slice(2, 4)).join("");
+                }
+                return null;
+            }
+
+            //readonly froms when the pre requisite is empty
+
+            sectionIdInput.addEventListener('input', enableSelects);
+            semesterInput.addEventListener('input', enableSelects);
+            subjectIdInput.addEventListener('input', enableSelects);
+            instructorIdInput.addEventListener('input', enableSelects);
+            typeInput.addEventListener('input', enableSelects);
+            roomIdInput.addEventListener('input', enableSelects);
+            dayInput.addEventListener('input', enableSelects);
+            startTimeInput.addEventListener('input', enableSelects);
+
+            function enableSelects() {
+                const inputs = [semesterInput, subjectIdInput, instructorIdInput, typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput];
+                const currentIndex = inputs.findIndex(input => input === this);
+
+                if (currentIndex < inputs.length - 1 && this.value !== "") {
+                    inputs[currentIndex + 1].disabled = false;
+                }
+            }
+
+            semesterInput.addEventListener('input', getSubjects);
+            // Find the available subjects for the year level based on the section
+            function getSubjects() {
+                const section_id = sectionIdInput.value;
+                const semester = semesterInput.value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("subject-id").innerHTML = '';
+                            document.getElementById("subject-id").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?section_id=${section_id}&semester=${semester}`, true);
+                xhr.send();
+            }
+            //get instructor
+            subjectIdInput.addEventListener('input', getInstructors);
+
+            function getInstructors() {
+                const subject_id = document.getElementById('subject-id').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("instructor-id").innerHTML = '';
+                            document.getElementById("instructor-id").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}`, true);
+                xhr.send();
+            }
+            instructorIdInput.addEventListener('input', getType);
+            //get type
+            function getType() {
+                const subject_id = document.getElementById('subject-id').value;
+                const section_id = document.getElementById('section-id').value;
+                const sy = processSy(syInput.value);
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("type").innerHTML = '';
+                            document.getElementById("type").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}&type=true&section_id=${section_id}&sy=${sy}`, true);
+                xhr.send();
+            }
+
+            //get room
+            typeInput.addEventListener('input', getRoom);
+
+            function getRoom() {
+                const type = document.getElementById('type').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("room-id").innerHTML = '';
+                            document.getElementById("room-id").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?type=${type}&get_room=true`, true);
+                xhr.send();
+            }
+
+            //get day
+            roomIdInput.addEventListener('input', getDay);
+
+            function getDay() {
+                const room_id = document.getElementById('room-id').value;
+                const sy = processSy(syInput.value);
+                let xhr = new XMLHttpRequest();
+                console.log(`../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&get_day=true`)
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("day").innerHTML = '';
+                            document.getElementById("day").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&get_day=true`, true);
+                xhr.send();
+            }
+
+            //get start time
+            dayInput.addEventListener('input', getStartTime);
+
+            function getStartTime() {
+                const room_id = document.getElementById('room-id').value;
+                const sy = processSy(syInput.value);
+                const day = document.getElementById('day').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("start-time").innerHTML = '';
+                            document.getElementById("start-time").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&get_start_time=true`, true);
+                xhr.send();
+            }
+
+            //get end time
+            startTimeInput.addEventListener('input', getEndTime);
+
+            function getEndTime() {
+                const room_id = document.getElementById('room-id').value;
+                const sy = processSy(syInput.value);
+                const day = document.getElementById('day').value;
+                const start_time = document.getElementById('start-time').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("end-time").innerHTML = '';
+                            document.getElementById("end-time").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?start_time=${start_time}&get_end_time=true`, true);
+                xhr.send();
             }
         });
+
+
+
+        //reset if go back
+        function handleSelectChange(inputElement, targetElements) {
+            console.log("entered");
+            inputElement.addEventListener('change', () => {
+                // Disable all target elements
+                targetElements.forEach(element => {
+                    element.disabled = true;
+                    element.selectedIndex = 0;
+                });
+
+                // Enable the target element based on the input element's value
+                if (inputElement.value !== '') {
+                    targetElements[0].disabled = false; // Enable the first target element
+                }
+            });
+        }
+
+        const sectionIdInput = document.getElementById('section-id');
+        const semesterInput = document.getElementById('semester');
+        const subjectIdInput = document.getElementById('subject-id');
+        const instructorIdInput = document.getElementById('instructor-id');
+        const typeInput = document.getElementById('type');
+        const roomIdInput = document.getElementById('room-id');
+        const dayInput = document.getElementById('day');
+        const startTimeInput = document.getElementById('start-time');
+        const endTimeInput = document.getElementById('end-time');
+        const syInput = document.getElementById('sy');
+
+        handleSelectChange(sectionIdInput, [semesterInput, subjectIdInput, instructorIdInput, typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(semesterInput, [subjectIdInput, instructorIdInput, typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(subjectIdInput, [instructorIdInput, typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(instructorIdInput, [typeInput, roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(typeInput, [roomIdInput, dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(roomIdInput, [dayInput, startTimeInput, endTimeInput]);
+        handleSelectChange(dayInput, [startTimeInput, endTimeInput]);
     </script>
 </body>
 
