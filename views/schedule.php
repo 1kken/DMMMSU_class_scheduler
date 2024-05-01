@@ -489,6 +489,7 @@ if (!is_logged_in()) {
 
             //get room
             typeInput.addEventListener('input', getRoom);
+
             function getRoom() {
                 const type = document.getElementById('type').value;
                 let xhr = new XMLHttpRequest();
@@ -508,7 +509,8 @@ if (!is_logged_in()) {
 
             //get day
             roomIdInput.addEventListener('input', getDay);
-            function getDay(){
+
+            function getDay() {
                 const room_id = document.getElementById('room-id').value;
                 const sy = processSy(syInput.value);
                 let xhr = new XMLHttpRequest();
@@ -527,9 +529,53 @@ if (!is_logged_in()) {
                 xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&get_day=true`, true);
                 xhr.send();
             }
+
+            //get start time
+            dayInput.addEventListener('input', getStartTime);
+
+            function getStartTime() {
+                const room_id = document.getElementById('room-id').value;
+                const sy = processSy(syInput.value);
+                const day = document.getElementById('day').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("start-time").innerHTML = '';
+                            document.getElementById("start-time").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&get_start_time=true`, true);
+                xhr.send();
+            }
+
+            //get end time
+            startTimeInput.addEventListener('input', getEndTime);
+
+            function getEndTime() {
+                const room_id = document.getElementById('room-id').value;
+                const sy = processSy(syInput.value);
+                const day = document.getElementById('day').value;
+                const start_time = document.getElementById('start-time').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("end-time").innerHTML = '';
+                            document.getElementById("end-time").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?start_time=${start_time}&get_end_time=true`, true);
+                xhr.send();
+            }
         });
-
-
 
 
         function search() {

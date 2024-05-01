@@ -117,26 +117,83 @@ if (isset($_GET['room_id']) && isset($_GET['get_day']) && isset($_GET['sy'])) {
         }
 
         if ($total_time >= (17 * 3600 - 8 * 3600)) { // 17:00 - 8:00 in seconds
-            if($day == 'monday') {
+            if ($day == 'monday') {
                 echo "<option value='$day' disabled>{$day} - Thursday FULL</option>";
             }
-            if($day == 'tuesday') {
+            if ($day == 'tuesday') {
                 echo "<option value='$day' disabled>{$day} - Friday FULL</option>";
             }
-            if($day == 'wednesday') {
+            if ($day == 'wednesday') {
                 echo "<option value='$day' disabled>{$day} FULL</option>";
             }
         } else {
-            if($day == 'monday') {
-                echo "<option value='$day'>{$day} - Thursday FULL</option>";
+            if ($day == 'monday') {
+                echo "<option value='$day'>{$day} - Thursday</option>";
             }
-            if($day == 'tuesday') {
-                echo "<option value='$day'>{$day} - Friday FULL</option>";
+            if ($day == 'tuesday') {
+                echo "<option value='$day'>{$day} - Friday</option>";
             }
-            if($day == 'wednesday') {
-                echo "<option value='$day'>{$day} FULL</option>";
+            if ($day == 'wednesday') {
+                echo "<option value='$day'>{$day}</option>";
             }
         }
+    }
+}
+
+if (isset($_GET['room_id']) && isset($_GET['sy']) && isset($_GET['get_start_time'])) {
+    //get the schedule 
+    $room_id = $_GET['room_id'];
+    $sy = $_GET['sy'];
+    $day = $_GET['day'];
+    $stmt = $pdo->prepare('SELECT start_time,end_time FROM schedule WHERE room_id = :room_id AND day = :day AND code LIKE :sy');
+    $stmt->execute(['room_id' => $room_id, 'sy' => "%$sy", 'day' => $day]);
+    $schedules = $stmt->fetchAll();
+
+    $availableSlots0800to1600 = [];
+
+    // Loop from 8:00 to 16:00 and check availability
+    $currTime = strtotime('08:00:00');
+    while ($currTime <= strtotime('16:00:00')) {
+        $desiredStartTime = date('H:i:s', $currTime);
+
+        $slotAvailable = true;
+        foreach ($schedules as $slot) {
+            $startTime = strtotime($slot['start_time']);
+            $endTime = strtotime($slot['end_time']);
+
+            if ($startTime <= $currTime && $endTime > $currTime) {
+                $slotAvailable = false;
+                break; // No need to continue checking if one slot overlaps
+            }
+        }
+
+        if ($slotAvailable) {
+            $availableSlots0800to1600[] = $desiredStartTime;
+        }
+
+        $currTime += 1800; // Move to the next 30-minute slot
+    }
+    if($availableSlots0800to1600 == null){
+        echo "<option disabled selected value> -- no available time -- </option>";
+        exit();
+    }
+
+    //display using option
+    echo "<option disabled selected value> -- select an option -- </option>";
+    foreach ($availableSlots0800to1600 as $time) {
+        echo "<option value='" . $time . "'>" . $time . "</option>";
+    }
+}
+
+if(isset($_GET['start_time']) && isset($_GET['get_end_time'])){
+    //get the end time
+    $start_time = $_GET['start_time'];
+    $start_time = strtotime($start_time) + 1800;
+    $end_time = strtotime('17:00:00');
+    while($start_time <= $end_time){
+        $display_time = date('H:i:s', $start_time);
+        echo "<option value='" . $display_time . "'>" .$display_time. "</option>";
+        $start_time += 1800;
     }
 }
 
