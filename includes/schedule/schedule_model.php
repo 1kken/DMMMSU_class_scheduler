@@ -42,4 +42,9 @@
         return $schedule;
     }
 
+    function create_schedule($pdo, $code, $room_id, $instructor_id, $day, $start_time, $end_time, $subject_id, $section_id, $sy, $type, $semester){
+        $stmt = $pdo->prepare("INSERT INTO schedule (code, room_id, instructor_id, day, start_time, end_time, subject_id, section_id, sy,type,semester) VALUES (:code, :room_id, :instructor_id, :day, :start_time, :end_time, :subject_id, :section_id, :sy,:type,:semester)");
+        $stmt->execute(['code' => $code, 'room_id' => $room_id, 'instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $subject_id, 'section_id' => $section_id, 'sy' => $sy,'type' =>$type, 'semester' => $semester]);
+    }
+
     

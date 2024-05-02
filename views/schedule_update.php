@@ -193,21 +193,6 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                 <input type="text" name="old_room_id" id="old_room_id" value=<?php echo $schedule["room_id"] ?> hidden>
             </div>
             <div class="form-group">
-                <label for="type">Lecture type:</label>
-                <select id="type" name="type" required disabled>
-                    <?php
-                    if ($schedule['type'] == "lecture") {
-                        echo "<option value='lecture' selected>Lecture</option>";
-                        echo "<option value='laboratory'>Laboratory</option>";
-                    } else {
-                        echo "<option value='lecture'>Lecture</option>";
-                        echo "<option value='laboratory' selected>Laboratory</option>";
-                    }
-                    ?>
-                </select>
-                <input type="text" id="old_type" name="old_type" value=<?php echo $schedule["type"] ?> hidden>
-            </div>
-            <div class="form-group">
                 <label for="day">Day:</label>
                 <select id="day" name="day" required disabled>
                     <?php
@@ -379,26 +364,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                 xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}`, true);
                 xhr.send();
             }
-            instructorIdInput.addEventListener('input', getType);
-            //get type
-            function getType() {
-                const subject_id = document.getElementById('subject-id').value;
-                const section_id = document.getElementById('section-id').value;
-                const sy = processSy(syInput.value);
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            document.getElementById("type").innerHTML = '';
-                            document.getElementById("type").innerHTML = xhr.responseText;
-                        } else {
-                            console.log("There was a problem with the request.");
-                        }
-                    }
-                };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}&type=true&section_id=${section_id}&sy=${sy}`, true);
-                xhr.send();
-            }
+
 
             //get room
             typeInput.addEventListener('input', getRoom);

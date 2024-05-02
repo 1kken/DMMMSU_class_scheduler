@@ -180,6 +180,9 @@ if (!is_logged_in()) {
         select {
             text-transform: capitalize;
         }
+        td{
+            text-transform: capitalize;
+        }
     </style>
 </head>
 <script src="../jquery.js"></script>
@@ -327,6 +330,7 @@ if (!is_logged_in()) {
                         <th>Start Time</th>
                         <th>End Time</th>
                         <th>Section</th>
+                        <th>Day</th>
                         <th>SY</th>
                         <th>Actions</th>
                     </tr>
@@ -344,6 +348,7 @@ if (!is_logged_in()) {
                         echo "<td>" . $schedule['start_time'] . "</td>";
                         echo "<td>" . $schedule['end_time'] . "</td>";
                         echo "<td>" . $schedule['section_id'] . "</td>";
+                        echo "<td>" . $schedule['day'] . "</td>";
                         echo "<td>" . $schedule['sy'] . "</td>";
                         echo "<td class='actions'>
                                 <form action='../../DMMMSU_class_scheduler\includes/schedule_handler.php' method='post'>

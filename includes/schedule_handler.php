@@ -36,13 +36,13 @@
         }
 
         //check for conflicts
-        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE room_id = :room_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time)");
+        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE room_id = :room_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) AND (start_time <= :end_time AND end_time >= :end_time) AND section_id = :section_id AND sy = :sy AND semester = :semester)");
         $stmt->execute(['room_id' => $room_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'section_id' => $section_id, 'sy' => $sy, 'semester' => $semester]);
         if($stmt->rowCount() > 0){
             $errors["room_conflict"] = "Room is already taken.";
         }
         //check for instructor conflict
-        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE instructor_id = :instructor_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time)");
+        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE instructor_id = :instructor_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) AND (start_time <= :end_time AND end_time >= :end_time) AND section_id = :section_id AND sy = :sy AND semester = :semester)");
         $stmt->execute(['instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'section_id' => $section_id, 'sy' => $sy, 'semester' => $semester]);
         if($stmt->rowCount() > 0){
             $errors["instructor_conflict"] = "Instructor is already taken.";
@@ -55,9 +55,21 @@
         }
         
         try {
-            //create schedule
-            $stmt = $pdo->prepare("INSERT INTO schedule (code, room_id, instructor_id, day, start_time, end_time, subject_id, section_id, sy,type,semester) VALUES (:code, :room_id, :instructor_id, :day, :start_time, :end_time, :subject_id, :section_id, :sy,:type,:semester)");
-            $stmt->execute(['code' => $code, 'room_id' => $room_id, 'instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $subject_id, 'section_id' => $section_id, 'sy' => $sy,'type' =>$type, 'semester' => $semester]);
+            //create schedule for monday - thursday
+            if($day === 'monday'){
+                create_schedule($pdo, $code, $room_id, $instructor_id, $day, $start_time, $end_time, $subject_id, $section_id, $sy, $type, $semester);
+                create_schedule($pdo, $code, $room_id, $instructor_id, 'thursday', $start_time, $end_time, $subject_id, $section_id, $sy, $type, $semester);
+            }
+
+            if($day === 'tuesday'){
+                create_schedule($pdo, $code, $room_id, $instructor_id, $day, $start_time, $end_time, $subject_id, $section_id, $sy, $type, $semester);
+                create_schedule($pdo, $code, $room_id, $instructor_id, 'friday', $start_time, $end_time, $subject_id, $section_id, $sy, $type, $semester);
+            }
+
+            if($day === 'wednesday'){
+                create_schedule($pdo, $code, $room_id, $instructor_id, $day, $start_time, $end_time, $subject_id, $section_id, $sy, $type, $semester);
+            }
+
         } catch (PDOException $e) {
             echo $e->getMessage();
             exit();
@@ -65,6 +77,7 @@
         header("LOCATION: /DMMMSU_class_scheduler/views/schedule.php");
         exit();
     }
+
 
     if(isset($_POST["delete_schedule"]) && isset($_SESSION["user_id"])){
         $schedule_id = $_POST["schedule_id"];
@@ -121,16 +134,15 @@
         if(is_schedule_code_taken($pdo, $code) && $old_schedule != $code){
             $errors["code_taken"] = "Code is already taken.";
         }
-        //check for conflicts
 
-        //check for conflicts
-        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE room_id = :room_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) OR (start_time <= :end_time AND end_time >= :end_time))");
+        //check fo  room conflicts
+        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE room_id != :room_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) OR (start_time <= :end_time AND end_time >= :end_time))");
         $stmt->execute(['room_id' => $room_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
         if($stmt->rowCount() > 0){
             $errors["room_conflict"] = "Room is already taken.";
         }
         //check for instructor conflict
-        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE instructor_id = :instructor_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) OR (start_time <= :end_time AND end_time >= :end_time))");
+        $stmt = $pdo->prepare("SELECT * FROM schedule WHERE instructor_id != :instructor_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) OR (start_time <= :end_time AND end_time >= :end_time))");
         $stmt->execute(['instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
         if($stmt->rowCount() > 0){
             $errors["instructor_conflict"] = "Instructor is already taken.";
