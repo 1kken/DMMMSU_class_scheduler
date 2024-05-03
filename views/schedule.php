@@ -32,6 +32,7 @@ if (!is_logged_in()) {
             margin: auto auto;
             display: flex;
             max-width: 100%;
+            max-height: 1050px;
         }
 
         .form-container {
@@ -97,7 +98,6 @@ if (!is_logged_in()) {
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             max-width: 1000px;
-            overflow: auto;
             /* Adjust the height as needed */
             overflow: auto;
         }

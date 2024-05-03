@@ -65,28 +65,7 @@ CREATE TABLE `rooms` (
 
 LOCK TABLES `rooms` WRITE;
 /*!40000 ALTER TABLE `rooms` DISABLE KEYS */;
-INSERT INTO rooms (room_id, room_type, priority) VALUES
-('CLR101','Laboratory',5),
-('CLR102','Laboratory',4),
-('CLR201','Laboratory',3),
-('CLR202','Laboratory',3),
-('CLR301','Laboratory',1),
-('CLR302','Laboratory',1),
-('CLR303','Laboratory',1),
-('LR101','Lecture',5),
-('LR102','Lecture',5),
-('LR103','Lecture',5),
-('LR201','Lecture',3),
-('LR202','Lecture',3),
-('LR203','Lecture',3),
-('LR301','Lecture',2),
-('LR302','Lecture',2),
-('LR303','Lecture',2),
-('MH1','Lecture',1),
-('MH2','Lecture',1),
-('MH3','Lecture',1),
-('MH4','Lecture',1);
-
+INSERT INTO `rooms` VALUES ('CLR101','Laboratory',5),('CLR102','Laboratory',4),('CLR201','Laboratory',3),('CLR202','Laboratory',3),('CLR301','Laboratory',1),('CLR302','Laboratory',1),('CLR303','Laboratory',1),('LR101','Lecture',5),('LR102','Lecture',5),('LR103','Lecture',5),('LR201','Lecture',3),('LR202','Lecture',3),('LR203','Lecture',3),('LR301','Lecture',2),('LR302','Lecture',2),('LR303','Lecture',2),('MH1','Lecture',1),('MH2','Lecture',1),('MH3','Lecture',1),('MH4','Lecture',1);
 /*!40000 ALTER TABLE `rooms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +98,7 @@ CREATE TABLE `schedule` (
   CONSTRAINT `schedule_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`subject_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `schedule_ibfk_4` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`instructor_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `schedule_ibfk_5` FOREIGN KEY (`section_id`) REFERENCES `section` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +107,7 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
-INSERT INTO `schedule` VALUES (25,'PATHFIT1011A2425','LR101','21298165','monday','08:00:00','09:00:00','PATHFIT101','1A','2024-2025','lecture',1),(26,'PATHFIT1011A2425','LR101','21298165','friday','08:00:00','09:00:00','PATHFIT101','1A','2024-2025','lecture',1),(27,'GECC101a1A2425','LR201','21127643','monday','10:00:00','11:00:00','GECC101a','1A','2024-2025','lecture',1),(28,'GECC102a1A2425','LR201','21127654','monday','13:00:00','14:00:00','GECC102a','1A','2024-2025','lecture',1),(29,'CSC1021A2425','LR201','21123987','monday','14:00:00','15:00:00','CSC102','1A','2024-2025','lecture',1),(30,'GECC1011A2425','LR301','21124567','monday','15:30:00','17:00:00','GECC101','1A','2024-2025','lecture',1),(31,'GECC103a1A2425','LR201','21127698','tuesday','08:00:00','09:00:00','GECC103a','1A','2024-2025','lecture',1),(32,'CSC1021A2425','CLR301','21123987','tuesday','09:30:00','11:00:00','CSC102','1A','2024-2025','laboratory',1),(33,'CSC1011A2425','CLR301','21121876','tuesday','14:00:00','15:30:00','CSC101','1A','2024-2025','laboratory',1),(34,'GECC101a1A2425','LR201','21127643','wednesday','11:00:00','12:00:00','GECC101a','1A','2024-2025','lecture',1),(35,'GECC103a1A2425','LR302','21127698','thursday','09:30:00','11:00:00','GECC103a','1A','2024-2025','lecture',1),(36,'CSC1021A2425','CLR301','21123987','thursday','09:30:00','11:00:00','CSC102','1A','2024-2025','laboratory',1),(37,'CSC1011A2425','CLR301','21121876','thursday','14:00:00','15:30:00','CSC101','1A','2024-2025','laboratory',1),(38,'GECC101a1A2425','LR201','21127643','friday','10:00:00','11:00:00','GECC101a','1A','2024-2025','lecture',1),(39,'CSC1011A2425','LR201','21121876','friday','13:00:00','14:00:00','CSC101','1A','2024-2025','lecture',1),(40,'CSC1021A2425','LR201','21123987','friday','14:00:00','15:00:00','CSC102','1A','2024-2025','lecture',1),(41,'GECC1011A2425','LR301','21124567','friday','15:00:00','17:00:00','GECC101','1A','2024-2025','lecture',1),(42,'CSC1011A2425','LR201','21121876','friday','11:00:00','12:00:00','CSC101','1A','2024-2025','lecture',1);
+INSERT INTO `schedule` VALUES (25,'PATHFIT1011A2425','LR101','21298165','monday','08:00:00','09:00:00','PATHFIT101','1A','2024-2025','lecture',1),(26,'PATHFIT1011A2425','LR101','21298165','friday','08:00:00','09:00:00','PATHFIT101','1A','2024-2025','lecture',1),(27,'GECC101a1A2425','LR201','21127643','monday','10:00:00','11:00:00','GECC101a','1A','2024-2025','lecture',1),(28,'GECC102a1A2425','LR201','21127654','monday','13:00:00','14:00:00','GECC102a','1A','2024-2025','lecture',1),(29,'CSC1021A2425','LR201','21123987','monday','14:00:00','15:00:00','CSC102','1A','2024-2025','lecture',1),(30,'GECC1011A2425','LR301','21124567','monday','15:30:00','17:00:00','GECC101','1A','2024-2025','lecture',1),(31,'GECC103a1A2425','LR201','21127698','tuesday','08:00:00','09:00:00','GECC103a','1A','2024-2025','lecture',1),(32,'CSC1021A2425','CLR301','21123987','tuesday','09:30:00','11:00:00','CSC102','1A','2024-2025','laboratory',1),(33,'CSC1011A2425','CLR302','21121876','tuesday','14:00:00','15:30:00','CSC101','1A','2024-2025','laboratory',1),(34,'GECC101a1A2425','LR201','21127643','wednesday','11:00:00','12:00:00','GECC101a','1A','2024-2025','lecture',1),(35,'GECC103a1A2425','LR302','21127698','thursday','09:30:00','11:00:00','GECC103a','1A','2024-2025','lecture',1),(36,'CSC1021A2425','CLR301','21123987','thursday','09:30:00','11:00:00','CSC102','1A','2024-2025','laboratory',1),(37,'CSC1011A2425','CLR302','21121876','thursday','14:00:00','15:30:00','CSC101','1A','2024-2025','laboratory',1),(38,'GECC101a1A2425','LR201','21127643','friday','10:00:00','11:00:00','GECC101a','1A','2024-2025','lecture',1),(39,'CSC1011A2425','LR201','21121876','friday','13:00:00','14:00:00','CSC101','1A','2024-2025','lecture',1),(40,'CSC1021A2425','LR201','21123987','friday','14:00:00','15:00:00','CSC102','1A','2024-2025','lecture',1),(41,'GECC1011A2425','LR301','21124567','friday','15:00:00','17:00:00','GECC101','1A','2024-2025','lecture',1),(42,'CSC1011A2425','LR201','21121876','friday','11:00:00','12:00:00','CSC101','1A','2024-2025','lecture',1),(43,'GECC104a1A2425','MH4','21234876','monday','08:00:00','09:00:00','GECC104a','1A','2024-2025','lecture',2);
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,7 +246,7 @@ CREATE TABLE `unit_counter` (
 
 LOCK TABLES `unit_counter` WRITE;
 /*!40000 ALTER TABLE `unit_counter` DISABLE KEYS */;
-INSERT INTO `unit_counter` VALUES (25,'PATHFIT1011A2425',1,0),(26,'PATHFIT1011A2425',1,0),(27,'GECC101a1A2425',1,0),(28,'GECC102a1A2425',1,0),(29,'CSC1021A2425',1,0),(30,'GECC1011A2425',1.5,0),(31,'GECC103a1A2425',1,0),(32,'CSC1021A2425',0,0.5),(33,'CSC1011A2425',0,0.5),(34,'GECC101a1A2425',1,0),(35,'GECC103a1A2425',1.5,0),(36,'CSC1021A2425',0,0.5),(37,'CSC1011A2425',0,0.5),(38,'GECC101a1A2425',1,0),(39,'CSC1011A2425',1,0),(40,'CSC1021A2425',1,0),(41,'GECC1011A2425',2,0),(42,'CSC1011A2425',1,0);
+INSERT INTO `unit_counter` VALUES (25,'PATHFIT1011A2425',1,0),(26,'PATHFIT1011A2425',1,0),(27,'GECC101a1A2425',1,0),(28,'GECC102a1A2425',1,0),(29,'CSC1021A2425',1,0),(30,'GECC1011A2425',1.5,0),(31,'GECC103a1A2425',1,0),(32,'CSC1021A2425',0,0.5),(33,'CSC1011A2425',0,0.5),(34,'GECC101a1A2425',1,0),(35,'GECC103a1A2425',1.5,0),(36,'CSC1021A2425',0,0.5),(37,'CSC1011A2425',0,0.5),(38,'GECC101a1A2425',1,0),(39,'CSC1011A2425',1,0),(40,'CSC1021A2425',1,0),(41,'GECC1011A2425',2,0),(42,'CSC1011A2425',1,0),(43,'GECC104a1A2425',1,0);
 /*!40000 ALTER TABLE `unit_counter` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -311,4 +290,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-03 17:03:05
+-- Dump completed on 2024-05-03 17:26:58

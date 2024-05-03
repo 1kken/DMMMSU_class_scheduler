@@ -4,6 +4,8 @@ INSERT INTO rooms (room_id, room_type, priority) VALUES
 ('CLR201','Laboratory',3),
 ('CLR202','Laboratory',3),
 ('CLR301','Laboratory',1),
+('CLR302','Laboratory',1),
+('CLR303','Laboratory',1),
 ('LR101','Lecture',5),
 ('LR102','Lecture',5),
 ('LR103','Lecture',5),
@@ -12,4 +14,8 @@ INSERT INTO rooms (room_id, room_type, priority) VALUES
 ('LR203','Lecture',3),
 ('LR301','Lecture',2),
 ('LR302','Lecture',2),
-('LR303','Lecture',2);
+('LR303','Lecture',2),
+('MH1','Lecture',1),
+('MH2','Lecture',1),
+('MH3','Lecture',1),
+('MH4','Lecture',1);
