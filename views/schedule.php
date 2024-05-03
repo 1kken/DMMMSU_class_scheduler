@@ -265,9 +265,12 @@ if (!is_logged_in()) {
                     <label for="day">Day:</label>
                     <select id="day" name="day" required disabled>
                         <option disabled selected value> -- select an option -- </option>
-                        <option value="monday">Monday - Thursday</option>
-                        <option value="tuesday">Tuesday - Friday</option>
+                        <option value="monday">Monday</option>
+                        <option value="tuesday">Tuesday </option>
                         <option value="wednesday">Wednesday</option>
+                        <option value="thursday">Thursday</option>
+                        <option value="friday">Friday</option>
+                        <option value="saturday">Saturday</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -343,6 +346,7 @@ if (!is_logged_in()) {
                     // Display schedule records
                     foreach ($schedules as $schedule) {
                         $schedule_id = $schedule['schedule_id'];
+                        $code = $schedule['code'];
                         echo "<tr>";
                         echo "<td>" . $schedule['code'] . "</td>";
                         echo "<td>" . $schedule['start_time'] . "</td>";
@@ -486,6 +490,7 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             document.getElementById("type").innerHTML = '';
                             document.getElementById("type").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }

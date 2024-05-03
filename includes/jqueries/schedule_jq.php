@@ -46,32 +46,21 @@ if (isset($_GET['subject_id']) && empty($_GET['type'])) {
 
 if (isset($_GET['subject_id']) && isset($_GET['type']) && isset($_GET['section_id']) && isset($_GET['sy'])) {
     $subject = getSubject($pdo, $_GET['subject_id']);
-    $schedules = getScheduleWithSubjectandSection($pdo, $_GET['subject_id'], $_GET['section_id'], $_GET['sy']);
-
-    //flags for checking if the section/subject has schedule for lab and lecture
-    $has_lab = false;
-    $has_lecture = false;
-    foreach ($schedules as $schedule) {
-        if ($schedule['type'] == 'laboratory') {
-            $has_lab = true;
-        }
-        if ($schedule['type'] == 'lecture') {
-            $has_lecture = true;
-        }
-    }
+    $lab_lec_counts = get_lecture_lab_count($pdo, $_GET['subject_id'], $_GET['section_id'], $_GET['sy']);
     echo "<option disabled selected value> -- select an option -- </option>";
-    // display none if the seciotn ahs both lab and lecture
-    if ($subject['laboratory_units'] > 0  && $has_lab && $subject['lecture'] > 0 && $has_lecture) {
-        echo "<option disabled selected value> -- no available schedule -- </option>";
-        exit();
-    }
 
-    if ($subject['laboratory_units'] > 0 && !$has_lab) {
+    if($lab_lec_counts['lecture_count'] < $subject['lecture_units'] && $lab_lec_counts['laboratory_count'] < $subject['laboratory_units']){
+        echo "<option value='lecture'>Lecture</option>";
         echo "<option value='laboratory'>Laboratory</option>";
     }
-
-    if ($subject['lecture_units'] > 0 && !$has_lecture) {
+    else if($lab_lec_counts['lecture_count'] < $subject['lecture_units']){
         echo "<option value='lecture'>Lecture</option>";
+    }
+    else if($lab_lec_counts['laboratory_count'] < $subject['laboratory_units']){
+        echo "<option value='laboratory'>Laboratory</option>";
+    }
+    else{
+        echo "<option disabled selected value> -- no available schedule -- </option>";
     }
 }
 if (isset($_GET['type']) && isset($_GET['get_room'])) {
@@ -84,6 +73,7 @@ if (isset($_GET['type']) && isset($_GET['get_room'])) {
         exit();
     }
     //display using option
+
     echo "<option disabled selected value> -- select an option -- </option>";
     foreach ($rooms as $room) {
         echo "<option value='" . $room["room_id"] . "'>" . $room["room_id"] . "</option>";
@@ -101,7 +91,7 @@ if (isset($_GET['room_id']) && isset($_GET['get_day']) && isset($_GET['sy'])) {
         return strtotime($time);
     }
 
-    $days = ['monday', 'tuesday', 'wednesday']; // Add other days as needed
+    $days = ['monday', 'tuesday', 'wednesday','thursday','friday','saturday']; // Add other days as needed
 
     echo "<option disabled selected value> -- select an option -- </option>";
     foreach ($days as $day) {
@@ -117,25 +107,9 @@ if (isset($_GET['room_id']) && isset($_GET['get_day']) && isset($_GET['sy'])) {
         }
 
         if ($total_time >= (17 * 3600 - 8 * 3600)) { // 17:00 - 8:00 in seconds
-            if ($day == 'monday') {
-                echo "<option value='$day' disabled>{$day} - Thursday FULL</option>";
-            }
-            if ($day == 'tuesday') {
-                echo "<option value='$day' disabled>{$day} - Friday FULL</option>";
-            }
-            if ($day == 'wednesday') {
                 echo "<option value='$day' disabled>{$day} FULL</option>";
-            }
         } else {
-            if ($day == 'monday') {
-                echo "<option value='$day'>{$day} - Thursday</option>";
-            }
-            if ($day == 'tuesday') {
-                echo "<option value='$day'>{$day} - Friday</option>";
-            }
-            if ($day == 'wednesday') {
                 echo "<option value='$day'>{$day}</option>";
-            }
         }
     }
 }
@@ -205,10 +179,10 @@ function getSubject($pdo, $subject_id)
     return $subject;
 }
 
-function getScheduleWithSubjectandSection($pdo, $subject_id, $section_id, $sy)
+function get_lecture_lab_count($pdo, $subject_id, $section_id, $sy)
 {
-    $stmt = $pdo->prepare('SELECT * FROM schedule WHERE subject_id = :subject_id AND section_id = :section_id AND code LIKE :sy');
+    $stmt = $pdo->prepare('SELECT SUM(lecture_count) AS lecture_count, SUM(laboratory_count) AS laboratory_count FROM `schedule` JOIN unit_counter ON schedule.schedule_id = unit_counter.schedule_id WHERE subject_id = :subject_id AND section_id = :section_id AND schedule.code LIKE :sy');
     $stmt->execute(['subject_id' => $subject_id, 'section_id' => $section_id, 'sy' => "%$sy"]);
-    $schedules = $stmt->fetchAll();
-    return $schedules;
+    $schedule_counts = $stmt->fetch(PDO::FETCH_ASSOC); // Use fetch instead of fetchAll
+    return $schedule_counts;
 }
