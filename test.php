@@ -8,7 +8,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo "Error Database: " . $e->getMessage();
-}?>
+} ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -114,13 +114,14 @@ try {
                 <td>Time</td>
                 <td>Monday</td>
                 <td>Tuesday</td>
-                <td>Wednesday</td>
+                <!-- <td>Wednesday</td>
                 <td>Thursday</td>
                 <td>Friday</td>
-                <td>Saturday</td>
+                <td>Saturday</td> -->
             </tr>
             <?php
-            function get_schedules_based_on_time($pdo, $time){
+            function get_schedules_based_on_time($pdo, $time)
+            {
                 $sql = "SELECT subject.descriptive_title,schedule.day,schedule.start_time,schedule.end_time FROM SCHEDULE JOIN SUBJECT ON schedule.subject_id = subject.subject_id WHERE start_time =:time;";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute(['time' => $time]);
@@ -128,9 +129,9 @@ try {
             }
             $time_1900 = strtotime("19:00");
             $time_0800 = strtotime("07:00");
-            $skip_ctr = [0,0,0,0,0,0];
+            $skip_ctr = [0, 0, 0, 0, 0, 0];
             for ($curr_time = $time_0800; $curr_time <= $time_1900; $curr_time += 1800) {
-                $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+                $days = ['monday'];
                 $schedules = get_schedules_based_on_time($pdo, date("H:i:s", $curr_time));
                 echo "<tr>";
                 echo "<td>" . date("h:i A", $curr_time) . "</td>";
@@ -139,9 +140,9 @@ try {
                 foreach ($days as $day) {
                     $found = false;
                     foreach ($schedules as $schedule) {
-                        $rowspan = (strtotime($schedule['end_time']) - strtotime($schedule['start_time'])) / 1800;
+                        $rowspan = (strtotime($schedule['end_time']) - strtotime($schedule['start_time'])) / 1800 + 1;
                         if (strtolower($schedule['day']) == $day) {
-                            echo "<td rowspan = $rowspan>" . $schedule['descriptive_title'] . "</td>";
+                            echo "<td rowspan = $rowspan >" . $schedule['descriptive_title'] . "</td>";
                             $found = true;
                             $skip_ctr[$index] = $rowspan;
                             break;
@@ -149,7 +150,7 @@ try {
                     }
                     if (!$found && $skip_ctr[$index] == 0) {
                         echo "<td></td>";
-                    }else{
+                    } else {
                         $skip_ctr[$index] -= 1;
                     }
                     $index += 1;
