@@ -5,7 +5,7 @@ INSERT INTO `subject`(`subject_id`,`descriptive_title`,`lecture_units`,`laborato
 ('GECC102a','purposive communication',3,0,3,3,1,1),
 ('GECC103a','mathematics in modern world',3,0,3,3,1,1),
 ('GECC101','enviromental science',3,0,3,3,1,1),
-('PATHFIT101','enviromental science',2,0,2,3,1,1),
+('PATHFIT101','movement competency training',2,0,2,3,1,1),
 ('NSTP101','reserved officer trainig corps',2,0,2,1,1,1),
 ('CSPC101','discrete structure 1',3,0,3,3,1,2),
 ('CSCC101','intermediate programming',2,1,3,3,1,2),

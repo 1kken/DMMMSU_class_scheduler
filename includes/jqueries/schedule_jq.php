@@ -129,6 +129,7 @@ if (isset($_GET['room_id']) && isset($_GET['sy']) && isset($_GET['get_start_time
     $currTime = strtotime('08:00:00');
     while ($currTime <= strtotime('16:00:00')) {
         $desiredStartTime = date('H:i:s', $currTime);
+        $display_time = date('h:i A', $currTime);
 
         $slotAvailable = true;
         foreach ($schedules as $slot) {
@@ -142,7 +143,7 @@ if (isset($_GET['room_id']) && isset($_GET['sy']) && isset($_GET['get_start_time
         }
 
         if ($slotAvailable) {
-            $availableSlots0800to1600[] = $desiredStartTime;
+            $availableSlots0800to1600[] = ['value' => $desiredStartTime, 'display' => $display_time];
         }
 
         $currTime += 1800; // Move to the next 30-minute slot
@@ -155,7 +156,7 @@ if (isset($_GET['room_id']) && isset($_GET['sy']) && isset($_GET['get_start_time
     //display using option
     echo "<option disabled selected value> -- select an option -- </option>";
     foreach ($availableSlots0800to1600 as $time) {
-        echo "<option value='" . $time . "'>" . $time . "</option>";
+        echo "<option value='" . $time['value'] . "'>" . $time['display'] . "</option>";
     }
 }
 
@@ -165,8 +166,9 @@ if(isset($_GET['start_time']) && isset($_GET['get_end_time'])){
     $start_time = strtotime($start_time) + 1800;
     $end_time = strtotime('17:00:00');
     while($start_time <= $end_time){
-        $display_time = date('H:i:s', $start_time);
-        echo "<option value='" . $display_time . "'>" .$display_time. "</option>";
+        $value_time = date('H:i:s', $start_time);
+        $display_time = date('h:i A', $start_time);
+        echo "<option value='" . $value_time . "'>" .$display_time. "</option>";
         $start_time += 1800;
     }
 }

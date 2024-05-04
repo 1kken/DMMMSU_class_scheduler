@@ -18,4 +18,7 @@ INSERT INTO rooms (room_id, room_type, priority) VALUES
 ('MH1','Lecture',1),
 ('MH2','Lecture',1),
 ('MH3','Lecture',1),
-('MH4','Lecture',1);
+('MH4','Lecture',1)
+('MSC1','Lecture',1);
+('MSC2','Lecture',1);
+('MSC3','Lecture',1);
