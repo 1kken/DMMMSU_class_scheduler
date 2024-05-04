@@ -48,27 +48,5 @@ INSERT INTO `subject`(`subject_id`,`descriptive_title`,`lecture_units`,`laborato
 ('CSPE103','Introduction to knowledge management',3,0,3,2,4,1),
 ('CSPC117','CS thesis writing 2',3,0,3,2,4,1),
 ('CSCC106','application development and emerging technologies',2,1,3,3,4,1),
-('CSAE105','parallel and distributed computing',2,1,3,3,4,1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+('CSAE105','parallel and distributed computing',2,1,3,3,4,1),
+('CSCC104',"data structures and algortihms",2,1,3,3,4,1);
