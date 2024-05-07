@@ -70,13 +70,22 @@ try {
             border-collapse: collapse;
             width: 100%;
         }
+        .normal-td{
+            border-bottom: 1px solid black;
+            border-right: 1px solid black;
+        }
+        .sched-td{
+            border-right: 1px solid black;
+        }
+        td{
+            text-transform: capitalize;
+        }
 
-        #sched td,
+        #sched
         th {
             text-transform: capitalize;
             text-align: left;
             padding: 8px;
-            border-bottom: 1px solid black;
             border-right: 1px solid black;
             font-size: 20px;
         }
@@ -111,13 +120,13 @@ try {
     <div id="sched">
         <table>
             <tr>
-                <td>Time</td>
-                <td>Monday</td>
-                <td>Tuesday</td>
-                <!-- <td>Wednesday</td>
-                <td>Thursday</td>
-                <td>Friday</td>
-                <td>Saturday</td> -->
+                <th class='normal-td'>Time</th>
+                <th class='normal-td'>Monday</th>
+                <th class='normal-td'>Tuesday</th>
+                <th class='normal-td'>Wednesday</th>
+                <th class='normal-td'>Thursday</th>
+                <th class='normal-td'>Friday</th>
+                <th class='normal-td'>Saturday</th>
             </tr>
             <?php
             function get_schedules_based_on_time($pdo, $time)
@@ -131,25 +140,29 @@ try {
             $time_0800 = strtotime("07:00");
             $skip_ctr = [0, 0, 0, 0, 0, 0];
             for ($curr_time = $time_0800; $curr_time <= $time_1900; $curr_time += 1800) {
-                $days = ['monday'];
+                $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
                 $schedules = get_schedules_based_on_time($pdo, date("H:i:s", $curr_time));
                 echo "<tr>";
-                echo "<td>" . date("h:i A", $curr_time) . "</td>";
+                echo "<td class='normal-td'>" . date("h:i A", $curr_time) . "</td>";
                 $counter = 0;
                 $index = 0;
                 foreach ($days as $day) {
                     $found = false;
                     foreach ($schedules as $schedule) {
-                        $rowspan = (strtotime($schedule['end_time']) - strtotime($schedule['start_time'])) / 1800 + 1;
+                        $rowspan = (strtotime($schedule['end_time']) - strtotime($schedule['start_time'])) / 1800;
                         if (strtolower($schedule['day']) == $day) {
-                            echo "<td rowspan = $rowspan >" . $schedule['descriptive_title'] . "</td>";
+                            $start_time = strtotime($schedule['start_time']);
+                            $start_time = date("h:i A", $start_time);
+                            $end_time = strtotime($schedule['end_time']);
+                            $end_time = date("h:i A", $end_time);
+                            echo "<td rowspan = $rowspan class='sched-td' >" . $schedule['descriptive_title']."<br>".$start_time."-". $end_time . "</td>";
                             $found = true;
                             $skip_ctr[$index] = $rowspan;
                             break;
                         }
                     }
                     if (!$found && $skip_ctr[$index] == 0) {
-                        echo "<td></td>";
+                        echo "<td class='normal-td'></td>";
                     } else {
                         $skip_ctr[$index] -= 1;
                     }
