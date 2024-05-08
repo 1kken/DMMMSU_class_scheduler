@@ -219,7 +219,7 @@ if (!is_logged_in()) {
             </div>
             <div class="menu-item">
                 <img src="../source/reports.png" alt="User">
-                <a href="#reports">Generate Reports</a>
+                <a href="create_report.php">Generate Reports</a>
             </div>
         </div>
         <div class="main-content">
