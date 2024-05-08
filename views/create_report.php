@@ -21,7 +21,8 @@ if (!is_logged_in()) {
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: row;
+            justify-content: space-around;
             align-items: center;
             min-height: 100vh;
             margin: 0;
@@ -99,18 +100,11 @@ if (!is_logged_in()) {
 
 <body>
     <div class="container">
-        <h1>Create Report</h1>
+        <h1>Create Report Student</h1>
         <form action="../../DMMMSU_class_scheduler\includes\report_handler.php" method="POST">
             <div class="form-group">
                 <label for="report_id">Report by Student ID:</label>
                 <input type="text" id="student_id" name="student_id">
-            </div>
-            <div class="separator">
-                <h1>Or</h1>
-            </div>
-            <div class="form-group">
-                <label for="report_id">Report by Instructor ID:</label>
-                <input type="text" id="instructor_id" name="instructor_id">
             </div>
             <div class="separator">
                 <h1>Filter</h1>
@@ -150,6 +144,52 @@ if (!is_logged_in()) {
             <input type="submit" value="Generate Report">
         </form>
     </div>
+    <div class="container">
+        <h1>Create Report Instructor</h1>
+        <form action="../../DMMMSU_class_scheduler\includes\report_handler.php" method="POST">
+            <div class="form-group">
+                <label for="report_id">Report by Instructor ID:</label>
+                <input type="text" id="instructor_id" name="instructor_id">
+            </div>
+            <div class="separator">
+                <h1>Filter</h1>
+            </div>
+            <div class="form-group">
+                <label for="school-year">School Year:</label>
+                <select id="school-year_instructor" name="sy_instructor" required>
+                    <option selected value disabled> -- select an option -- </option>;
+                    <?php
+                    $school_years = get_all_available_school_year($pdo);
+                    foreach ($school_years as $school_year) {
+                        echo "<option value='{$school_year['sy']}'>{$school_year['sy']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="section">Section:</label>
+                <select id="section_instructor" name="section_instructor" required disabled>
+                    <option selected value disabled> -- select an option -- </option>;
+                    <?php
+                    $sections = get_all_sections($pdo);
+                    foreach ($sections as $section) {
+                        echo "<option value='{$section['section_id']}'>{$section['section_id']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="semester">Semester:</label>
+                <select id="semester_instructor" name="semester_instructor" required disabled>
+                    <option selected value disabled> -- select an option -- </option>;
+                    <option value="1">First Semester</option>
+                    <option value="2">Second Semester</option>
+                </select>
+            </div>
+            <input type="submit" value="Generate Report">
+        </form>
+
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const studentIdInput = document.getElementById('student_id');
@@ -160,6 +200,7 @@ if (!is_logged_in()) {
 
             //Find the school years that the student is enrolled 
             studentIdInput.addEventListener('input', getSchoolYears);
+
             function getSchoolYears() {
                 if (studentIdInput.value.trim() === '') {
                     return;
@@ -182,6 +223,7 @@ if (!is_logged_in()) {
 
             //Find the section that is available via student_id in student history
             schoolYearSelect.addEventListener('input', getSections);
+
             function getSections() {
                 if (studentIdInput.value.trim() === '') {
                     return;
@@ -205,6 +247,7 @@ if (!is_logged_in()) {
 
             //Get the semester that has available schedule for that school year school year
             sectionSelect.addEventListener('input', getSemester);
+
             function getSemester() {
                 if (studentIdInput.value.trim() === '') {
                     return;
@@ -229,7 +272,11 @@ if (!is_logged_in()) {
             }
 
             //Instructor
+            const schoolYearSelect_instructor = document.getElementById('school-year_instructor');
+            const sectionSelect_instructor = document.getElementById('section_instructor');
+
             instructorIdInput.addEventListener('input', getInstructorSchoolYears);
+
             function getInstructorSchoolYears() {
                 if (instructorIdInput.value.trim() === '') {
                     return;
@@ -239,8 +286,8 @@ if (!is_logged_in()) {
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            schoolYearSelect.innerHTML = '';
-                            schoolYearSelect.innerHTML = xhr.responseText;
+                            schoolYearSelect_instructor.innerHTML = '';
+                            schoolYearSelect_instructor.innerHTML = xhr.responseText;
                             console.log(xhr.responseText)
                         } else {
                             console.log("There was a problem with the request.");
@@ -252,19 +299,19 @@ if (!is_logged_in()) {
             }
 
             //get sections
-            schoolYearSelect.addEventListener('input', getInstructorSections);
+            schoolYearSelect_instructor.addEventListener('input', getInstructorSections);
             function getInstructorSections() {
                 if (instructorIdInput.value.trim() === '') {
                     return;
                 }
                 const instructor_id = instructorIdInput.value.trim();
-                const sy = schoolYearSelect.value.trim();
+                const sy = schoolYearSelect_instructor.value.trim();
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            sectionSelect.innerHTML = '';
-                            sectionSelect.innerHTML = xhr.responseText;
+                            sectionSelect_instructor.innerHTML = '';
+                            sectionSelect_instructor.innerHTML = xhr.responseText;
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -275,20 +322,21 @@ if (!is_logged_in()) {
             }
 
             //semester
-            sectionSelect.addEventListener('input', getInstructorSemester);
+            sectionSelect_instructor.addEventListener('input', getInstructorSemester);
+
             function getInstructorSemester() {
                 if (instructorIdInput.value.trim() === '') {
                     return;
                 }
                 const instructor_id = instructorIdInput.value.trim();
-                const sy = schoolYearSelect.value.trim();
-                const section = sectionSelect.value.trim();
+                const sy = schoolYearSelect_instructor.value.trim();
+                const section = sectionSelect_instructor.value.trim();
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            semesterSelect.innerHTML = '';
-                            semesterSelect.innerHTML = xhr.responseText;
+                            semesterSelect_instructor.innerHTML = '';
+                            semesterSelect_instructor.innerHTML = xhr.responseText;
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -307,20 +355,54 @@ if (!is_logged_in()) {
             instructorIdInput.addEventListener('input', toggleReadOnly);
 
             function toggleReadOnly() {
-            const schoolYearSelect = document.getElementById('school-year');
-            const sectionSelect = document.getElementById('section');
-            const semesterSelect = document.getElementById('semester');
+                const schoolYearSelect = document.getElementById('school-year');
+                const sectionSelect = document.getElementById('section');
+                const semesterSelect = document.getElementById('semester');
                 const hasStudentIdValue = studentIdInput.value.trim() !== '';
                 const hasInstructorIdValue = instructorIdInput.value.trim() !== '';
-                if(!hasStudentIdValue || !hasInstructorIdValue){
+                if (!hasStudentIdValue || !hasInstructorIdValue) {
                     schoolYearSelect.innerHTML = '<option selected value disabled> -- select an option -- </option>';
                     sectionSelect.innerHTML = '<option selected value disabled> -- select an option -- </option>';
                     semesterSelect.innerHTML = '<option selected value disabled> -- select an option -- </option>';
+                    schoolYearSelect_instructor.innerHTML = '<option selected value disabled> -- select an option -- </option>';
+                    sectionSelect_instructor.innerHTML = '<option selected value disabled> -- select an option -- </option>';
+                    semesterSelect_instructor.innerHTML = '<option selected value disabled> -- select an option -- </option>';
                     sectionSelect.disabled = true;
                     semesterSelect.disabled = true;
                 }
+                if (hasStudentIdValue) {
+                    const schoolYearSelect_instructor = document.getElementById('school-year_instructor');
+                    const sectionSelect_instructor = document.getElementById('section_instructor');
+                    const semesterSelect_instructor = document.getElementById('semester_instructor');
+                    instructorIdInput.value = '';
+                    schoolYearSelect_instructor.disabled = true;
+                    sectionSelect_instructor.disabled = true;
+                    semesterSelect_instructor.disabled = true;
+                } else {
+                    const schoolYearSelect_instructor = document.getElementById('school-year_instructor');
+                    const sectionSelect_instructor = document.getElementById('section_instructor');
+                    const semesterSelect_instructor = document.getElementById('semester_instructor');
+                    schoolYearSelect_instructor.disabled = false;
+                    sectionSelect_instructor.disabled = false;
+                    semesterSelect_instructor.disabled = false;
+                }
 
-
+                if (hasInstructorIdValue) {
+                    const schoolYearSelect = document.getElementById('school-year');
+                    const sectionSelect = document.getElementById('section');
+                    const semesterSelect = document.getElementById('semester');
+                    studentIdInput.value = '';
+                    schoolYearSelect.disabled = true;
+                    sectionSelect.disabled = true;
+                    semesterSelect.disabled = true;
+                } else {
+                    const schoolYearSelect = document.getElementById('school-year');
+                    const sectionSelect = document.getElementById('section');
+                    const semesterSelect = document.getElementById('semester');
+                    schoolYearSelect.disabled = false;
+                    sectionSelect.disabled = false;
+                    semesterSelect.disabled = false;
+                }
                 studentIdInput.readOnly = hasInstructorIdValue;
                 instructorIdInput.readOnly = hasStudentIdValue;
             }
@@ -354,6 +436,12 @@ if (!is_logged_in()) {
 
         handleSelectChange(schoolYearSelect, [sectionSelect, semesterSelect]);
         handleSelectChange(sectionSelect, [semesterSelect]);
+
+        const schoolYearSelect_instructor = document.getElementById('school-year_instructor');
+        const sectionSelect_instructor = document.getElementById('section_instructor');
+        const semesterSelect_instructor = document.getElementById('semester_instructor');
+        handleSelectChange(schoolYearSelect_instructor, [sectionSelect_instructor, semesterSelect_instructor]);
+        handleSelectChange(sectionSelect_instructor, [semesterSelect_instructor]);
     </script>
 </body>
 
