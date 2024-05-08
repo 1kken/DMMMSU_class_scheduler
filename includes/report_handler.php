@@ -1,15 +1,12 @@
 <?php
-$dsn = "mysql:host=localhost;dbname=class_schedule;";
-$db_user_name = "root";
-$db_password = "";
-
-try {
-    $pdo = new PDO($dsn, $db_user_name, $db_password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Error Database: " . $e->getMessage();
-} ?>
-
+require_once("database_header.php");
+require_once('config_session.inc.php');
+require_once('report/report_model.php');
+?>
+<?php
+//Three input
+if(isset($_POST['section']) && isset($_POST['semester']) && isset($_POST['sy']) && isset($_POST['student_id'])){
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,6 +71,7 @@ try {
             border-bottom: 1px solid black;
             border-right: 1px solid black;
         }
+
         .sched-td{
             border-right: 1px solid black;
         }
@@ -104,23 +102,34 @@ try {
     <div class="container" id="header">
         <table>
             <tr>
-                <td><img src="./source/dmmsu_logo.png" alt="DMMMSU logo"></td>
+                <td><img src="../source/dmmsu_logo.png" alt="DMMMSU logo"></td>
                 <td>
                     <h1>CLASS SCHEDULE FORM</h1>
                 </td>
             </tr>
         </table>
     </div>
+    <?php 
+        $student = get_student($pdo, $_POST['student_id']); 
+    ?>
     <div id="information">
         <table>
             <tr>
                 <td>
-                    <h3>______ Semester, School Year 20__ - 20__</h3>
+                    <?php
+                        $post_name = "";
+                        if($_POST['semester'] == "1"){
+                            $post_name = "st Semester";
+                        }else{
+                            $post_name = "nd Semester";
+                        }
+                    ?>
+                    <h3><?php echo $_POST['semester'].$post_name.", School Year ".$_POST['sy']; ?></h3>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h3>NAME: _________________ PROGRAM/YEAR/SECTION:______________</h3>
+                    <h3>NAME: <?php echo $student['full_name']; ?> PROGRAM/YEAR/SECTION:BSCS <?php echo $_POST['section']; ?></h3>
                 </td>
             </tr>
         </table>
@@ -137,11 +146,16 @@ try {
                 <th class='normal-td'>Saturday</th>
             </tr>
             <?php
+            $section_id = $_POST['section'];
+            $semester = $_POST['semester'];
+            $sy = $_POST['sy'];
             function get_schedules_based_on_time($pdo, $time)
             {
-                $sql = "SELECT subject.descriptive_title,schedule.day,schedule.start_time,schedule.end_time FROM SCHEDULE JOIN SUBJECT ON schedule.subject_id = subject.subject_id WHERE start_time =:time;";
+                $sql = "SELECT subject.descriptive_title,schedule.day,schedule.start_time,schedule.end_time 
+                FROM SCHEDULE JOIN SUBJECT ON schedule.subject_id = subject.subject_id WHERE start_time =:time
+                AND section_id = :section_id AND schedule.semester = :semester AND sy =:sy;";
                 $stmt = $pdo->prepare($sql);
-                $stmt->execute(['time' => $time]);
+                $stmt->execute(['time' => $time, 'section_id' => $_POST['section'], 'semester' => $_POST['semester'], 'sy' => $_POST['sy']]);
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
             $time_1900 = strtotime("19:00");
@@ -184,3 +198,5 @@ try {
 </body>
 
 </html>
+<?php
+}?>

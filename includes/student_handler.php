@@ -1,8 +1,8 @@
 <?php
-    require_once("database_header.php");
-    require_once('config_session.inc.php');
-    require_once('student/student_model.php');
-    require_once('student/student_controller.php');
+require_once("database_header.php");
+require_once('config_session.inc.php');
+require_once('student/student_model.php');
+require_once('student/student_controller.php');
 //CREATE
 if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
     $student_id = $_POST["student_id"];
@@ -29,7 +29,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
 
     $errors = [];
     //check if student_id is valid
-    if(!check_student_id_format($student_id)){
+    if (!check_student_id_format($student_id)) {
         $errors["id_format"] = "Invalid student ID.";
     }
 
@@ -39,31 +39,34 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
     }
 
     // //check email if already in the database
-    if(is_student_email_taken($pdo, $email)){
+    if (is_student_email_taken($pdo, $email)) {
         $errors["email_taken"] =  "Email is already taken.";
     }
 
     //check if the instructor_id is already in the database
-    if(is_student_id_taken($pdo, $student_id)){
+    if (is_student_id_taken($pdo, $student_id)) {
         $errors["id_taken"] =  "ID is already taken.";
     }
 
-    if(!check_email_format($student_id, $first_name, $last_name, $email) && $errors["id_format"] == null && $errors["email_invalid"] == null 
-    && $errors["email_taken"] == null && $errors["id_taken"] == null){
+    if (
+        !check_email_format($student_id, $first_name, $last_name, $email) && $errors["id_format"] == null && $errors["email_invalid"] == null
+        && $errors["email_taken"] == null && $errors["id_taken"] == null
+    ) {
         $suggested_email = suggest_email($student_id, $first_name, $last_name);
         $errors["email_format"] = "Invalid email. suggestion: $suggested_email";
     }
 
 
 
-    
+
     if ($errors) {
         $_SESSION["errors_students"] = $errors;
         header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
         exit();
     }
     try {
-        insert_student($pdo, $student_id, $first_name, $last_name, $middle_name, $email,$section_id);
+        insert_student($pdo, $student_id, $first_name, $last_name, $middle_name, $email, $section_id);
+        create_student_history($pdo, $student_id, $section_id);
         header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
         exit();
     } catch (\Throwable $th) {
@@ -71,13 +74,13 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
     }
 }
 
-if(isset($_POST["delete_student"]) && isset($_SESSION["user_id"])){
+if (isset($_POST["delete_student"]) && isset($_SESSION["user_id"])) {
     $student_id = $_POST["student_id"];
-    try{
+    try {
         delete_student($pdo, $student_id);
         header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
         exit();
-    }catch(PDOException $e){
+    } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
@@ -111,13 +114,13 @@ if (isset($_SESSION["user_id"]) && isset($_POST["update_student"])) {
     $old_student_id = $_POST["old_student_id"];
 
     //check if the student_id is already in the database
-    if($old_student_email != $email){
-        if(is_student_email_taken($pdo, $email)){
+    if ($old_student_email != $email) {
+        if (is_student_email_taken($pdo, $email)) {
             $errors["email_taken"] = "Email is already taken.";
         }
     }
-    if($old_student_id != $student_id){
-        if(is_student_id_taken($pdo, $student_id)){
+    if ($old_student_id != $student_id) {
+        if (is_student_id_taken($pdo, $student_id)) {
             $errors["id_taken"] = "ID is already taken.";
         }
     }
@@ -139,7 +142,17 @@ if (isset($_SESSION["user_id"]) && isset($_POST["update_student"])) {
 
     try {
         $email = suggest_email($student_id, $first_name, $last_name);
-        update_student($pdo, $student_id, $first_name, $last_name, $middle_name, $email, $section_id,$old_student_id);
+        update_student($pdo, $student_id, $first_name, $last_name, $middle_name, $email, $section_id, $old_student_id);
+        $currentYear = date('Y');
+        $nextYear = $currentYear + 1;
+        $sy = $currentYear . "-" . $nextYear;
+        $student_history = get_student_history($pdo, $student_id, $sy);
+        if(!$student_history){
+            create_student_history($pdo, $student_id, $section_id);
+        }else{
+            update_history($pdo,$student_id,$section_id);
+        }
+        //update_history($pdo,$student_id,$section_id);
         echo "Success";
         header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
         exit();

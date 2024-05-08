@@ -1,5 +1,18 @@
+<?php
+define('APP_NAME', dirname(__FILE__) . "/../");
+require_once(APP_NAME . "includes/authorization.php");
+require_once(APP_NAME . "includes/config_session.inc.php");
+require_once(APP_NAME . "includes/database_header.php");
+require_once(APP_NAME . "includes/report/report_model.php");
+require_once(APP_NAME . "includes/report/report_view.php");
+if (!is_logged_in()) {
+    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -81,38 +94,155 @@
         }
     </style>
 </head>
+
+<script src="../jquery.js"></script>
+
 <body>
     <div class="container">
         <h1>Create Report</h1>
-        <form action="process_report.php" method="POST">
-            <div class="separator">
-                <h1>Filter</h1>
-            </div>
+        <form action="../../DMMMSU_class_scheduler\includes\report_handler.php" method="POST">
             <div class="form-group">
-                <label for="section">Section:</label>
-                <select id="section" name="section">
-                    <option value="section1">Section 1</option>
-                    <option value="section2">Section 2</option>
-                    <option value="section3">Section 3</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="semester">Semester:</label>
-                <select id="semester" name="semester">
-                    <option value="semester1">Semester 1</option>
-                    <option value="semester2">Semester 2</option>
-                    <option value="semester3">Semester 3</option>
-                </select>
+                <label for="report_id">Report by Student ID:</label>
+                <input type="text" id="student_id" name="student_id">
             </div>
             <div class="separator">
                 <h1>Or</h1>
             </div>
             <div class="form-group">
-                <label for="report_id">Report by ID:</label>
-                <input type="text" id="report_id" name="report_id">
+                <label for="report_id">Report by Instructor ID:</label>
+                <input type="text" id="instructor_id" name="instructor_id">
+            </div>
+            <div class="separator">
+                <h1>Filter</h1>
+            </div>
+            <div class="form-group">
+                <label for="school-year">School Year:</label>
+                <select id="school-year" name="sy" required >
+                    <option selected value disabled> -- select an option -- </option>;
+                    <?php
+                    $school_years = get_all_available_school_year($pdo);
+                    foreach ($school_years as $school_year) {
+                        echo "<option value='{$school_year['sy']}'>{$school_year['sy']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="section">Section:</label>
+                <select id="section" name="section" required disabled>
+                    <option selected value disabled> -- select an option -- </option>;
+                    <?php
+                    $sections = get_all_sections($pdo);
+                    foreach ($sections as $section) {
+                        echo "<option value='{$section['section_id']}'>{$section['section_id']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="semester">Semester:</label>
+                <select id="semester" name="semester" required disabled>
+                    <option selected value disabled> -- select an option -- </option>;
+                    <option value="1">First Semester</option>
+                    <option value="2">Second Semester</option>
+                </select>
             </div>
             <input type="submit" value="Generate Report">
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const studentIdInput = document.getElementById('student_id');
+            const instructorIdInput = document.getElementById('instructor_id');
+            const schoolYearSelect = document.getElementById('school-year');
+            const sectionSelect = document.getElementById('section');
+            const semesterSelect = document.getElementById('semester');
+
+            //Find the school years that the student is enrolled 
+            studentIdInput.addEventListener('input', getSchoolYears);
+            function getSchoolYears() {
+                const student_id = studentIdInput.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            schoolYearSelect.innerHTML = '';
+                            schoolYearSelect.innerHTML = xhr.responseText;
+                            console.log(xhr.responseText)
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&get_sy=true`, true);
+                xhr.send();
+            }
+
+            //Find the section that is available via student_id in student history
+            schoolYearSelect.addEventListener('input', getSections);
+            function getSections(){
+                const student_id = studentIdInput.value.trim();
+                const sy = schoolYearSelect.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            sectionSelect.innerHTML = '';
+                            sectionSelect.innerHTML = xhr.responseText;
+                            console.log(xhr.responseText)
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&sy=${sy}&get_section=true`, true);
+                xhr.send();
+            }
+
+
+
+
+
+            //Disable
+            studentIdInput.addEventListener('input', toggleReadOnly);
+            instructorIdInput.addEventListener('input', toggleReadOnly);
+
+            function toggleReadOnly() {
+                const hasStudentIdValue = studentIdInput.value.trim() !== '';
+                const hasInstructorIdValue = instructorIdInput.value.trim() !== '';
+
+                studentIdInput.readOnly = hasInstructorIdValue;
+                instructorIdInput.readOnly = hasStudentIdValue;
+            }
+
+            // Initial call to set initial state
+            toggleReadOnly();
+        });
+
+        //reset if go back
+        function handleSelectChange(inputElement, targetElements) {
+            inputElement.addEventListener('change', () => {
+                // Disable all target elements
+                targetElements.forEach(element => {
+                    element.disabled = true;
+                    element.selectedIndex = 0;
+                });
+
+                // Enable the target element based on the input element's value
+                if (inputElement.value !== '') {
+                    targetElements[0].disabled = false; // Enable the first target element
+                }
+            });
+        }
+
+        // Usage example
+        const schoolYearSelect = document.getElementById('school-year');
+        const sectionSelect = document.getElementById('section');
+        const semesterSelect = document.getElementById('semester');
+
+        handleSelectChange(schoolYearSelect, [sectionSelect, semesterSelect]);
+        handleSelectChange(sectionSelect, [semesterSelect]);
+    </script>
 </body>
+
 </html>

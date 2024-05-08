@@ -63,7 +63,7 @@ CREATE TABLE `rooms` (
 
 LOCK TABLES `rooms` WRITE;
 /*!40000 ALTER TABLE `rooms` DISABLE KEYS */;
-INSERT INTO `rooms` VALUES ('CLR101','Laboratory',5),('CLR102','Laboratory',4),('CLR201','Laboratory',3),('CLR202','Laboratory',3),('CLR301','Laboratory',1),('LR101','Lecture',5),('LR102','Lecture',5),('LR103','Lecture',5),('LR201','Lecture',3),('LR202','Lecture',3),('LR203','Lecture',3),('LR301','Lecture',2),('LR302','Lecture',2),('LR303','Lecture',2);
+INSERT INTO `rooms` VALUES ('CLR101','Laboratory',5),('CLR102','Laboratory',4),('CLR201','Laboratory',3),('CLR202','Laboratory',3),('CLR301','Laboratory',1),('CLR302','Laboratory',1),('CLR303','Laboratory',1),('LR101','Lecture',5),('LR102','Lecture',5),('LR103','Lecture',5),('LR201','Lecture',3),('LR202','Lecture',3),('LR203','Lecture',3),('LR301','Lecture',2),('LR302','Lecture',2),('LR303','Lecture',2),('MH1','Lecture',1),('MH2','Lecture',1),('MH3','Lecture',1),('MH4','Lecture',1),('MSC1','Lecture',1),('MSC2','Lecture',1),('MSC3','Lecture',1);
 /*!40000 ALTER TABLE `rooms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,6 +85,8 @@ CREATE TABLE `schedule` (
   `subject_id` varchar(20) NOT NULL,
   `section_id` varchar(2) NOT NULL,
   `sy` varchar(9) NOT NULL,
+  `type` varchar(10) NOT NULL,
+  `semester` int(11) NOT NULL,
   PRIMARY KEY (`schedule_id`),
   KEY `room_id` (`room_id`),
   KEY `subject_id` (`subject_id`),
@@ -94,7 +96,7 @@ CREATE TABLE `schedule` (
   CONSTRAINT `schedule_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`subject_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `schedule_ibfk_4` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`instructor_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `schedule_ibfk_5` FOREIGN KEY (`section_id`) REFERENCES `section` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,6 +105,7 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
+INSERT INTO `schedule` VALUES (44,'PATHFIT1011A2425','MSC1','21298165','monday','08:00:00','09:00:00','PATHFIT101','1A','2024-2025','lecture',1),(45,'GECC101a1A2425','LR201','21127643','monday','10:00:00','11:00:00','GECC101a','1A','2024-2025','lecture',1),(46,'GECC102a1A2425','LR201','21127654','monday','11:00:00','12:00:00','GECC102a','1A','2024-2025','lecture',1),(47,'CSC1011A2425','LR201','21121876','monday','13:00:00','14:00:00','CSC101','1A','2024-2025','lecture',1),(48,'CSC1021A2425','LR201','21123987','monday','14:00:00','15:00:00','CSC102','1A','2024-2025','lecture',1),(49,'GECC1011A2425','LR301','21124567','monday','15:30:00','17:00:00','GECC101','1A','2024-2025','lecture',1),(50,'GECC103a1A2425','LR201','21127698','tuesday','08:00:00','09:30:00','GECC103a','1A','2024-2025','lecture',1),(51,'CSC1021A2425','CLR302','21123987','tuesday','09:30:00','11:00:00','CSC102','1A','2024-2025','laboratory',1),(52,'CSC1011A2425','CLR301','21121876','tuesday','14:00:00','15:30:00','CSC101','1A','2024-2025','laboratory',1),(53,'GECC101a1A2425','LR201','21127643','wednesday','10:00:00','11:00:00','GECC101a','1A','2024-2025','lecture',1),(54,'GECC103a1A2425','LR201','21127698','thursday','08:00:00','09:30:00','GECC103a','1A','2024-2025','lecture',1),(55,'CSC1021A2425','CLR302','21123987','thursday','09:30:00','11:00:00','CSC102','1A','2024-2025','laboratory',1),(56,'CSC1011A2425','CLR301','21121876','thursday','14:00:00','15:30:00','CSC101','1A','2024-2025','laboratory',1),(57,'PATHFIT1011A2425','MSC1','21298165','friday','08:00:00','09:00:00','PATHFIT101','1A','2024-2025','lecture',1),(58,'GECC101a1A2425','LR201','21127643','friday','10:00:00','11:00:00','GECC101a','1A','2024-2025','lecture',1),(59,'GECC102a1A2425','LR201','21127654','friday','11:00:00','12:00:00','GECC102a','1A','2024-2025','lecture',1),(60,'CSC1011A2425','LR201','21121876','friday','13:00:00','14:00:00','CSC101','1A','2024-2025','lecture',1),(61,'CSC1021A2425','LR201','21123987','friday','14:00:00','15:00:00','CSC102','1A','2024-2025','lecture',1),(62,'GECC1011A2425','LR301','21124567','friday','15:30:00','17:00:00','GECC101','1A','2024-2025','lecture',1),(63,'NSTP1011A2425','MSC2','21127890','saturday','08:00:00','11:00:00','NSTP101','1A','2024-2025','lecture',1);
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,6 +163,35 @@ INSERT INTO `student` VALUES ('39078901','Watson','Ethan','William','ethanwillia
 UNLOCK TABLES;
 
 --
+-- Table structure for table `student_history`
+--
+
+DROP TABLE IF EXISTS `student_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `student_history` (
+  `history_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `student_id` varchar(10) NOT NULL,
+  `section_id` varchar(2) NOT NULL,
+  `sy` varchar(9) NOT NULL,
+  PRIMARY KEY (`history_id`),
+  KEY `student_id` (`student_id`),
+  KEY `section_id` (`section_id`),
+  CONSTRAINT `student_history_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `student_history_ibfk_2` FOREIGN KEY (`section_id`) REFERENCES `section` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `student_history`
+--
+
+LOCK TABLES `student_history` WRITE;
+/*!40000 ALTER TABLE `student_history` DISABLE KEYS */;
+/*!40000 ALTER TABLE `student_history` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `subject`
 --
 
@@ -185,7 +217,7 @@ CREATE TABLE `subject` (
 
 LOCK TABLES `subject` WRITE;
 /*!40000 ALTER TABLE `subject` DISABLE KEYS */;
-INSERT INTO `subject` VALUES ('CSAE101','introduction to natural language processing',3,0,3,3,2,2),('CSAE102','digital design',2,1,3,3,2,2),('CSAE103','methods of research',3,0,3,2,3,2),('CSAE104','methods of research',2,1,3,3,3,2),('CSAE105','parallel and distributed computing',2,1,3,3,4,1),('CSAE106','mobile application development',2,1,3,5,3,2),('CSC101','introduction to computing',2,1,3,3,1,1),('CSC102','fundamentals of programming',2,1,3,3,1,1),('CSCC101','intermediate programming',2,1,3,3,1,2),('CSCC105','information management',2,1,3,3,2,2),('CSCC106','application development and emerging technologies',2,1,3,3,4,1),('CSME101','introduction to numerical analysis',3,0,3,3,2,2),('CSPC101','discrete structure 1',3,0,3,3,1,2),('CSPC102','discrete structure 2',3,0,3,3,2,1),('CSPC103','object oriented programming',2,1,3,3,2,1),('CSPC104','algorithms and complexity',2,1,3,3,2,2),('CSPC105','automata theory and formal languages',3,0,3,3,3,1),('CSPC106','architecture and organization',2,1,3,3,3,1),('CSPC107','information assurance and security',3,0,3,3,3,1),('CSPC108','networks and communication',2,1,3,3,3,1),('CSPC109','human and computer interaction',2,1,3,2,3,1),('CSPC110','programming languages',2,1,3,3,3,2),('CSPC111','software engineering 1',2,1,3,1,3,2),('CSPC112','software enigneering 2',2,1,3,3,4,1),('CSPC114','Operating Systems',2,1,3,3,4,1),('CSPC115','social issues and proffesional practice',3,0,3,3,3,2),('CSPC116','CS thesis writing 1',3,0,3,2,4,1),('CSPC117','CS thesis writing 2',3,0,3,2,4,1),('CSPE101','graphics and visual computing',2,1,3,5,2,1),('CSPE102','intelligent system',2,1,3,3,3,1),('CSPE103','Introduction to knowledge management',3,0,3,2,4,1),('GECC101','enviromental science',3,0,3,3,1,1),('GECC101a','art appreciation',3,0,3,3,1,1),('GECC102a','purposive communication',3,0,3,3,1,1),('GECC103a','mathematics in modern world',3,0,3,3,1,1),('GECC104a','ethics',3,0,3,2,1,2),('GECC105a','science, technology and society',3,0,3,2,1,2),('GECC106','introduction to linear programming',3,0,3,2,1,2),('GECC106a','reading in the phillipines history',3,0,3,2,1,2),('GECC107a','the contemporary world',3,0,3,2,1,2),('GECC108a','understanding the self',3,0,3,2,2,1),('GEEC105','theory of probability',3,0,3,2,2,1),('GEEC112','the entreprenurial minds',2,1,3,3,2,2),('GEMC101a','the life and works of rizal',3,0,3,2,2,1),('NSTP101','reserved officer trainig corps',2,0,2,1,1,1),('NSTP102','reserved officer trainig corps 2',2,0,2,1,1,2),('PATHFIT101','enviromental science',2,0,2,3,1,1),('PATHFIT102','exercise based fitness activities',2,0,2,1,1,2),('PATHFIT103','individual, dual and team sports',2,0,2,1,2,1),('PATHFIT104','outdoor and adventure activities',2,0,2,1,2,2);
+INSERT INTO `subject` VALUES ('CSAE101','introduction to natural language processing',3,0,3,3,2,2),('CSAE102','digital design',2,1,3,3,2,2),('CSAE103','methods of research',3,0,3,2,3,2),('CSAE104','methods of research',2,1,3,3,3,2),('CSAE105','parallel and distributed computing',2,1,3,3,4,1),('CSAE106','mobile application development',2,1,3,5,3,2),('CSC101','introduction to computing',2,1,3,3,1,1),('CSC102','fundamentals of programming',2,1,3,3,1,1),('CSCC101','intermediate programming',2,1,3,3,1,2),('CSCC104','data structures and algortihms',2,1,3,3,4,1),('CSCC105','information management',2,1,3,3,2,2),('CSCC106','application development and emerging technologies',2,1,3,3,4,1),('CSME101','introduction to numerical analysis',3,0,3,3,2,2),('CSPC101','discrete structure 1',3,0,3,3,1,2),('CSPC102','discrete structure 2',3,0,3,3,2,1),('CSPC103','object oriented programming',2,1,3,3,2,1),('CSPC104','algorithms and complexity',2,1,3,3,2,2),('CSPC105','automata theory and formal languages',3,0,3,3,3,1),('CSPC106','architecture and organization',2,1,3,3,3,1),('CSPC107','information assurance and security',3,0,3,3,3,1),('CSPC108','networks and communication',2,1,3,3,3,1),('CSPC109','human and computer interaction',2,1,3,2,3,1),('CSPC110','programming languages',2,1,3,3,3,2),('CSPC111','software engineering 1',2,1,3,1,3,2),('CSPC112','software enigneering 2',2,1,3,3,4,1),('CSPC114','Operating Systems',2,1,3,3,4,1),('CSPC115','social issues and proffesional practice',3,0,3,3,3,2),('CSPC116','CS thesis writing 1',3,0,3,2,4,1),('CSPC117','CS thesis writing 2',3,0,3,2,4,1),('CSPE101','graphics and visual computing',2,1,3,5,2,1),('CSPE102','intelligent system',2,1,3,3,3,1),('CSPE103','Introduction to knowledge management',3,0,3,2,4,1),('GECC101','enviromental science',3,0,3,3,1,1),('GECC101a','art appreciation',3,0,3,3,1,1),('GECC102a','purposive communication',3,0,3,3,1,1),('GECC103a','mathematics in modern world',3,0,3,3,1,1),('GECC104a','ethics',3,0,3,2,1,2),('GECC105a','science, technology and society',3,0,3,2,1,2),('GECC106','introduction to linear programming',3,0,3,2,1,2),('GECC106a','reading in the phillipines history',3,0,3,2,1,2),('GECC107a','the contemporary world',3,0,3,2,1,2),('GECC108a','understanding the self',3,0,3,2,2,1),('GEEC105','theory of probability',3,0,3,2,2,1),('GEEC112','the entreprenurial minds',2,1,3,3,2,2),('GEMC101a','the life and works of rizal',3,0,3,2,2,1),('NSTP101','reserved officer trainig corps',2,0,2,1,1,1),('NSTP102','reserved officer trainig corps 2',2,0,2,1,1,2),('PATHFIT101','movement competency training',2,0,2,3,1,1),('PATHFIT102','exercise based fitness activities',2,0,2,1,1,2),('PATHFIT103','individual, dual and team sports',2,0,2,1,2,1),('PATHFIT104','outdoor and adventure activities',2,0,2,1,2,2);
 /*!40000 ALTER TABLE `subject` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,7 +237,7 @@ CREATE TABLE `subject_instructor` (
   KEY `instructor_id` (`instructor_id`),
   CONSTRAINT `subject_instructor_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`subject_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `subject_instructor_ibfk_2` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`instructor_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=487 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,8 +246,35 @@ CREATE TABLE `subject_instructor` (
 
 LOCK TABLES `subject_instructor` WRITE;
 /*!40000 ALTER TABLE `subject_instructor` DISABLE KEYS */;
-INSERT INTO `subject_instructor` VALUES (4,'CSAE102','21123987'),(5,'CSAE101','21121876');
+INSERT INTO `subject_instructor` VALUES (431,'CSC101','21121876'),(432,'CSC102','21123987'),(433,'GECC101','21124567'),(434,'GECC101a','21127643'),(435,'GECC102a','21127654'),(436,'GECC103a','21127698'),(437,'PATHFIT101','21298165'),(438,'NSTP101','21127890'),(439,'GECC101','21128735'),(440,'CSCC101','21128765'),(441,'CSPC101','21128876'),(442,'GECC104a','21234876'),(443,'GECC105a','21245678'),(444,'GECC106','21257689'),(445,'GECC106a','21268907'),(446,'GECC107a','21275678'),(447,'NSTP102','21284567'),(448,'PATHFIT102','21298165'),(449,'CSPC102','21307654'),(450,'CSPC103','21318865'),(451,'CSCC104','21327654'),(452,'GECC108a','21334876'),(453,'GEMC101a','21345678'),(454,'GEEC105','21357689'),(455,'PATHFIT103','21368907'),(456,'CSPC104','21375678'),(457,'CSCC105','21384567'),(458,'CSME101','21398365'),(459,'CSAE101','21407654'),(460,'CSAE102','21418965'),(461,'GEEC112','21427654'),(462,'PATHFIT104','21121876'),(463,'CSPC105','21123987'),(464,'CSPC106','21124567'),(465,'CSPC107','21127643'),(466,'CSPC108','21127654'),(467,'CSPC109','21127698'),(468,'CSPE102','21127890'),(469,'CSAE106','21128735'),(470,'CSPC110','21128765'),(471,'CSPC111','21128876'),(472,'CSAE103','21234876'),(473,'CSAE104','21245678'),(474,'CSPC115','21257689'),(475,'CSPC112','21268907'),(476,'CSPC114','21275678'),(477,'CSPC116','21284567'),(478,'CSPE103','21298165'),(479,'CSPC117','21307654'),(480,'CSCC106','21318865'),(481,'CSAE105','21327654'),(482,'GECC106a','21345678'),(483,'GECC107a','21357689'),(484,'GEMC101a','21368907'),(485,'NSTP102','21375678'),(486,'PATHFIT103','21384567');
 /*!40000 ALTER TABLE `subject_instructor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `unit_counter`
+--
+
+DROP TABLE IF EXISTS `unit_counter`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `unit_counter` (
+  `schedule_id` int(20) NOT NULL,
+  `code` text NOT NULL,
+  `lecture_count` float NOT NULL DEFAULT 0,
+  `laboratory_count` float NOT NULL DEFAULT 0,
+  KEY `schedule_id` (`schedule_id`),
+  CONSTRAINT `unit_counter_ibfk_1` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `unit_counter`
+--
+
+LOCK TABLES `unit_counter` WRITE;
+/*!40000 ALTER TABLE `unit_counter` DISABLE KEYS */;
+INSERT INTO `unit_counter` VALUES (44,'PATHFIT1011A2425',1,0),(45,'GECC101a1A2425',1,0),(46,'GECC102a1A2425',1,0),(47,'CSC1011A2425',1,0),(48,'CSC1021A2425',1,0),(49,'GECC1011A2425',1.5,0),(50,'GECC103a1A2425',1.5,0),(51,'CSC1021A2425',0,0.5),(52,'CSC1011A2425',0,0.5),(53,'GECC101a1A2425',1,0),(54,'GECC103a1A2425',1.5,0),(55,'CSC1021A2425',0,0.5),(56,'CSC1011A2425',0,0.5),(57,'PATHFIT1011A2425',1,0),(58,'GECC101a1A2425',1,0),(59,'GECC102a1A2425',1,0),(60,'CSC1011A2425',1,0),(61,'CSC1021A2425',1,0),(62,'GECC1011A2425',1.5,0),(63,'NSTP1011A2425',3,0);
+/*!40000 ALTER TABLE `unit_counter` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -236,7 +295,7 @@ CREATE TABLE `user` (
   KEY `instructor_id` (`instructor_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_ibfk_2` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`instructor_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +304,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (11,'instructor',NULL,'21307654','$2y$12$XO7fG2oGbb2z/UfxP.DK8.0Ya9683RQMKYPl5Vd09GmNt9PLsPJ1S');
+INSERT INTO `user` VALUES (12,'instructor',NULL,'21307654','$2y$12$MAjNrfze7Eu1WFT15zhL..KFlWX.Ve9/3KXeTUKvMgwhT1vm5.iQq');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -258,4 +317,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-28 22:41:20
+-- Dump completed on 2024-05-07 20:38:27

@@ -65,6 +65,8 @@ CREATE TABLE `schedule` (
   `subject_id` varchar(20) NOT NULL,
   `section_id` varchar(2) NOT NULL,
   `sy` varchar(9) NOT NULL,
+  `type` varchar(10) NOT NULL,
+  `semester` int(11) NOT NULL,
   PRIMARY KEY (`schedule_id`),
   KEY `room_id` (`room_id`),
   KEY `subject_id` (`subject_id`),
@@ -74,7 +76,7 @@ CREATE TABLE `schedule` (
   CONSTRAINT `schedule_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`subject_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `schedule_ibfk_4` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`instructor_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `schedule_ibfk_5` FOREIGN KEY (`section_id`) REFERENCES `section` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,6 +113,26 @@ CREATE TABLE `student` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `student_history`
+--
+
+DROP TABLE IF EXISTS `student_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `student_history` (
+  `history_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `student_id` varchar(10) NOT NULL,
+  `section_id` varchar(2) NOT NULL,
+  `sy` varchar(9) NOT NULL,
+  PRIMARY KEY (`history_id`),
+  KEY `student_id` (`student_id`),
+  KEY `section_id` (`section_id`),
+  CONSTRAINT `student_history_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `student_history_ibfk_2` FOREIGN KEY (`section_id`) REFERENCES `section` (`section_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `subject`
 --
 
@@ -124,7 +146,45 @@ CREATE TABLE `subject` (
   `laboratory_units` int(6) NOT NULL,
   `total_units` int(10) NOT NULL,
   `priority` int(3) NOT NULL,
+  `year_level` int(11) NOT NULL,
+  `semester` int(11) NOT NULL,
   PRIMARY KEY (`subject_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `subject_instructor`
+--
+
+DROP TABLE IF EXISTS `subject_instructor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `subject_instructor` (
+  `si_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `subject_id` varchar(20) NOT NULL,
+  `instructor_id` varchar(10) NOT NULL,
+  PRIMARY KEY (`si_id`),
+  KEY `subject_id` (`subject_id`),
+  KEY `instructor_id` (`instructor_id`),
+  CONSTRAINT `subject_instructor_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`subject_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `subject_instructor_ibfk_2` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`instructor_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=487 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `unit_counter`
+--
+
+DROP TABLE IF EXISTS `unit_counter`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `unit_counter` (
+  `schedule_id` int(20) NOT NULL,
+  `code` text NOT NULL,
+  `lecture_count` float NOT NULL DEFAULT 0,
+  `laboratory_count` float NOT NULL DEFAULT 0,
+  KEY `schedule_id` (`schedule_id`),
+  CONSTRAINT `unit_counter_ibfk_1` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -146,7 +206,7 @@ CREATE TABLE `user` (
   KEY `instructor_id` (`instructor_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_ibfk_2` FOREIGN KEY (`instructor_id`) REFERENCES `instructor` (`instructor_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -158,4 +218,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-23 19:20:54
+-- Dump completed on 2024-05-07 20:38:04
