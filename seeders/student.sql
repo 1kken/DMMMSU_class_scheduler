@@ -1,5 +1,5 @@
 INSERT INTO student (student_id, last_name, first_name, middle_name, email, section_id) VALUES
-('39078901', 'Watson', 'Ethan', 'William', 'ethanwilliam8901@student.dmmmsu.edu.ph', '2C'),
+('39078901', 'Watson', 'Ethan', 'William', 'ethanwilliam8901@student.dmmmsu.edu.ph', '2A'),
 ('39089012', 'Young', 'Emma', 'Olivia', 'emmaolivia9012@student.dmmmsu.edu.ph', '2D'),
 ('39090123', 'Adams', 'Noah', 'Aiden', 'noahaiden0123@student.dmmmsu.edu.ph', '3A'),
 ('39101234', 'Baker', 'Sophia', 'Ella', 'sophiaella1234@student.dmmmsu.edu.ph', '3B'),
