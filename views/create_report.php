@@ -117,7 +117,7 @@ if (!is_logged_in()) {
             </div>
             <div class="form-group">
                 <label for="school-year">School Year:</label>
-                <select id="school-year" name="sy" required >
+                <select id="school-year" name="sy" required>
                     <option selected value disabled> -- select an option -- </option>;
                     <?php
                     $school_years = get_all_available_school_year($pdo);
@@ -161,7 +161,80 @@ if (!is_logged_in()) {
             //Find the school years that the student is enrolled 
             studentIdInput.addEventListener('input', getSchoolYears);
             function getSchoolYears() {
+                if (studentIdInput.value.trim() === '') {
+                    return;
+                }
                 const student_id = studentIdInput.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            schoolYearSelect.innerHTML = '';
+                            schoolYearSelect.innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&get_sy=true`, true);
+                xhr.send();
+            }
+
+            //Find the section that is available via student_id in student history
+            schoolYearSelect.addEventListener('input', getSections);
+            function getSections() {
+                if (studentIdInput.value.trim() === '') {
+                    return;
+                }
+                const student_id = studentIdInput.value.trim();
+                const sy = schoolYearSelect.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            sectionSelect.innerHTML = '';
+                            sectionSelect.innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&sy=${sy}&get_section=true`, true);
+                xhr.send();
+            }
+
+            //Get the semester that has available schedule for that school year school year
+            sectionSelect.addEventListener('input', getSemester);
+            function getSemester() {
+                if (studentIdInput.value.trim() === '') {
+                    return;
+                }
+                const student_id = studentIdInput.value.trim();
+                const sy = schoolYearSelect.value.trim();
+                const section = sectionSelect.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            semesterSelect.innerHTML = '';
+                            semesterSelect.innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&sy=${sy}&section=${section}&get_semester=true`, true);
+                xhr.send();
+            }
+
+            //Instructor
+            instructorIdInput.addEventListener('input', getInstructorSchoolYears);
+            function getInstructorSchoolYears() {
+                if (instructorIdInput.value.trim() === '') {
+                    return;
+                }
+                const instructor_id = instructorIdInput.value.trim();
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -174,14 +247,17 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&get_sy=true`, true);
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?instructor_id=${instructor_id}&get_sy=true`, true);
                 xhr.send();
             }
 
-            //Find the section that is available via student_id in student history
-            schoolYearSelect.addEventListener('input', getSections);
-            function getSections(){
-                const student_id = studentIdInput.value.trim();
+            //get sections
+            schoolYearSelect.addEventListener('input', getInstructorSections);
+            function getInstructorSections() {
+                if (instructorIdInput.value.trim() === '') {
+                    return;
+                }
+                const instructor_id = instructorIdInput.value.trim();
                 const sy = schoolYearSelect.value.trim();
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
@@ -189,13 +265,36 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             sectionSelect.innerHTML = '';
                             sectionSelect.innerHTML = xhr.responseText;
-                            console.log(xhr.responseText)
                         } else {
                             console.log("There was a problem with the request.");
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&sy=${sy}&get_section=true`, true);
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?instructor_id=${instructor_id}&sy=${sy}&get_section=true`, true);
+                xhr.send();
+            }
+
+            //semester
+            sectionSelect.addEventListener('input', getInstructorSemester);
+            function getInstructorSemester() {
+                if (instructorIdInput.value.trim() === '') {
+                    return;
+                }
+                const instructor_id = instructorIdInput.value.trim();
+                const sy = schoolYearSelect.value.trim();
+                const section = sectionSelect.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            semesterSelect.innerHTML = '';
+                            semesterSelect.innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?instructor_id=${instructor_id}&sy=${sy}&section=${section}&get_semester=true`, true);
                 xhr.send();
             }
 
@@ -208,8 +307,19 @@ if (!is_logged_in()) {
             instructorIdInput.addEventListener('input', toggleReadOnly);
 
             function toggleReadOnly() {
+            const schoolYearSelect = document.getElementById('school-year');
+            const sectionSelect = document.getElementById('section');
+            const semesterSelect = document.getElementById('semester');
                 const hasStudentIdValue = studentIdInput.value.trim() !== '';
                 const hasInstructorIdValue = instructorIdInput.value.trim() !== '';
+                if(!hasStudentIdValue || !hasInstructorIdValue){
+                    schoolYearSelect.innerHTML = '<option selected value disabled> -- select an option -- </option>';
+                    sectionSelect.innerHTML = '<option selected value disabled> -- select an option -- </option>';
+                    semesterSelect.innerHTML = '<option selected value disabled> -- select an option -- </option>';
+                    sectionSelect.disabled = true;
+                    semesterSelect.disabled = true;
+                }
+
 
                 studentIdInput.readOnly = hasInstructorIdValue;
                 instructorIdInput.readOnly = hasStudentIdValue;
@@ -234,6 +344,8 @@ if (!is_logged_in()) {
                 }
             });
         }
+
+
 
         // Usage example
         const schoolYearSelect = document.getElementById('school-year');
