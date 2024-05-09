@@ -3,6 +3,7 @@ INSERT INTO rooms (room_id, room_type, priority) VALUES
 ('CLR102','Laboratory',4),
 ('CLR201','Laboratory',3),
 ('CLR202','Laboratory',3),
+('CLR203','Laboratory',3),
 ('CLR301','Laboratory',1),
 ('CLR302','Laboratory',1),
 ('CLR303','Laboratory',1),
