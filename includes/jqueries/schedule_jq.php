@@ -119,8 +119,9 @@ if (isset($_GET['room_id']) && isset($_GET['sy']) && isset($_GET['get_start_time
     $room_id = $_GET['room_id'];
     $sy = $_GET['sy'];
     $day = $_GET['day'];
-    $stmt = $pdo->prepare('SELECT start_time,end_time FROM schedule WHERE room_id = :room_id AND day = :day AND code LIKE :sy');
-    $stmt->execute(['room_id' => $room_id, 'sy' => "%$sy", 'day' => $day]);
+    $semester = $_GET['semester'];
+    $stmt = $pdo->prepare('SELECT start_time,end_time FROM schedule WHERE room_id = :room_id AND day = :day AND semester = :semester AND code LIKE :sy');
+    $stmt->execute(['room_id' => $room_id, 'sy' => "%$sy", 'day' => $day, 'semester' => $semester]);
     $schedules = $stmt->fetchAll();
 
     $availableSlots0800to1600 = [];

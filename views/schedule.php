@@ -490,7 +490,6 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             document.getElementById("type").innerHTML = '';
                             document.getElementById("type").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -533,7 +532,6 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             document.getElementById("day").innerHTML = '';
                             document.getElementById("day").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -550,18 +548,20 @@ if (!is_logged_in()) {
                 const room_id = document.getElementById('room-id').value;
                 const sy = processSy(syInput.value);
                 const day = document.getElementById('day').value;
+                const semester = document.getElementById('semester').value;
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             document.getElementById("start-time").innerHTML = '';
                             document.getElementById("start-time").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&get_start_time=true`, true);
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&semester=${semester}&get_start_time=true`, true);
                 xhr.send();
             }
 
