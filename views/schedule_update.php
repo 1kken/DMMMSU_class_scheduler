@@ -85,6 +85,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
         }
     </style>
 </head>
+<script src="../jquery.js"></script>
 
 <body>
     <div class="container">
@@ -94,6 +95,18 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
             exit();
         }
         $schedule = get_schedule($pdo, $_GET['schedule_id']);
+        $schedule_id = $_GET['schedule_id'];
+        $code = $schedule['code'];
+        $room_id = $schedule['room_id'];
+        $instructor_id = $schedule['instructor_id'];
+        $day = $schedule['day'];
+        $start_time = $schedule['start_time'];
+        $end_time = $schedule['end_time'];
+        $subject_id = $schedule['subject_id'];
+        $section_id = $schedule['section_id'];
+        $sy = $schedule['sy'];
+        $type = $schedule['type'];
+        $semester = $schedule['semester'];
 
         if (empty($schedule)) {
             echo "Schedule not found";
@@ -104,97 +117,177 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
         <form action="../../DMMMSU_class_scheduler\includes\schedule_handler.php" method="post" id="forms">
             <div class="form-group">
                 <label for="code">Code:</label>
-                <input type="text" id="code" name="code" readonly value=<?php echo $schedule['code'] ?> required>
-                <input type="text" id="old_section_id" name="old_section_id" value=<?php echo $schedule["section_id"] ?> hidden>
-                <input type="text" id="old_subject_id" name="old_subject_id" value=<?php echo $schedule["subject_id"] ?> hidden>
-                <input type="text" name="old_instructor_id" id="old_instructor_id" value=<?php echo $schedule["instructor_id"] ?> hidden>
-            <div class="form-group">
-                <label for="room">Room:</label>
-                <select id="room-id" name="room_id" required>
-                    <?php
-                    $rooms = get_classroom_name_id($pdo);
-                    foreach ($rooms as $room) {
-                        echo "<option value='" . $room['room_id'] . "'";
-                        if ($schedule['room_id'] == $room['room_id']) {
-                            echo " selected";
-                        }
-                        echo ">" . $room['room_id'] . "</option>";
-                    }
-                    ?>
-                </select>
-                <input type="text" name="old_room_id" id="old_room_id" value=<?php echo $schedule["room_id"] ?> hidden>
-            </div>
-            <div class="form-group">
-                <label for="day">Day:</label>
-                <select id="day" name="day" required disabled>
-                    <?php
-                    $days = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
-                    foreach ($days as $day) {
-                        $day = strtolower($day);
-                        echo "<option value='$day'";
-                        if ($schedule['day'] == $day) {
-                            echo " selected";
-                        }
-                        $day = ucfirst($day);
-                        echo ">$day</option>";
-                    }
-                    ?>
-                </select>
-                <input type="text" name="old_day" id="old_day" value=<?php echo $schedule["day"] ?> hidden>
-            </div>
-            <div class="form-group">
-                <label for="start-time">Start Time:</label>
-                <select id="start-time" name="start_time" required disabled>
-                    <?php
-                    $start_time = strtotime('8:00'); // Convert start time to Unix timestamp
-                    $end_time = strtotime('16:00'); // Convert end time to Unix timestamp
-                    $time_format = 'H:i'; // Time format
+                <input type="text" id="code" name="code" readonly value=<?php echo $code ?> required>
+                <input type="text" id="schedule_id" value="<?php echo $schedule_id ?>" hidden>
+                <input type="text" id="room_id" value="<?php echo $room_id ?>" hidden>
+                <input type="text" id="instructor_id" value="<?php echo $instructor_id ?>" hidden>
+                <input type="text" id="day" value="<?php echo $day ?>" hidden>
+                <input type="text" id="start_time" value="<?php echo $start_time ?>" hidden>
+                <input type="text" id="end_time" value="<?php echo $end_time ?>" hidden>
+                <input type="text" id="subject_id" value="<?php echo $subject_id ?>" hidden>
+                <input type="text" id="section_id" value="<?php echo $section_id ?>" hidden>
+                <input type="text" id="sy" value="<?php echo $sy ?>" hidden>
+                <input type="text" id="type" value="<?php echo $type ?>" hidden>
+                <input type="text" id="semester" value="<?php echo $semester ?>" hidden>
 
-                    for ($time = $start_time; $time <= $end_time; $time += 1800) { // 1800 seconds = 30 minutes
-                        if ($time == strtotime($schedule['start_time'])) {
-                            echo '<option value="' . date($time_format, $time) . '" selected>' . date($time_format, $time) . '</option>';
-                        } else {
-                            echo '<option value="' . date($time_format, $time) . '">' . date($time_format, $time) . '</option>';
+                <div class="form-group">
+                    <label for="room">Room:</label>
+                    <select id="new_room_id" name="new_room_id" required>
+                        <?php
+                        $rooms = get_classroom_name_id($pdo);
+                        foreach ($rooms as $room) {
+                            echo "<option value='" . $room['room_id'] . "'";
+                            if ($schedule['room_id'] == $room['room_id']) {
+                                echo " selected";
+                            }
+                            echo ">" . $room['room_id'] . "</option>";
                         }
-                    }
-                    ?>
-                </select>
-                <input type="text" name="old_start_time" id="old_start_time" value=<?php echo $schedule["start_time"] ?> hidden>
-            </div>
-            <div class="form-group">
-                <label for="end-time">End Time:</label>
-                <select id="end-time" name="end_time" required disabled>
-                    <?php
-                    $start_time = strtotime('9:00'); // Convert start time to Unix timestamp
-                    $end_time = strtotime('17:00'); // Convert end time to Unix timestamp
-                    $time_format = 'H:i'; // Time format
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="day">Day:</label>
+                    <select id="new_day" name="new_day" required disabled>
+                        <?php
+                        $days = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+                        foreach ($days as $day) {
+                            $day = strtolower($day);
+                            echo "<option value='$day'";
+                            if ($schedule['day'] == $day) {
+                                echo " selected";
+                            }
+                            $day = ucfirst($day);
+                            echo ">$day</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="start-time">Start Time:</label>
+                    <select id="new_start_time" name="new_start_time" required disabled>
+                        <?php
+                        $start_time = strtotime('8:00'); // Convert start time to Unix timestamp
+                        $end_time = strtotime('16:00'); // Convert end time to Unix timestamp
+                        $time_format = 'H:i'; // Time format
 
-                    for ($time = $start_time; $time <= $end_time; $time += 1800) { // 1800 seconds = 30 minutes
-                        if ($time == strtotime($schedule['end_time'])) {
-                            echo '<option value="' . date($time_format, $time) . '" selected>' . date($time_format, $time) . '</option>';
-                        } else {
-                            echo '<option value="' . date($time_format, $time) . '">' . date($time_format, $time) . '</option>';
+                        for ($time = $start_time; $time <= $end_time; $time += 1800) { // 1800 seconds = 30 minutes
+                            if ($time == strtotime($schedule['start_time'])) {
+                                echo '<option value="' . date($time_format, $time) . '" selected>' . date($time_format, $time) . '</option>';
+                            } else {
+                                echo '<option value="' . date($time_format, $time) . '">' . date($time_format, $time) . '</option>';
+                            }
                         }
-                    }
-                    ?>
-                </select>
-                <input type="text" id="old_end_time" name="old_end_time" value=<?php echo $schedule["end_time"] ?> hidden>
-            </div>
-            <div class="form-group">
-                <label for="sy">School Year:</label>
-                <input type="text" id="sy" name="sy" placeholder="YYYY-YYYY" value=<?php echo $schedule["sy"]; ?> required readonly>
-                <input type="text" id="old_sy" name="old_sy" value=<?php echo $schedule["sy"] ?> hidden>
-            </div>
-            <input type="submit" value="Update Schedule" name="update_schedule">
-            <input type="text" name="old_schedule_code" value=<?php echo $schedule["code"] ?> hidden>
-            <input type="text" name="schedule_id" value=<?php echo $_GET["schedule_id"] ?> hidden>
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="end-time">End Time:</label>
+                    <select id="new_end_time" name="new_end_time" required disabled>
+                        <?php
+                        $start_time = strtotime('9:00'); // Convert start time to Unix timestamp
+                        $end_time = strtotime('17:00'); // Convert end time to Unix timestamp
+                        $time_format = 'H:i'; // Time format
+
+                        for ($time = $start_time; $time <= $end_time; $time += 1800) { // 1800 seconds = 30 minutes
+                            if ($time == strtotime($schedule['end_time'])) {
+                                echo '<option value="' . date($time_format, $time) . '" selected>' . date($time_format, $time) . '</option>';
+                            } else {
+                                echo '<option value="' . date($time_format, $time) . '">' . date($time_format, $time) . '</option>';
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sy">School Year:</label>
+                    <input type="text" id="new_sy" name="new_sy" placeholder="YYYY-YYYY" value=<?php echo $schedule["sy"]; ?> required readonly>
+                </div>
+                <input type="submit" value="Update Schedule" name="update_schedule">
         </form>
-        <?php
-        check_schedule_errors();
-        ?>
     </div>
+
     <script>
-        //reset if go back
+        document.addEventListener('DOMContentLoaded', () => {
+            const roomIdInput = document.getElementById('new_room_id');
+            const dayInput = document.getElementById('new_day');
+            const startTimeInput = document.getElementById('new_start_time');
+            const endTimeInput = document.getElementById('new_end_time');
+            const syInput = document.getElementById('new_sy');
+
+            getRooms();
+            function getRooms() { 
+                const type = document.getElementById('type').value;
+                const subject_id = document.getElementById('subject_id').value; 
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("new_room_id").innerHTML = '';
+                            document.getElementById("new_room_id").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText)
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_update_jq.php?type=${type}&subject_id=${subject_id}&get_room=true`, true);
+                xhr.send();
+            }
+            roomIdInput.addEventListener('change', getDays);
+            function getDays() {
+                const room_id = document.getElementById('new_room_id').value;
+                const sy = document.getElementById('sy').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("new_day").innerHTML = '';
+                            document.getElementById("new_day").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_update_jq.php?new_room_id=${room_id}&sy=${sy}&get_day=true`, true);
+                xhr.send();
+            }
+            dayInput.addEventListener('change', getStartTimes);
+            function getStartTimes() {
+                const room_id = document.getElementById('new_room_id').value;
+                const sy = document.getElementById('sy').value;
+                const day = document.getElementById('new_day').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("new_start_time").innerHTML = '';
+                            document.getElementById("new_start_time").innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_update_jq.php?new_room_id=${room_id}&sy=${sy}&day=${day}&get_start_time=true`, true);
+                xhr.send();
+            }
+
+            //enabling in sequence
+            roomIdInput.addEventListener('change', enableSelects);
+            dayInput.addEventListener('change', enableSelects);
+            startTimeInput.addEventListener('change', enableSelects);
+            endTimeInput.addEventListener('change', enableSelects);
+
+            function enableSelects() {
+                const inputs = [dayInput, startTimeInput, endTimeInput, syInput];
+                const currentIndex = inputs.findIndex(input => input === this);
+
+                if (currentIndex < inputs.length - 1 && this.value !== "") {
+                    inputs[currentIndex + 1].disabled = false;
+                }
+            }
+        });
+
+
         function handleSelectChange(inputElement, targetElements) {
             inputElement.addEventListener('change', () => {
                 // Disable all target elements
@@ -210,12 +303,13 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
             });
         }
 
-        const roomIdInput = document.getElementById('room-id');
-        const dayInput = document.getElementById('day');
-        const startTimeInput = document.getElementById('start-time');
-        const endTimeInput = document.getElementById('end-time');
-        const syInput = document.getElementById('sy');
 
+
+        const roomIdInput = document.getElementById('new_room_id');
+        const dayInput = document.getElementById('new_day');
+        const startTimeInput = document.getElementById('new_start_time');
+        const endTimeInput = document.getElementById('new_end_time');
+        const syInput = document.getElementById('new_sy');
         handleSelectChange(roomIdInput, [dayInput, startTimeInput, endTimeInput]);
         handleSelectChange(dayInput, [startTimeInput, endTimeInput]);
         handleSelectChange(startTimeInput, [endTimeInput]);

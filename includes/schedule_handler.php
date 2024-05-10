@@ -147,6 +147,7 @@ if (isset($_POST["delete_schedule"]) && isset($_SESSION["user_id"])) {
     exit();
 }
 
+//UPDATE ===========================================================================
 if (isset($_POST["update_schedule"]) && isset($_SESSION["user_id"])) {
     //old schedule
     $old_schedule = $_POST["old_schedule_code"];
