@@ -1,8 +1,13 @@
-DELIMITER //
-CREATE TRIGGER insert_unit_counter_trigger
-AFTER INSERT ON SCHEDULE
-FOR EACH ROW
-BEGIN
+DELIMITER $$
+
+USE `class_schedule`$$
+
+DROP TRIGGER /*!50032 IF EXISTS */ `insert_unit_counter_trigger_update`$$
+
+CREATE
+    /*!50017 DEFINER = 'root'@'localhost' */
+    TRIGGER `insert_unit_counter_trigger_update` AFTER UPDATE ON `schedule` 
+    FOR EACH ROW BEGIN
     DECLARE time_counter INT;
     
     IF NEW.type = 'Lecture' THEN
@@ -14,6 +19,7 @@ BEGIN
         INSERT INTO unit_counter (schedule_id, CODE, laboratory_count)
         VALUES (NEW.schedule_id, NEW.code, time_counter / 1800 / 2 - 1);
     END IF;
-END//
-DELIMITER;
+END;
+$$
 
+DELIMITER ;
