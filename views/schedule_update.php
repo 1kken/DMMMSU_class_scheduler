@@ -117,18 +117,19 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
         <form action="../../DMMMSU_class_scheduler\includes\schedule_handler.php" method="post" id="forms">
             <div class="form-group">
                 <label for="code">Code:</label>
-                <input type="text" id="code" name="code" readonly value=<?php echo $code ?> required>
-                <input type="text" id="schedule_id" value="<?php echo $schedule_id ?>" hidden>
-                <input type="text" id="room_id" value="<?php echo $room_id ?>" hidden>
-                <input type="text" id="instructor_id" value="<?php echo $instructor_id ?>" hidden>
-                <input type="text" id="day" value="<?php echo $day ?>" hidden>
-                <input type="text" id="start_time" value="<?php echo $start_time ?>" hidden>
-                <input type="text" id="end_time" value="<?php echo $end_time ?>" hidden>
-                <input type="text" id="subject_id" value="<?php echo $subject_id ?>" hidden>
-                <input type="text" id="section_id" value="<?php echo $section_id ?>" hidden>
-                <input type="text" id="sy" value="<?php echo $sy ?>" hidden>
-                <input type="text" id="type" value="<?php echo $type ?>" hidden>
-                <input type="text" id="semester" value="<?php echo $semester ?>" hidden>
+                <h1 id="code"><?php echo $code?></h1>
+                <input type="text" id="code" name="code" readonly value=<?php echo $code ?> required hidden>
+                <input type="text" id="schedule_id" name ="schedule_id" value="<?php echo $schedule_id ?>" hidden>
+                <input type="text" id="room_id" name="room_id" value="<?php echo $room_id ?>" hidden>
+                <input type="text" id="instructor_id" name="instructor_id" value="<?php echo $instructor_id ?>" hidden>
+                <input type="text" id="day" name="day" value="<?php echo $day ?>" hidden>
+                <input type="text" id="start_time" name ="start_time" value="<?php echo $start_time ?>" hidden>
+                <input type="text" id="end_time" name="end_time" value="<?php echo $end_time ?>" hidden>
+                <input type="text" id="subject_id" name="subject_id" value="<?php echo $subject_id ?>" hidden>
+                <input type="text" id="section_id" name="section_id" value="<?php echo $section_id ?>" hidden>
+                <input type="text" id="sy" name="sy" value="<?php echo $sy ?>" hidden>
+                <input type="text" id="type" name="type" value="<?php echo $type ?>" hidden>
+                <input type="text" id="semester" name="semester" value="<?php echo $semester ?>" hidden>
 
                 <div class="form-group">
                     <label for="room">Room:</label>
