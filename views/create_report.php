@@ -99,9 +99,9 @@ if (!is_logged_in()) {
 <script src="../jquery.js"></script>
 
 <body>
-    <div class="container">
+    <div class="container" id="student_form">
         <h1>Create Report Student</h1>
-        <form action="../../DMMMSU_class_scheduler\includes\report_handler.php" method="POST">
+        <form action="../../DMMMSU_class_scheduler\includes\report_handler.php" method="POST" >
             <div class="form-group">
                 <label for="report_id">Report by Student ID:</label>
                 <input type="text" id="student_id" name="student_id">
@@ -144,9 +144,9 @@ if (!is_logged_in()) {
             <input type="submit" value="Generate Report">
         </form>
     </div>
-    <div class="container">
+    <div class="container" id="instructor_form">
         <h1>Create Report Instructor</h1>
-        <form action="../../DMMMSU_class_scheduler\includes\report_handler.php" method="POST">
+        <form action="../../DMMMSU_class_scheduler\includes\instructor_report_handler.php" method="POST" id="instructor_form">
             <div class="form-group">
                 <label for="report_id">Report by Instructor ID:</label>
                 <input type="text" id="instructor_id" name="instructor_id">
@@ -156,31 +156,21 @@ if (!is_logged_in()) {
             </div>
             <div class="form-group">
                 <label for="school-year">School Year:</label>
-                <select id="school-year_instructor" name="sy_instructor" required>
+                <select id="school-year_instructor" name="sy_instructor">
                     <option selected value disabled> -- select an option -- </option>;
-                    <?php
-                    $school_years = get_all_available_school_year($pdo);
-                    foreach ($school_years as $school_year) {
-                        echo "<option value='{$school_year['sy']}'>{$school_year['sy']}</option>";
-                    }
-                    ?>
+                    <option value="test1"> test1</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="section">Section:</label>
-                <select id="section_instructor" name="section_instructor" required disabled>
+                <select id="section_instructor" name="section_instructor">
                     <option selected value disabled> -- select an option -- </option>;
-                    <?php
-                    $sections = get_all_sections($pdo);
-                    foreach ($sections as $section) {
-                        echo "<option value='{$section['section_id']}'>{$section['section_id']}</option>";
-                    }
-                    ?>
+                    <option value="test1"> test1</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="semester">Semester:</label>
-                <select id="semester_instructor" name="semester_instructor" required disabled>
+                <select id="semester_instructor" name="semester_instructor">
                     <option selected value disabled> -- select an option -- </option>;
                     <option value="1">First Semester</option>
                     <option value="2">Second Semester</option>
@@ -212,6 +202,7 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             schoolYearSelect.innerHTML = '';
                             schoolYearSelect.innerHTML = xhr.responseText;
+                            console.log(xhr.responseText)
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -271,140 +262,21 @@ if (!is_logged_in()) {
                 xhr.send();
             }
 
-            //Instructor
-            const schoolYearSelect_instructor = document.getElementById('school-year_instructor');
-            const sectionSelect_instructor = document.getElementById('section_instructor');
-
-            instructorIdInput.addEventListener('input', getInstructorSchoolYears);
-
-            function getInstructorSchoolYears() {
-                if (instructorIdInput.value.trim() === '') {
-                    return;
-                }
-                const instructor_id = instructorIdInput.value.trim();
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            schoolYearSelect_instructor.innerHTML = '';
-                            schoolYearSelect_instructor.innerHTML = xhr.responseText;
-                            console.log(xhr.responseText)
-                        } else {
-                            console.log("There was a problem with the request.");
-                        }
-                    }
-                };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?instructor_id=${instructor_id}&get_sy=true`, true);
-                xhr.send();
-            }
-
-            //get sections
-            schoolYearSelect_instructor.addEventListener('input', getInstructorSections);
-            function getInstructorSections() {
-                if (instructorIdInput.value.trim() === '') {
-                    return;
-                }
-                const instructor_id = instructorIdInput.value.trim();
-                const sy = schoolYearSelect_instructor.value.trim();
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            sectionSelect_instructor.innerHTML = '';
-                            sectionSelect_instructor.innerHTML = xhr.responseText;
-                        } else {
-                            console.log("There was a problem with the request.");
-                        }
-                    }
-                };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?instructor_id=${instructor_id}&sy=${sy}&get_section=true`, true);
-                xhr.send();
-            }
-
-            //semester
-            sectionSelect_instructor.addEventListener('input', getInstructorSemester);
-
-            function getInstructorSemester() {
-                if (instructorIdInput.value.trim() === '') {
-                    return;
-                }
-                const instructor_id = instructorIdInput.value.trim();
-                const sy = schoolYearSelect_instructor.value.trim();
-                const section = sectionSelect_instructor.value.trim();
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            semesterSelect_instructor.innerHTML = '';
-                            semesterSelect_instructor.innerHTML = xhr.responseText;
-                        } else {
-                            console.log("There was a problem with the request.");
-                        }
-                    }
-                };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?instructor_id=${instructor_id}&sy=${sy}&section=${section}&get_semester=true`, true);
-                xhr.send();
-            }
-
-
-
-
 
             //Disable
             studentIdInput.addEventListener('input', toggleReadOnly);
             instructorIdInput.addEventListener('input', toggleReadOnly);
 
             function toggleReadOnly() {
+                const student_form =document.getElementById('student_form');
+                const instructor_form =document.getElementById('instructor_form');
                 const schoolYearSelect = document.getElementById('school-year');
                 const sectionSelect = document.getElementById('section');
                 const semesterSelect = document.getElementById('semester');
                 const hasStudentIdValue = studentIdInput.value.trim() !== '';
                 const hasInstructorIdValue = instructorIdInput.value.trim() !== '';
-                if (!hasStudentIdValue || !hasInstructorIdValue) {
-                    schoolYearSelect.innerHTML = '<option selected value disabled> -- select an option -- </option>';
-                    sectionSelect.innerHTML = '<option selected value disabled> -- select an option -- </option>';
-                    semesterSelect.innerHTML = '<option selected value disabled> -- select an option -- </option>';
-                    schoolYearSelect_instructor.innerHTML = '<option selected value disabled> -- select an option -- </option>';
-                    sectionSelect_instructor.innerHTML = '<option selected value disabled> -- select an option -- </option>';
-                    semesterSelect_instructor.innerHTML = '<option selected value disabled> -- select an option -- </option>';
-                    sectionSelect.disabled = true;
-                    semesterSelect.disabled = true;
-                }
-                if (hasStudentIdValue) {
-                    const schoolYearSelect_instructor = document.getElementById('school-year_instructor');
-                    const sectionSelect_instructor = document.getElementById('section_instructor');
-                    const semesterSelect_instructor = document.getElementById('semester_instructor');
-                    instructorIdInput.value = '';
-                    schoolYearSelect_instructor.disabled = true;
-                    sectionSelect_instructor.disabled = true;
-                    semesterSelect_instructor.disabled = true;
-                } else {
-                    const schoolYearSelect_instructor = document.getElementById('school-year_instructor');
-                    const sectionSelect_instructor = document.getElementById('section_instructor');
-                    const semesterSelect_instructor = document.getElementById('semester_instructor');
-                    schoolYearSelect_instructor.disabled = false;
-                    sectionSelect_instructor.disabled = false;
-                    semesterSelect_instructor.disabled = false;
-                }
-
-                if (hasInstructorIdValue) {
-                    const schoolYearSelect = document.getElementById('school-year');
-                    const sectionSelect = document.getElementById('section');
-                    const semesterSelect = document.getElementById('semester');
-                    studentIdInput.value = '';
-                    schoolYearSelect.disabled = true;
-                    sectionSelect.disabled = true;
-                    semesterSelect.disabled = true;
-                } else {
-                    const schoolYearSelect = document.getElementById('school-year');
-                    const sectionSelect = document.getElementById('section');
-                    const semesterSelect = document.getElementById('semester');
-                    schoolYearSelect.disabled = false;
-                    sectionSelect.disabled = false;
-                    semesterSelect.disabled = false;
-                }
-                studentIdInput.readOnly = hasInstructorIdValue;
-                instructorIdInput.readOnly = hasStudentIdValue;
+                student_form.hidden = hasInstructorIdValue;
+                instructor_form.hidden = hasStudentIdValue;    
             }
 
             // Initial call to set initial state
