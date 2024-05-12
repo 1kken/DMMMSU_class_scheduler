@@ -101,7 +101,7 @@ if (!is_logged_in()) {
 <body>
     <div class="container" id="student_form">
         <h1>Create Report Student</h1>
-        <form action="../../DMMMSU_class_scheduler\includes\report_handler.php" method="POST" >
+        <form action="../../DMMMSU_class_scheduler\includes\report_handler.php" method="POST">
             <div class="form-group">
                 <label for="report_id">Report by Student ID:</label>
                 <input type="text" id="student_id" name="student_id">
@@ -157,15 +157,23 @@ if (!is_logged_in()) {
             <div class="form-group">
                 <label for="school-year">School Year:</label>
                 <select id="school-year_instructor" name="sy_instructor">
-                    <option selected value disabled> -- select an option -- </option>;
-                    <option value="test1"> test1</option>
+                    <?php
+                    $school_years = get_all_available_school_year($pdo);
+                    foreach ($school_years as $school_year) {
+                        echo "<option value='{$school_year['sy']}'>{$school_year['sy']}</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <div class="form-group">
                 <label for="section">Section:</label>
                 <select id="section_instructor" name="section_instructor">
-                    <option selected value disabled> -- select an option -- </option>;
-                    <option value="test1"> test1</option>
+                    <?php
+                    $sections = get_all_sections($pdo);
+                    foreach ($sections as $section) {
+                        echo "<option value='{$section['section_id']}'>{$section['section_id']}</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <div class="form-group">
@@ -268,15 +276,15 @@ if (!is_logged_in()) {
             instructorIdInput.addEventListener('input', toggleReadOnly);
 
             function toggleReadOnly() {
-                const student_form =document.getElementById('student_form');
-                const instructor_form =document.getElementById('instructor_form');
+                const student_form = document.getElementById('student_form');
+                const instructor_form = document.getElementById('instructor_form');
                 const schoolYearSelect = document.getElementById('school-year');
                 const sectionSelect = document.getElementById('section');
                 const semesterSelect = document.getElementById('semester');
                 const hasStudentIdValue = studentIdInput.value.trim() !== '';
                 const hasInstructorIdValue = instructorIdInput.value.trim() !== '';
                 student_form.hidden = hasInstructorIdValue;
-                instructor_form.hidden = hasStudentIdValue;    
+                instructor_form.hidden = hasStudentIdValue;
             }
 
             // Initial call to set initial state
