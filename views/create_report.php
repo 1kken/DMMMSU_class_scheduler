@@ -157,17 +157,13 @@ if (!is_logged_in()) {
             <div class="form-group">
                 <label for="school-year">School Year:</label>
                 <select id="school-year_instructor" name="sy_instructor">
-                    <?php
-                    $school_years = get_all_available_school_year($pdo);
-                    foreach ($school_years as $school_year) {
-                        echo "<option value='{$school_year['sy']}'>{$school_year['sy']}</option>";
-                    }
-                    ?>
+                    <option selected value disabled> -- select an option -- </option>;
                 </select>
             </div>
             <div class="form-group">
                 <label for="section">Section:</label>
-                <select id="section_instructor" name="section_instructor">
+                <select id="section_instructor" name="section_instructor" disabled>
+                    <option selected value disabled> -- select an option -- </option>;
                     <?php
                     $sections = get_all_sections($pdo);
                     foreach ($sections as $section) {
@@ -178,7 +174,7 @@ if (!is_logged_in()) {
             </div>
             <div class="form-group">
                 <label for="semester">Semester:</label>
-                <select id="semester_instructor" name="semester_instructor">
+                <select id="semester_instructor" name="semester_instructor" disabled>
                     <option selected value disabled> -- select an option -- </option>;
                     <option value="1">First Semester</option>
                     <option value="2">Second Semester</option>
@@ -269,6 +265,79 @@ if (!is_logged_in()) {
                 xhr.open("GET", `../includes/jqueries/reports_jq.php?student_id=${student_id}&sy=${sy}&section=${section}&get_semester=true`, true);
                 xhr.send();
             }
+
+
+            //Instructor
+            const schoolYearSelect_instructor = document.getElementById('school-year_instructor');
+            const sectionSelect_instructor = document.getElementById('section_instructor');
+            const semesterSelect_instructor = document.getElementById('semester_instructor');
+
+            instructorIdInput.addEventListener('input', getSchoolYearsInstructor);
+            function getSchoolYearsInstructor() {
+                if (instructorIdInput.value.trim() === '') {
+                    return;
+                }
+                const instructor_id = instructorIdInput.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            schoolYearSelect_instructor.innerHTML = '';
+                            schoolYearSelect_instructor.innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../includes/jqueries/reports_jq.php?instructor_id=${instructor_id}&get_sy=true`, true);
+                xhr.send();
+            }
+
+            schoolYearSelect_instructor.addEventListener('input', getSectionsInstructor);
+            function getSectionsInstructor(){
+                if (instructorIdInput.value.trim() === '') {
+                    return;
+                }
+                const instructor_id = instructorIdInput.value.trim();
+                const sy = schoolYearSelect_instructor.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            sectionSelect_instructor.innerHTML = '';
+                            sectionSelect_instructor.innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../includes/jqueries/reports_jq.php?instructor_id=${instructor_id}&sy=${sy}&get_section=true`, true);
+                xhr.send();
+            }
+
+            sectionSelect_instructor.addEventListener('input', getSemesterInstructor);
+            function getSemesterInstructor(){
+                if (instructorIdInput.value.trim() === '') {
+                    return;
+                }
+                const instructor_id = instructorIdInput.value.trim();
+                const sy = schoolYearSelect_instructor.value.trim();
+                const section = sectionSelect_instructor.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            semesterSelect_instructor.innerHTML = '';
+                            semesterSelect_instructor.innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../includes/jqueries/reports_jq.php?instructor_id=${instructor_id}&sy=${sy}&section=${section}&get_semester=true`, true);
+                xhr.send();
+            }
+
 
 
             //Disable

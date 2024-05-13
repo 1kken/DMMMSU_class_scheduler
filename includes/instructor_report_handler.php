@@ -200,29 +200,4 @@ if (isset($_POST['instructor_id']) && isset($_POST['sy_instructor']) && isset($_
         </div>
     </body>
 <?php } ?>
-
-<?php if (isset($_POST['instructor_id']) && isset($_POST['sy_instructor']) && empty($_POST['section_instructor']) && empty($_POST['semester_instructor'])) { ?>
-    <h1>instructor sy</h1>
-<?php } ?>
-
-<?php if (isset($_POST['instructor_id']) && isset($_POST['section_instructor']) && empty($_POST['sy_instructor']) && empty($_POST['semester_instructor'])) { ?>
-    <h1>insructor section</h1>
-<?php } ?>
-
-<?php if (isset($_POST['instructor_id']) && isset($_POST['semester_instructor']) && empty($_POST['sy_instructor']) && empty($_POST['section_instructor'])) { ?>
-    <h1>instructor semester</h1>
-<?php } ?>
-
-<?php if (isset($_POST['instructor_id']) && isset($_POST['sy_instructor']) && isset($_POST['section_instructor']) && empty($_POST['semester_instructor'])) { ?>
-    <h1>instructor sy section</h1>
-<?php } ?>
-
-<?php if (isset($_POST['instructor_id']) && isset($_POST['sy_instructor']) && isset($_POST['semester_instructor']) && empty($_POST['section_instructor'])) { ?>
-    <h1>instructor sy semester</h1>
-<?php } ?>
-
-<?php if (isset($_POST['instructor_id']) && isset($_POST['section_instructor']) && isset($_POST['semester_instructor']) && empty($_POST['sy_instructor'])) { ?>
-    <h1>instructor section semester</h1>
-<?php } ?>
-
 </html>

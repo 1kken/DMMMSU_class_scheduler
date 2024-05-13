@@ -99,8 +99,8 @@ if(isset($_GET['instructor_id']) && isset($_GET['sy']) && isset($_GET['section']
     //get all the semester of the instructor based on the school year and section
     $sy = $_GET['sy'];
     $section = $_GET['section'];
-    $stmt = $pdo->prepare("SELECT DISTINCT semester FROM schedule WHERE sy = :sy AND section_id = :section ORDER BY semester ASC");
-    $stmt->execute(['sy' => $sy, 'section' => $section]);
+    $stmt = $pdo->prepare("SELECT DISTINCT semester FROM schedule WHERE sy = :sy AND section_id = :section AND instructor_id = :instructor_id ORDER BY semester ASC");
+    $stmt->execute(['sy' => $sy, 'section' => $section, 'instructor_id' => $_GET['instructor_id']]);
     $semesters = $stmt->fetchAll();
     if($semesters == null){
         echo "<option disabled selected value> -- no available semester -- </option>";
@@ -108,7 +108,8 @@ if(isset($_GET['instructor_id']) && isset($_GET['sy']) && isset($_GET['section']
     }
     echo "<option disabled selected value> -- select an option -- </option>";
     foreach($semesters as $semester){
-        $semester_name = $semester['semester'] == 1 ? "1st Semester" : "2nd Semester";
+        $semester_name = $semester['semester'] == 1 ? "First Semester" : "Second Semester";
+
         echo "<option value='{$semester['semester']}'>{$semester_name}</option>";
     }
 }
