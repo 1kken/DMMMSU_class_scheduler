@@ -5,7 +5,7 @@ require_once('schedule/schedule_model.php');
 require_once('schedule/schedule_controller.php');
 
 if (!isset($_SESSION["user_id"])) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 
@@ -48,7 +48,7 @@ if (isset($_POST["create_schedule"]) && isset($_SESSION["user_id"])) {
     if ($errors) {
         $_SESSION["schedule_errors"] = $errors;
         $schedule_id = $_POST["schedule_id"];
-        header("LOCATION: /DMMMSU_class_scheduler/views/schedule.php");
+        header("LOCATION: ../views/schedule.php");
         exit();
     }
 
@@ -58,7 +58,7 @@ if (isset($_POST["create_schedule"]) && isset($_SESSION["user_id"])) {
         echo $e->getMessage();
         exit();
     }
-    header("LOCATION: /DMMMSU_class_scheduler/views/schedule.php");
+    header("LOCATION: ../views/schedule.php");
     exit();
 }
 
@@ -71,7 +71,7 @@ if (isset($_POST["delete_schedule"]) && isset($_SESSION["user_id"])) {
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
-    header("LOCATION: /DMMMSU_class_scheduler/views/schedule.php");
+    header("LOCATION: ../views/schedule.php");
     exit();
 }
 
@@ -106,7 +106,7 @@ if (isset($_POST["update_schedule"]) && isset($_SESSION["user_id"])) {
         $errors["same_values"] = "No changes were made.";
         $_SESSION["schedule_errors"] = $errors;
         $schedule_id = $_POST["schedule_id"];
-        header("LOCATION: /DMMMSU_class_scheduler/views/schedule_update.php?schedule_id=$schedule_id");
+        header("LOCATION: ../views/schedule_update.php?schedule_id=$schedule_id");
         exit();
     }
     if (strtotime($start_time) >= strtotime($end_time)) {
@@ -129,7 +129,7 @@ if (isset($_POST["update_schedule"]) && isset($_SESSION["user_id"])) {
     if ($errors) {
         $_SESSION["schedule_errors"] = $errors;
         $schedule_id = $_POST["schedule_id"];
-        header("LOCATION: /DMMMSU_class_scheduler/views/schedule_update.php?schedule_id=$schedule_id");
+        header("LOCATION: ../views/schedule_update.php?schedule_id=$schedule_id");
         exit();
     }
 
@@ -141,6 +141,6 @@ if (isset($_POST["update_schedule"]) && isset($_SESSION["user_id"])) {
         echo $e->getMessage();
         exit();
     }
-    header("LOCATION: /DMMMSU_class_scheduler/views/schedule.php");
+    header("LOCATION: ../views/schedule.php");
     exit();
 }

@@ -30,7 +30,7 @@ if (isset($_POST["create_room"]) && isset($_SESSION["user_id"])) {
 
     if ($errors) {
         $_SESSION["room_errors"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/room.php");
+        header("LOCATION: ../views/room.php");
         exit();
     }
 
@@ -39,7 +39,7 @@ if (isset($_POST["create_room"]) && isset($_SESSION["user_id"])) {
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
-    header("LOCATION: /DMMMSU_class_scheduler/views/room.php");
+    header("LOCATION: ../views/room.php");
 
     $pdo = null;
     $stmt = null;
@@ -49,7 +49,7 @@ if(isset($_POST['delete_room']) && isset($_SESSION["user_id"])){
     $room_id = $_POST["room_id"];
     try {
         delete_room($pdo, $room_id);
-        header("LOCATION: /DMMMSU_class_scheduler/views/room.php");
+        header("LOCATION: ../views/room.php");
         exit();
     } catch (\Throwable $th) {
         echo "Error: " . $th->getMessage();
@@ -84,18 +84,18 @@ if(isset($_POST['update_room']) && isset($_SESSION["user_id"])){
 
     if ($errors) {
         $_SESSION["room_errors"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/room_update.php?room_id=$old_room_id");
+        header("LOCATION: ../views/room_update.php?room_id=$old_room_id");
         exit();
     }
 
     try {
         update_room($pdo, $room_id, $room_type, $room_priority,$old_room_id);
-        header("LOCATION: /DMMMSU_class_scheduler/views/room.php");
+        header("LOCATION: ../views/room.php");
         exit();
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
-    header("LOCATION: /DMMMSU_class_scheduler/views/room.php");
+    header("LOCATION: ../views/room.php");
 
     $pdo = null;
     $stmt = null;

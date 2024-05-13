@@ -16,11 +16,11 @@ if (isset($_GET['instructor_id'])) {
         echo "<td>" . $instructor['middle_name'] . "</td>";
         echo "<td>" . $instructor['email'] . "</td>";
         echo "<td class='actions'>
-                <form action='../../DMMMSU_class_scheduler\includes\instructor_handler.php' method='post'>
+                <form action='../includes/instructor_handler.php' method='post'>
                     <input type='text' name='instructor_id' value='" . $instructor['instructor_id'] . "' hidden>
                     <button class='delete' name='delete_instructor'>Delete</button>
                 </form>
-                <form action='../../DMMMSU_class_scheduler/views/instructor_update.php' method='get'>
+                <form action='../views/instructor_update.php' method='get'>
                     <input type='text' name='instructor_id' value='" . $instructor['instructor_id'] . "' hidden>
                     <button class='update'>Update</button>
                 </form>

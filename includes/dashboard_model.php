@@ -3,7 +3,7 @@ require_once("database_header.php");
 require_once('config_session.inc.php');
 
 if(!isset($_SESSION["user_id"])){
-    header("LOCATION: /DMMMSU_class_scheduler/views/auths/log_in_page.php");
+    header("LOCATION: ../views/auths/log_in_page.php");
     exit();
 }
 

@@ -59,12 +59,12 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_instructor"])) {
 
     if ($errors) {
         $_SESSION["errors_instructor"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/instructor.php");
+        header("LOCATION: ../views/instructor.php");
         exit();
     }
     try {
         insert_instructor($pdo, $instructor_id, $first_name, $last_name, $middle_name, $email);
-        header("LOCATION: /DMMMSU_class_scheduler/views/instructor.php");
+        header("LOCATION: ../views/instructor.php");
         exit();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
@@ -78,7 +78,7 @@ if (isset($_POST["delete_instructor"]) && isset($_SESSION["user_id"])) {
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
-    header("LOCATION: /DMMMSU_class_scheduler/views/instructor.php");
+    header("LOCATION: ../views/instructor.php");
     exit();
 }
 
@@ -133,7 +133,7 @@ if (isset($_POST["update_instructor"]) && isset($_SESSION["user_id"])) {
     //if error
     if ($errors) {
         $_SESSION["errors_instructor"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/instructor_update.php?instructor_id=$old_instructor_id");
+        header("LOCATION: ../views/instructor_update.php?instructor_id=$old_instructor_id");
         exit();
     }
 
@@ -144,6 +144,6 @@ if (isset($_POST["update_instructor"]) && isset($_SESSION["user_id"])) {
         echo "Error: " . $e->getMessage();
         exit();
     }
-    header("LOCATION: /DMMMSU_class_scheduler/views/instructor.php?");
+    header("LOCATION: ../views/instructor.php?");
     exit();
 }

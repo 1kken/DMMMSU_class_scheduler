@@ -4,7 +4,7 @@ require_once('config_session.inc.php');
 require_once('change_password/change_password_model.php');
 
 if ($_SESSION['user_id'] == null) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 
@@ -33,13 +33,13 @@ if (isset($_POST["change_pass"])) {
 
     if ($errors) {
         $_SESSION['errors_change_pass'] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/user.php");
+        header("LOCATION: ../views/user.php");
         exit();
     }
 
     try {
         change_password($pdo, $new_password, $_SESSION['user_id']);
-        header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
+        header("LOCATION: ../views/dashboard.php");
         exit();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
@@ -48,6 +48,6 @@ if (isset($_POST["change_pass"])) {
 
 if(isset($_POST["log_out"])){
     session_destroy();
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }

@@ -61,13 +61,13 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_student"])) {
 
     if ($errors) {
         $_SESSION["errors_students"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
+        header("LOCATION: ../views/student.php");
         exit();
     }
     try {
         insert_student($pdo, $student_id, $first_name, $last_name, $middle_name, $email, $section_id);
         create_student_history($pdo, $student_id, $section_id);
-        header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
+        header("LOCATION: ../views/student.php");
         exit();
     } catch (\Throwable $th) {
         echo "Error: " . $th->getMessage();
@@ -78,7 +78,7 @@ if (isset($_POST["delete_student"]) && isset($_SESSION["user_id"])) {
     $student_id = $_POST["student_id"];
     try {
         delete_student($pdo, $student_id);
-        header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
+        header("LOCATION: ../views/student.php");
         exit();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
@@ -136,7 +136,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["update_student"])) {
 
     if ($errors) {
         $_SESSION["errors_students"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/student_update.php?student_id=$old_student_id");
+        header("LOCATION: ../views/student_update.php?student_id=$old_student_id");
         exit();
     }
 
@@ -154,7 +154,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["update_student"])) {
         }
         //update_history($pdo,$student_id,$section_id);
         echo "Success";
-        header("LOCATION: /DMMMSU_class_scheduler/views/student.php");
+        header("LOCATION: ../views/student.php");
         exit();
     } catch (\Throwable $th) {
         echo "Error: " . $th->getMessage();

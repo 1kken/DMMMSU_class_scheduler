@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] !== "POST") {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 
@@ -30,19 +30,19 @@ try {
     require_once("./config_session.inc.php");
     if ($errors) {
         $_SESSION["log_in_errors"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/index.php");
+        header("LOCATION: ../index.php");
         exit();
     }
     if ($user_type == "student") {
         $_SESSION["user_id"] = $user['student_id'];
         $a = $_SESSION["user_id"];
-        header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
+        header("LOCATION: ../views/dashboard.php");
         exit();
     }
     if ($user_type == "instructor") {
         $_SESSION["user_id"] = $user['instructor_id'];
         $a = $_SESSION["user_id"];
-        header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
+        header("LOCATION: ../views/dashboard.php");
         exit();
     }
 } catch (PDOException $e) {

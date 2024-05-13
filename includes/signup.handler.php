@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] !== "POST") {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 
@@ -38,12 +38,12 @@ try {
     if ($errors) {
         require_once("./config_session.inc.php");
         $_SESSION["errors_signup"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/sign_up_page.php");
+        header("LOCATION: ../views/sign_up_page.php");
         exit();
     }
 
     create_user($pdo,$user_type,$user_id,$password);
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
 
     $pdo = null;
     $stmt = null;
