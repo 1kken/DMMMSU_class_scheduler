@@ -7,7 +7,7 @@ require_once(APP_NAME . "includes/schedule/schedule_model.php");
 require_once(APP_NAME . "includes/schedule/schedule_view.php");
 
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>
@@ -192,7 +192,7 @@ if (!is_logged_in()) {
     <div class="container">
         <div class="form-container">
             <h2>Add Schedule</h2>
-            <form action="../../DMMMSU_class_scheduler\includes\schedule_handler.php" method="post">
+            <form action="../includes/schedule_handler.php" method="post">
                 <div class="form-group">
                     <label for="code">Code:</label>
                     <input type="text" id="code" name="code" readonly>
@@ -355,11 +355,11 @@ if (!is_logged_in()) {
                         echo "<td>" . $schedule['day'] . "</td>";
                         echo "<td>" . $schedule['sy'] . "</td>";
                         echo "<td class='actions'>
-                                <form action='../../DMMMSU_class_scheduler\includes/schedule_handler.php' method='post'>
+                                <form action='../includes/schedule_handler.php' method='post'>
                                     <input type='text' name='schedule_id' value='$schedule_id' hidden>
                                     <button class='delete' name='delete_schedule'>Delete</button>
                                 </form>
-                                <form action='../../DMMMSU_class_scheduler/views/schedule_update.php' method='get'>
+                                <form action='../views/schedule_update.php' method='get'>
                                     <input type='text' name='schedule_id' value='$schedule_id' hidden>
                                     <button class='update'>Update</button>
                                 </form>
@@ -374,7 +374,7 @@ if (!is_logged_in()) {
     </div>
     <script>
         function redirectToDashboard() {
-            window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
+            window.location.href = '../views/dashboard.php';
         }
         document.addEventListener('DOMContentLoaded', () => {
             //SY
@@ -456,7 +456,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?section_id=${section_id}&semester=${semester}`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?section_id=${section_id}&semester=${semester}`, true);
                 xhr.send();
             }
             //get instructor
@@ -475,7 +475,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?subject_id=${subject_id}`, true);
                 xhr.send();
             }
             instructorIdInput.addEventListener('input', getType);
@@ -495,7 +495,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?subject_id=${subject_id}&type=true&section_id=${section_id}&sy=${sy}`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?subject_id=${subject_id}&type=true&section_id=${section_id}&sy=${sy}`, true);
                 xhr.send();
             }
 
@@ -515,7 +515,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?type=${type}&get_room=true`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?type=${type}&get_room=true`, true);
                 xhr.send();
             }
 
@@ -526,7 +526,7 @@ if (!is_logged_in()) {
                 const room_id = document.getElementById('room-id').value;
                 const sy = processSy(syInput.value);
                 let xhr = new XMLHttpRequest();
-                console.log(`../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&get_day=true`)
+                console.log(`../includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&get_day=true`)
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
@@ -537,7 +537,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&get_day=true`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&get_day=true`, true);
                 xhr.send();
             }
 
@@ -561,7 +561,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&semester=${semester}&get_start_time=true`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&semester=${semester}&get_start_time=true`, true);
                 xhr.send();
             }
 
@@ -585,7 +585,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_jq.php?start_time=${start_time}&get_end_time=true`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?start_time=${start_time}&get_end_time=true`, true);
                 xhr.send();
             }
         });

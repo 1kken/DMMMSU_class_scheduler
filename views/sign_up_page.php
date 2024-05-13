@@ -4,7 +4,7 @@ require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/signup/signup_view.php");
 require_once(APP_NAME . "includes/authorization.php");
 if (is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/views/dashboard.php");
+    header("LOCATION: ./views/dashboard.php");
     exit();
 }
 ?>
@@ -77,7 +77,7 @@ if (is_logged_in()) {
 <body>
     <div class="container">
         <h1>Create an Account</h1>
-        <form action="/DMMMSU_class_scheduler/includes/signup.handler.php" method="post">
+        <form action="../includes/signup.handler.php" method="post">
             <div>
                 <label for="id-number">Your ID Number</label>
                 <input type="number" name="id-number" id="id-number" placeholder="21111111" required="">
@@ -100,7 +100,7 @@ if (is_logged_in()) {
             <button type="submit">Create an Account</button>
         </form>
         <p>
-            Already have an account? <a href="/DMMMSU_class_scheduler/index.php">Login here</a>
+            Already have an account? <a href="../index.php">Login here</a>
         </p>
         <?php check_for_signup_errors() ?>
     </div>

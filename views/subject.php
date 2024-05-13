@@ -7,7 +7,7 @@ require_once(APP_NAME . "includes/subject/subject_model.php");
 require_once(APP_NAME . "includes/subject/subject_view.php");
 
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>
@@ -172,7 +172,7 @@ if (!is_logged_in()) {
     <div class="container">
         <div class="form_container">
             <h2>Add Subject</h2>
-            <form action="../../DMMMSU_class_scheduler\includes\subject_handler.php" method="post">
+            <form action="../includes/subject_handler.php" method="post">
                 <div class="form-group">
                     <label for="subject-id">Subject ID:</label>
                     <input type="text" id="subject-id" name="subject_id" required>
@@ -276,11 +276,11 @@ if (!is_logged_in()) {
                         echo "<td>" . $subject['year_level'] . "</td>";
                         echo "<td>" . $subject['semester'] . "</td>";
                         echo "<td class='actions'>
-                                <form action='../../DMMMSU_class_scheduler\includes\subject_handler.php' method='post'>
+                                <form action='../includes/subject_handler.php' method='post'>
                                     <input type='text' name='subject_id' value=$subject_id hidden>
                                     <button class='delete' name='delete_subject'>Delete</button>
                                 </form>
-                                <form action='../../DMMMSU_class_scheduler/views/subject_update.php' method='get'>
+                                <form action='../views/subject_update.php' method='get'>
                                     <input type='text' name='subject_id' value=$subject_id hidden>
                                     <button class='update'>Update</button>
                                 </form>
@@ -327,7 +327,7 @@ if (!is_logged_in()) {
         });
         
         function redirectToDashboard() {
-            window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
+            window.location.href = '../views/dashboard.php';
         }
     </script>
 

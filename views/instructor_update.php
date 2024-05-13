@@ -8,7 +8,7 @@ require_once(APP_NAME . "includes/instructor/instructor_model.php");
 require_once(APP_NAME . "includes/instructor/instructor_view.php");
 
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>
@@ -85,7 +85,7 @@ if (!is_logged_in()) {
         }
     ?>
 
-    <form action="../../DMMMSU_class_scheduler\includes\instructor_handler.php" method="post">
+    <form action="../includes/instructor_handler.php" method="post">
         <div class="form-group">
             <label for="last-name">Instructor ID:</label>
             <input type="text" id="instructor-id" name="instructor_id" value="<?php echo $instructor['instructor_id']; ?>" required>

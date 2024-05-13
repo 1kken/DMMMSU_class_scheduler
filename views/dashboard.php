@@ -6,7 +6,7 @@ require_once(APP_NAME . "includes/dashboard_model.php");
 
 
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>

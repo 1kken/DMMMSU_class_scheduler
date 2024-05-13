@@ -36,7 +36,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_subject_instructor"])) {
 
     if ($errors) {
         $_SESSION["errors"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/subject_instructor.php");
+        header("LOCATION: ../views/subject_instructor.php");
         exit();
     } else {
         try {
@@ -44,7 +44,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["create_subject_instructor"])) {
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-        header("LOCATION: /DMMMSU_class_scheduler/views/subject_instructor.php");
+        header("LOCATION: ../views/subject_instructor.php");
         exit();
     }
 }
@@ -58,7 +58,7 @@ if(isset($_SESSION["user_id"]) && isset($_POST["delete_si"])){
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
-    header("LOCATION: /DMMMSU_class_scheduler/views/subject_instructor.php");
+    header("LOCATION: ../views/subject_instructor.php");
     exit();
 }
 
@@ -92,7 +92,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["update_subject_instructor"])) {
 
     if ($errors) {
         $_SESSION["errors"] = $errors;
-        header("LOCATION: /DMMMSU_class_scheduler/views/subject_instructor.php");
+        header("LOCATION: ../views/subject_instructor.php");
         exit();
     } else {
         try {
@@ -100,7 +100,7 @@ if (isset($_SESSION["user_id"]) && isset($_POST["update_subject_instructor"])) {
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-        header("LOCATION: /DMMMSU_class_scheduler/views/subject_instructor.php");
+        header("LOCATION: ../views/subject_instructor.php");
         exit();
     }
 }

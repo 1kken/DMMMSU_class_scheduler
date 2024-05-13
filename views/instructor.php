@@ -6,7 +6,7 @@ require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/instructor/instructor_model.php");
 require_once(APP_NAME . "includes/instructor/instructor_view.php");
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>
@@ -179,7 +179,7 @@ if (!is_logged_in()) {
     <div class="container">
         <div class="form_container">
             <h2>Create Instructor</h2>
-            <form action="../../DMMMSU_class_scheduler\includes\instructor_handler.php" method="post">
+            <form action="../includes/instructor_handler.php" method="post">
                 <div class="form-group">
                     <label for="instructor-id">Instructor ID:</label>
                     <input type="number" id="instructor-id" name="instructor_id" required>
@@ -239,11 +239,11 @@ if (!is_logged_in()) {
                         echo "<td>" . $instructor['middle_name'] . "</td>";
                         echo "<td>" . $instructor['email'] . "</td>";
                         echo "<td class='actions'>
-                                <form action='../../DMMMSU_class_scheduler\includes\instructor_handler.php' method='post'>
+                                <form action='../includes/instructor_handler.php' method='post'>
                                     <input type='text' name='instructor_id' value=$instructor_id hidden>
                                     <button class='delete' name='delete_instructor'>Delete</button>
                                 </form>
-                                <form action='../../DMMMSU_class_scheduler/views/instructor_update.php' method='get'>
+                                <form action='../views/instructor_update.php' method='get'>
                                     <input type='text' name='instructor_id' value=$instructor_id hidden>
                                     <button class='update'>Update</button>
                                 </form>
@@ -273,7 +273,7 @@ if (!is_logged_in()) {
         }
 
         function redirectToDashboard() {
-            window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
+            window.location.href = './dashboard.php';
         }
         document.addEventListener('DOMContentLoaded', () => {
             const firstNameInput = document.getElementById('first-name');

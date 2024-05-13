@@ -106,7 +106,7 @@ require_once(APP_NAME . "includes/room/room_view.php");
         }
         ?>
 
-        <form action="../../DMMMSU_class_scheduler\includes/room_handler.php" method="post">
+        <form action="../includes/room_handler.php" method="post">
             <div class="form-group">
                 <label for="room-id">Room ID:</label>
                 <input type="text" id="room-id" name="room_id" value="<?php echo $_GET['room_id']; ?>" required>

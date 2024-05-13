@@ -114,7 +114,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
         }
         ?>
         <h2>Update Schedule</h2>
-        <form action="../../DMMMSU_class_scheduler\includes\schedule_handler.php" method="post" id="forms">
+        <form action="../includes/schedule_handler.php" method="post" id="forms">
             <div class="form-group">
                 <label for="code">Code:</label>
                 <h1 id="code"><?php echo $code?></h1>
@@ -231,7 +231,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_update_jq.php?type=${type}&subject_id=${subject_id}&get_room=true`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_update_jq.php?type=${type}&subject_id=${subject_id}&get_room=true`, true);
                 xhr.send();
             }
             roomIdInput.addEventListener('change', getDays);
@@ -249,7 +249,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_update_jq.php?new_room_id=${room_id}&sy=${sy}&get_day=true`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_update_jq.php?new_room_id=${room_id}&sy=${sy}&get_day=true`, true);
                 xhr.send();
             }
             dayInput.addEventListener('change', getStartTimes);
@@ -268,7 +268,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/schedule_update_jq.php?new_room_id=${room_id}&sy=${sy}&day=${day}&get_start_time=true`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_update_jq.php?new_room_id=${room_id}&sy=${sy}&day=${day}&get_start_time=true`, true);
                 xhr.send();
             }
 

@@ -6,7 +6,7 @@ require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/report/report_model.php");
 require_once(APP_NAME . "includes/report/report_view.php");
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>
@@ -101,7 +101,7 @@ if (!is_logged_in()) {
 <body>
     <div class="container" id="student_form">
         <h1>Create Report Student</h1>
-        <form action="../../DMMMSU_class_scheduler\includes\report_handler.php" method="POST">
+        <form action="../includes/report_handler.php" method="POST">
             <div class="form-group">
                 <label for="report_id">Report by Student ID:</label>
                 <input type="text" id="student_id" name="student_id">
@@ -146,7 +146,7 @@ if (!is_logged_in()) {
     </div>
     <div class="container" id="instructor_form">
         <h1>Create Report Instructor</h1>
-        <form action="../../DMMMSU_class_scheduler\includes\instructor_report_handler.php" method="POST" id="instructor_form">
+        <form action="../includes/instructor_report_handler.php" method="POST" id="instructor_form">
             <div class="form-group">
                 <label for="report_id">Report by Instructor ID:</label>
                 <input type="text" id="instructor_id" name="instructor_id">
@@ -216,7 +216,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&get_sy=true`, true);
+                xhr.open("GET", `../includes/jqueries/reports_jq.php?student_id=${student_id}&get_sy=true`, true);
                 xhr.send();
             }
 
@@ -240,7 +240,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&sy=${sy}&get_section=true`, true);
+                xhr.open("GET", `../includes/jqueries/reports_jq.php?student_id=${student_id}&sy=${sy}&get_section=true`, true);
                 xhr.send();
             }
 
@@ -266,7 +266,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../../DMMMSU_class_scheduler/includes/jqueries/reports_jq.php?student_id=${student_id}&sy=${sy}&section=${section}&get_semester=true`, true);
+                xhr.open("GET", `../includes/jqueries/reports_jq.php?student_id=${student_id}&sy=${sy}&section=${section}&get_semester=true`, true);
                 xhr.send();
             }
 

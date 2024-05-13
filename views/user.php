@@ -7,7 +7,7 @@ require_once(APP_NAME . "includes/change_password/change_password_view.php");
 require_once(APP_NAME . "includes/change_password/change_password_model.php");
 
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>
@@ -106,7 +106,7 @@ if (!is_logged_in()) {
     <div class="container">
         <h1>Hello <?php echo get_full_name($pdo,$_SESSION["user_id"]); ?> </h1>
         <h2>Change Password</h2>
-        <form action="../../DMMMSU_class_scheduler/includes/change_password_handler.php" method="post">
+        <form action="../includes/change_password_handler.php" method="post">
             <div class="form-group">
                 <label for="new-password">New Password:</label>
                 <input type="password" id="new-password" name="new_password" required>
@@ -127,7 +127,7 @@ if (!is_logged_in()) {
                 <button type="submit" name="change_pass" class="btn-blue">Change Password</button>
             </div>
         </form>
-        <form action="../../DMMMSU_class_scheduler/includes/change_password_handler.php" method="post">
+        <form action="../includes/change_password_handler.php" method="post">
             <div class="button-group">
                 <button type="submit" name="log_out" class="btn-tomato">Log Out</button>
             </div>

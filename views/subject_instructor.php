@@ -6,7 +6,7 @@ require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/subject_instructor/subject_instructor_model.php");
 require_once(APP_NAME . "includes/subject_instructor/subject_instructor_view.php");
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>
@@ -144,7 +144,7 @@ if (!is_logged_in()) {
     <div class="container">
         <div class="form_container">
             <h2>Add Subject Instructor</h2>
-            <form action="../../DMMMSU_class_scheduler/includes/subject_instructor_handler.php" method="post">
+            <form action="../includes/subject_instructor_handler.php" method="post">
                 <div class="form-group">
                     <label for="subject">Subject Name:</label>
                     <select id="subject" name="subject_id" required>
@@ -199,12 +199,12 @@ if (!is_logged_in()) {
                         echo "<td>" . $subject_instructor['subject_id'] . "</td>";
                         echo "<td>" . $subject_instructor['instructor_name'] . "</td>";
                         echo "<td class='actions'>
-                                <form action='../../DMMMSU_class_scheduler/includes/subject_instructor_handler.php' method='post'>
+                                <form action='../includes/subject_instructor_handler.php' method='post'>
                                     <input type='hidden' name='si_id' value='" . $subject_instructor['si_id'] . "'>
                                     <input type='hidden' name='delete_si'>
                                     <button class='delete' name='delete_subject_instructor'>Delete</button>
                                 </form>
-                                <form action='../../DMMMSU_class_scheduler/views/subject_instructor_update.php' method='get'>
+                                <form action='../views/subject_instructor_update.php' method='get'>
                                     <input type='hidden' name='si_id' value='" . $subject_instructor['si_id'] . "'> 
                                     <button class='update'>Update</button>
                                 </form>
@@ -221,7 +221,7 @@ if (!is_logged_in()) {
     <script>
 
         function redirectToDashboard() {
-            window.location.href = '/DMMMSU_class_scheduler/views/dashboard.php';
+            window.location.href = '../views/dashboard.php';
         }
     </script>
 </body>

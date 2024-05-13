@@ -47,13 +47,13 @@
 
         if($errors){
             $_SESSION['subject_errors'] = $errors;
-            header("LOCATION: /DMMMSU_class_scheduler/views/subject.php");
+            header("LOCATION: ../views/subject.php");
             exit();
         }
        
         try {
             insert_subject($pdo, $subject_id, $descriptive_title, $lecture_units, $laboratory_units, $total_units, $priority,$year_level,$semester);
-            header("LOCATION: /DMMMSU_class_scheduler/views/subject.php");
+            header("LOCATION: ../views/subject.php");
             exit();
             
         } catch (PDOException $th) {
@@ -65,7 +65,7 @@
     if(isset($_POST['delete_subject']) && isset($_SESSION['user_id'])){
         try {
             delete_subject($pdo, $_POST['subject_id']);
-            header("LOCATION: /DMMMSU_class_scheduler/views/subject.php");
+            header("LOCATION: ../views/subject.php");
             exit();
         } catch (PDOException $th) {
             echo $th->getMessage();
@@ -116,13 +116,13 @@
 
         if($errors){
             $_SESSION['subject_errors'] = $errors;
-            header("LOCATION: /DMMMSU_class_scheduler/views/subject.php");
+            header("LOCATION: ../views/subject.php");
             exit();
         }
 
         try {
             update_subject($pdo, $subject_id, $descriptive_title, $lecture_units, $laboratory_units, $total_units, $priority,$old_subject_id,$year_level,$semester);
-            header("LOCATION: /DMMMSU_class_scheduler/views/subject.php");
+            header("LOCATION: ../views/subject.php");
             exit();
         } catch (PDOException $th) {
             echo $th->getMessage();

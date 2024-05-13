@@ -7,7 +7,7 @@ require_once(APP_NAME . "includes/student/student_model.php");
 require_once(APP_NAME . "includes/student/student_view.php");
 
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>
@@ -91,7 +91,7 @@ if (!is_logged_in()) {
         }
         ?>
         <h2>Update Student</h2>
-        <form action="../../DMMMSU_class_scheduler\includes\student_handler.php" method="post">
+        <form action="../includes/student_handler.php" method="post">
             <div class="form-group">
                 <label for="student-id">Student ID:</label>
                 <input type="text" id="student-id" name="student_id" value="<?php echo $student['student_id']; ?>" required>

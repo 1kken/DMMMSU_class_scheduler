@@ -7,7 +7,7 @@ require_once(APP_NAME . "includes/subject/subject_model.php");
 require_once(APP_NAME . "includes/subject/subject_view.php");
 
 if (!is_logged_in()) {
-    header("LOCATION: /DMMMSU_class_scheduler/index.php");
+    header("LOCATION: ../index.php");
     exit();
 }
 ?>
@@ -91,7 +91,7 @@ if (!is_logged_in()) {
             exit();
         }
             ?>
-            <form action="../../DMMMSU_class_scheduler\includes\subject_handler.php" method="post">
+            <form action="../includes/subject_handler.php" method="post">
                 <div class="form-group">
                     <label for="subject-id">Subject ID:</label>
                     <input type="text" id="subject-id" name="subject_id" value="<?php echo $subject['subject_id']; ?>">
