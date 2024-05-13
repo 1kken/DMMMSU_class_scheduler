@@ -70,53 +70,86 @@ if (!is_logged_in()) {
 </head>
 
 <body>
-<div class="container">
-    <h2>Update Instructor</h2>
-    <?php
-    if(!isset($_GET["instructor_id"])){
-        echo "Instructor ID not found.";
-        exit();
-    }
+    <div class="container">
+        <h2>Update Instructor</h2>
+        <?php
+        if (!isset($_GET["instructor_id"])) {
+            echo "Instructor ID not found.";
+            exit();
+        }
 
-    $instructor = get_instructor($pdo, $_GET["instructor_id"]);
-        if(!$instructor){
+        $instructor = get_instructor($pdo, $_GET["instructor_id"]);
+        if (!$instructor) {
             echo "Instructor not found.";
             exit();
         }
-    ?>
+        ?>
 
-    <form action="../includes/instructor_handler.php" method="post">
-        <div class="form-group">
-            <label for="last-name">Instructor ID:</label>
-            <input type="text" id="instructor-id" name="instructor_id" value="<?php echo $instructor['instructor_id']; ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="last-name">Last Name:</label>
-            <input type="text" id="last-name" name="last_name" value="<?php echo $instructor['last_name']; ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="first-name">First Name:</label>
-            <input type="text" id="first-name" name="first_name" value="<?php echo $instructor['first_name']; ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="middle-name">Middle Name:</label>
-            <input type="text" id="middle-name" name="middle_name" value="<?php echo $instructor['middle_name']; ?>">
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="<?php echo $instructor['email']; ?>" required>
-        </div>
-        <div class="form-group">
-            <input type="hidden" id="instructor-id" name="old_instructor_email" value="<?php echo $instructor["email"]; ?>">
-            <input type="hidden" id="instructor-id" name="old_instructor_id" value="<?php echo $_GET["instructor_id"]; ?>">
-            <input type="submit" name="update_instructor" value="Update Instructor">
-        </div>
-    </form>
-    <?php
+        <form action="../includes/instructor_handler.php" method="post">
+            <div class="form-group">
+                <label for="last-name">Instructor ID:</label>
+                <input type="text" id="instructor-id" name="instructor_id" value="<?php echo $instructor['instructor_id']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" name="last_name" value="<?php echo $instructor['last_name']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" name="first_name" value="<?php echo $instructor['first_name']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="middle-name">Middle Name:</label>
+                <input type="text" id="middle-name" name="middle_name" value="<?php echo $instructor['middle_name']; ?>">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="<?php echo $instructor['email']; ?>" required>
+            </div>
+            <div class="form-group">
+                <input type="hidden" id="instructor-id" name="old_instructor_email" value="<?php echo $instructor["email"]; ?>">
+                <input type="hidden" id="instructor-id" name="old_instructor_id" value="<?php echo $_GET["instructor_id"]; ?>">
+                <input type="submit" name="update_instructor" value="Update Instructor">
+            </div>
+        </form>
+        <?php
         check_update_errors();
-    ?>
-</div>
+        ?>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+                    const firstNameInput = document.getElementById('first-name');
+                    const lastNameInput = document.getElementById('last-name');
+                    const instructorIdInput = document.getElementById('instructor-id');
+                    const emailInput = document.getElementById('email');
 
+                    firstNameInput.addEventListener('input', generateEmail);
+                    lastNameInput.addEventListener('input', generateEmail);
+                    instructorIdInput.addEventListener('input', generateEmail);
+
+                    function generateEmail() {
+                        const firstName = firstNameInput.value.trim().toLowerCase();
+                        const lastName = lastNameInput.value.trim().replace(/\s/g, '').toLowerCase();
+                        const instructorId = instructorIdInput.value.trim().toLowerCase();
+                        let nameExploded = firstName.split(" ");
+                        let generatedEmail = nameExploded.map(name => name[0]).join("");
+
+                        // Add the last name
+                        generatedEmail += lastName;
+                        // Add the last four digits of instructorId
+                        generatedEmail += instructorId.substring(4, 8);
+                        // Add the suffix email format
+                        generatedEmail += "@instructor.dmmmsu.edu.ph";
+                        // Check if all inputs have values
+                        if (firstName && lastName && instructorId) {
+                            ;
+                            emailInput.value = generatedEmail;
+                        } else {
+                            emailInput.value = ''; // Clear the email if any input is empty
+                        }
+                    }
+        });
+    </script>
 </body>
 
 </html>
