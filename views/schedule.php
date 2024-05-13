@@ -177,10 +177,12 @@ if (!is_logged_in()) {
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         select {
             text-transform: capitalize;
         }
-        td{
+
+        td {
             text-transform: capitalize;
         }
     </style>
@@ -588,11 +590,24 @@ if (!is_logged_in()) {
                 xhr.open("GET", `../includes/jqueries/schedule_jq.php?start_time=${start_time}&get_end_time=true`, true);
                 xhr.send();
             }
+
+
         });
 
-
         function search() {
-            console.log("search");
+            var code_title = document.getElementById("search-input").value;
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById("schedule-id").innerHTML = xhr.responseText;
+                    } else {
+                        document.getElementById("schedule-id").innerHTML = "No schedule Found" + xhr.status;
+                    }
+                }
+            };
+            xhr.open("GET", "../includes/jqueries/searchSchedule.php?code_desc=" + encodeURIComponent(code_title), true);
+            xhr.send();
         }
 
         //reset if go back
