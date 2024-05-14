@@ -558,7 +558,6 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             document.getElementById("start-time").innerHTML = '';
                             document.getElementById("start-time").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -572,6 +571,7 @@ if (!is_logged_in()) {
             startTimeInput.addEventListener('input', getEndTime);
 
             function getEndTime() {
+                const instructor_id = document.getElementById('instructor-id').value;
                 const room_id = document.getElementById('room-id').value;
                 const sy = processSy(syInput.value);
                 const day = document.getElementById('day').value;
@@ -582,13 +582,13 @@ if (!is_logged_in()) {
                         if (xhr.status === 200) {
                             document.getElementById("end-time").innerHTML = '';
                             document.getElementById("end-time").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
                     }
                 };
-                xhr.open("GET", `../includes/jqueries/schedule_jq.php?start_time=${start_time}&get_end_time=true`, true);
+                const semester = document.getElementById('semester').value;
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&semester=${semester}&instructor_id=${instructor_id}&start_time=${start_time}&get_end_time=true`, true);
                 xhr.send();
             }
 

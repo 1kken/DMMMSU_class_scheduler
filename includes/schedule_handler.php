@@ -78,7 +78,7 @@ if (isset($_POST["delete_schedule"]) && isset($_SESSION["user_id"])) {
 //UPDATE ===========================================================================
 if (isset($_POST["update_schedule"]) && isset($_SESSION["user_id"])) {
     //old schedule
-    $old_code = $_POST["code"];
+    $old_code = $_POST["old_code"];
     $old_schedule_id = $_POST["schedule_id"];
     $old_room_id = $_POST["room_id"];
     $old_instructor_id = $_POST["instructor_id"];
@@ -98,7 +98,7 @@ if (isset($_POST["update_schedule"]) && isset($_SESSION["user_id"])) {
     $end_time = $_POST["new_end_time"];
 
     $errors = [];
-    if (empty($room_id) || empty($day) || empty($start_time) || empty($end_time)){
+    if (empty($room_id) || empty($day) || empty($start_time) || empty($end_time)) {
         $errors["missing_fields"] = "All fields are required.";
     }
     //check if same value
@@ -115,15 +115,19 @@ if (isset($_POST["update_schedule"]) && isset($_SESSION["user_id"])) {
 
     //check fo  room conflicts
     $stmt = $pdo->prepare("SELECT start_time,end_time FROM schedule WHERE room_id = :room_id AND day = :day AND start_time = :start_time AND end_time = :end_time AND semester = :semester");
-    $stmt->execute(['room_id' => $room_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time,'semester' => $old_semester]);
+    $stmt->execute(['room_id' => $room_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'semester' => $old_semester]);
     if ($stmt->rowCount() > 0) {
         $errors["room_conflict"] = "Room is already taken.";
     }
     //check for instructor conflict
-    $stmt = $pdo->prepare("SELECT * FROM schedule WHERE instructor_id = :instructor_id AND day = :day AND ((start_time <= :start_time AND end_time >= :start_time) OR (start_time <= :end_time AND end_time >= :end_time))");
-    $stmt->execute(['instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time]);
-    if ($stmt->rowCount() > 0) {
-        $errors["instructor_conflict"] = "Instructor is already taken.";
+    $stmt = "SELECT * FROM `schedule` WHERE instructor_id = :instructor_id AND day = :day AND start_time != :start_time AND end_time != :end_time AND semester = :semester";
+    $sql = $pdo->prepare($stmt);
+    $sql->execute(['instructor_id' => $old_instructor_id, 'day' => $day, 'start_time' => $old_start_time, 'end_time' => $old_end_time, 'semester' => $old_semester]);
+    $result = $sql->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($result as $row) {
+        if ($row['start_time'] <= $start_time && $row['end_time'] >= $start_time) {
+            $errors["instructor_conflict"] = "Instructor is already taken.";
+        }
     }
 
     if ($errors) {
@@ -136,10 +140,9 @@ if (isset($_POST["update_schedule"]) && isset($_SESSION["user_id"])) {
     try {
         //update schedule
         $stmt = $pdo->prepare("UPDATE schedule SET code = :code, room_id = :room_id, instructor_id = :instructor_id, day = :day, start_time = :start_time, end_time = :end_time, subject_id = :subject_id, section_id = :section_id, sy = :sy WHERE code = :old_schedule AND room_id = :old_room_id AND instructor_id = :old_instructor_id AND day = :old_day AND start_time = :old_start_time AND end_time = :old_end_time AND subject_id = :old_subject_id AND section_id = :old_section_id AND sy = :old_sy");
-        $stmt->execute(['code' => $code, 'room_id' => $room_id, 'instructor_id' => $instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $subject_id, 'section_id' => $section_id, 'sy' => $sy, 'old_schedule' => $old_schedule, 'old_room_id' => $old_room_id, 'old_instructor_id' => $old_instructor_id, 'old_day' => $old_day, 'old_start_time' => $old_start_time, 'old_end_time' => $old_end_time, 'old_subject_id' => $old_subject_id, 'old_section_id' => $old_section_id, 'old_sy' => $old_sy]);
+        $stmt->execute(['code' => $old_code, 'room_id' => $room_id, 'instructor_id' => $old_instructor_id, 'day' => $day, 'start_time' => $start_time, 'end_time' => $end_time, 'subject_id' => $old_subject_id, 'section_id' => $old_section_id, 'sy' => $old_sy, 'old_schedule' => $old_code, 'old_room_id' => $old_room_id, 'old_instructor_id' => $old_instructor_id, 'old_day' => $old_day, 'old_start_time' => $old_start_time, 'old_end_time' => $old_end_time, 'old_subject_id' => $old_subject_id, 'old_section_id' => $old_section_id, 'old_sy' => $old_sy]);
     } catch (PDOException $e) {
         echo $e->getMessage();
-        exit();
     }
     header("LOCATION: ../views/schedule.php");
     exit();

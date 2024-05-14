@@ -1,9 +1,4 @@
 DELIMITER $$
-
-USE `class_schedule`$$
-
-DROP TRIGGER /*!50032 IF EXISTS */ `insert_unit_counter_trigger`$$
-
 CREATE
     /*!50017 DEFINER = 'root'@'localhost' */
     TRIGGER `insert_unit_counter_trigger` AFTER INSERT ON `schedule` 

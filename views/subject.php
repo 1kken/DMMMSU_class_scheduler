@@ -252,9 +252,9 @@ if (!is_logged_in()) {
                         <th>Laboratory Units</th>
                         <th>Total Units</th>
                         <th>Priority</th>
-                        <th>Actions</th>
                         <th>Year level</th>
                         <th>Semester</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="subject-show">

@@ -7,11 +7,12 @@ if (isset($_GET['type']) && isset($_GET['subject_id']) &&  isset($_GET['get_room
     $subject_id = $_GET['subject_id'];
     $get_room = $_GET['get_room'];
     $stmt = $pdo->prepare("SELECT DISTINCT rooms.room_id 
-FROM rooms 
-JOIN SUBJECT ON rooms.priority = subject.priority 
-JOIN SCHEDULE ON schedule.subject_id = subject.subject_id 
-WHERE subject.subject_id = :subject_id AND rooms.room_type = schedule.type;");
+                            FROM rooms 
+                            JOIN SUBJECT ON rooms.priority = subject.priority 
+                            JOIN SCHEDULE ON schedule.subject_id = subject.subject_id 
+                            WHERE subject.subject_id = :subject_id AND rooms.room_type = :type");
     $stmt->bindParam(':subject_id', $subject_id);
+    $stmt->bindParam(':type', $type);
     $stmt->execute();
     $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -155,7 +156,7 @@ if (isset($_GET['room_id']) && isset($_GET['sy']) && isset($_GET['get_start_time
 
 if(isset($_GET['start_time']) && isset($_GET['get_end_time'])){
     //get the end time
-    $start_time = $_GET['new_start_time'];
+    $start_time = $_GET['start_time'];
     $start_time = strtotime($start_time) + 1800;
     $end_time = strtotime('17:00:00');
     while($start_time <= $end_time){

@@ -118,7 +118,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
             <div class="form-group">
                 <label for="code">Code:</label>
                 <h1 id="code"><?php echo $code?></h1>
-                <input type="text" id="code" name="code" readonly value=<?php echo $code ?> required hidden>
+                <input type="text" id="code" name="old_code" readonly value=<?php echo $code ?> required hidden>
                 <input type="text" id="schedule_id" name ="schedule_id" value="<?php echo $schedule_id ?>" hidden>
                 <input type="text" id="room_id" name="room_id" value="<?php echo $room_id ?>" hidden>
                 <input type="text" id="instructor_id" name="instructor_id" value="<?php echo $instructor_id ?>" hidden>
@@ -205,6 +205,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                 </div>
                 <input type="submit" value="Update Schedule" name="update_schedule">
         </form>
+        <?php check_schedule_errors(); ?>
     </div>
 
     <script>
@@ -225,7 +226,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                         if (xhr.status === 200) {
                             document.getElementById("new_room_id").innerHTML = '';
                             document.getElementById("new_room_id").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText)
+                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -252,6 +253,7 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                 xhr.open("GET", `../includes/jqueries/schedule_update_jq.php?new_room_id=${room_id}&sy=${sy}&get_day=true`, true);
                 xhr.send();
             }
+
             dayInput.addEventListener('change', getStartTimes);
             function getStartTimes() {
                 const room_id = document.getElementById('new_room_id').value;
@@ -269,6 +271,28 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                     }
                 };
                 xhr.open("GET", `../includes/jqueries/schedule_update_jq.php?new_room_id=${room_id}&sy=${sy}&day=${day}&get_start_time=true`, true);
+                xhr.send();
+            }
+
+            startTimeInput.addEventListener('change', getEndTimes);
+            function getEndTimes() {
+                const room_id = document.getElementById('new_room_id').value;
+                const sy = document.getElementById('sy').value;
+                const day = document.getElementById('new_day').value;
+                const start_time = document.getElementById('new_start_time').value;
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById("new_end_time").innerHTML = '';
+                            document.getElementById("new_end_time").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../includes/jqueries/schedule_update_jq.php?start_time=${start_time}&get_end_time=true`, true);
                 xhr.send();
             }
 
