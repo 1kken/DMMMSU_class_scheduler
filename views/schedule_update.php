@@ -117,13 +117,13 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
         <form action="../includes/schedule_handler.php" method="post" id="forms">
             <div class="form-group">
                 <label for="code">Code:</label>
-                <h1 id="code"><?php echo $code?></h1>
+                <h1 id="code"><?php echo $code ?></h1>
                 <input type="text" id="code" name="old_code" readonly value=<?php echo $code ?> required hidden>
-                <input type="text" id="schedule_id" name ="schedule_id" value="<?php echo $schedule_id ?>" hidden>
+                <input type="text" id="schedule_id" name="schedule_id" value="<?php echo $schedule_id ?>" hidden>
                 <input type="text" id="room_id" name="room_id" value="<?php echo $room_id ?>" hidden>
                 <input type="text" id="instructor_id" name="instructor_id" value="<?php echo $instructor_id ?>" hidden>
                 <input type="text" id="day" name="day" value="<?php echo $day ?>" hidden>
-                <input type="text" id="start_time" name ="start_time" value="<?php echo $start_time ?>" hidden>
+                <input type="text" id="start_time" name="start_time" value="<?php echo $start_time ?>" hidden>
                 <input type="text" id="end_time" name="end_time" value="<?php echo $end_time ?>" hidden>
                 <input type="text" id="subject_id" name="subject_id" value="<?php echo $subject_id ?>" hidden>
                 <input type="text" id="section_id" name="section_id" value="<?php echo $section_id ?>" hidden>
@@ -217,16 +217,16 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
             const syInput = document.getElementById('new_sy');
 
             getRooms();
-            function getRooms() { 
+
+            function getRooms() {
                 const type = document.getElementById('type').value;
-                const subject_id = document.getElementById('subject_id').value; 
+                const subject_id = document.getElementById('subject_id').value;
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             document.getElementById("new_room_id").innerHTML = '';
                             document.getElementById("new_room_id").innerHTML = xhr.responseText;
-                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
@@ -235,7 +235,9 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                 xhr.open("GET", `../includes/jqueries/schedule_update_jq.php?type=${type}&subject_id=${subject_id}&get_room=true`, true);
                 xhr.send();
             }
+
             roomIdInput.addEventListener('change', getDays);
+
             function getDays() {
                 const room_id = document.getElementById('new_room_id').value;
                 const sy = document.getElementById('sy').value;
@@ -254,11 +256,21 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                 xhr.send();
             }
 
+            function processSy(syValue) {
+                const syParts = syValue.split("-");
+                if (syParts.length === 2) {
+                    return syParts.map(sy => sy.slice(2, 4)).join("");
+                }
+                return null;
+            }
+
             dayInput.addEventListener('change', getStartTimes);
+
             function getStartTimes() {
                 const room_id = document.getElementById('new_room_id').value;
-                const sy = document.getElementById('sy').value;
+                const sy = processSy(document.getElementById('new_sy').value);
                 const day = document.getElementById('new_day').value;
+                const instructor_id = document.getElementById('instructor_id').value;
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -270,11 +282,14 @@ require_once(APP_NAME . "includes/schedule/schedule_view.php");
                         }
                     }
                 };
-                xhr.open("GET", `../includes/jqueries/schedule_update_jq.php?new_room_id=${room_id}&sy=${sy}&day=${day}&get_start_time=true`, true);
+                const semester = document.getElementById('semester').value;
+                console.log(`../includes/jqueries/schedule_update_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&instructor_id=${instructor_id}&semester=${semester}&get_start_time=true`)
+                xhr.open("GET", `../includes/jqueries/schedule_update_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&instructor_id=${instructor_id}&semester=${semester}&get_start_time=true`, true);
                 xhr.send();
             }
 
             startTimeInput.addEventListener('change', getEndTimes);
+
             function getEndTimes() {
                 const room_id = document.getElementById('new_room_id').value;
                 const sy = document.getElementById('sy').value;

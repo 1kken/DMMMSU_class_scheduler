@@ -61,53 +61,7 @@ if (isset($_GET['new_room_id']) && isset($_GET['get_day']) && isset($_GET['sy'])
     }
 }
 
-if (isset($_GET['new_room_id']) && isset($_GET['sy']) && isset($_GET['get_start_time'])) {
-    //get the schedule 
-    $room_id = $_GET['new_room_id'];
-    $sy = $_GET['sy'];
-    $day = $_GET['new_day'];
-    $semester = $_GET['semester'];
-    $stmt = $pdo->prepare('SELECT start_time,end_time FROM schedule WHERE room_id = :room_id AND day = :day AND semester = :semester AND code LIKE :sy');
-    $stmt->execute(['room_id' => $room_id, 'sy' => "%$sy", 'day' => $day, 'semester' => $semester]);
-    $schedules = $stmt->fetchAll();
-
-    $availableSlots0800to1600 = [];
-
-    // Loop from 8:00 to 16:00 and check availability
-    $currTime = strtotime('08:00:00');
-    while ($currTime <= strtotime('16:00:00')) {
-        $desiredStartTime = date('H:i:s', $currTime);
-        $display_time = date('h:i A', $currTime);
-
-        $slotAvailable = true;
-        foreach ($schedules as $slot) {
-            $startTime = strtotime($slot['start_time']);
-            $endTime = strtotime($slot['end_time']);
-
-            if ($startTime <= $currTime && $endTime > $currTime) {
-                $slotAvailable = false;
-                break; // No need to continue checking if one slot overlaps
-            }
-        }
-
-        if ($slotAvailable) {
-            $availableSlots0800to1600[] = ['value' => $desiredStartTime, 'display' => $display_time];
-        }
-
-        $currTime += 1800; // Move to the next 30-minute slot
-    }
-    if($availableSlots0800to1600 == null){
-        echo "<option disabled selected value> -- no available time -- </option>";
-        exit();
-    }
-
-    //display using option
-    echo "<option disabled selected value> -- select an option -- </option>";
-    foreach ($availableSlots0800to1600 as $time) {
-        echo "<option value='" . $time['value'] . "'>" . $time['display'] . "</option>";
-    }
-}
-if (isset($_GET['room_id']) && isset($_GET['sy']) && isset($_GET['get_start_time'])) {
+if (isset($_GET['room_id']) && isset($_GET['sy']) &&isset($_GET['day']) && isset($_GET['semester']) && isset($_GET['instructor_id']) && isset($_GET['get_start_time'])) {
     //get the schedule 
     $room_id = $_GET['room_id'];
     $sy = $_GET['sy'];
@@ -117,6 +71,9 @@ if (isset($_GET['room_id']) && isset($_GET['sy']) && isset($_GET['get_start_time
     $stmt->execute(['room_id' => $room_id, 'sy' => "%$sy", 'day' => $day, 'semester' => $semester]);
     $schedules = $stmt->fetchAll();
 
+    if($schedules == null){
+        echo "<option disabled selected value> -- no available time -- </option>";
+    }
     $availableSlots0800to1600 = [];
 
     // Loop from 8:00 to 16:00 and check availability
