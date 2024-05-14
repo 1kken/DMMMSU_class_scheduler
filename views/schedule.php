@@ -551,6 +551,7 @@ if (!is_logged_in()) {
                 const sy = processSy(syInput.value);
                 const day = document.getElementById('day').value;
                 const semester = document.getElementById('semester').value;
+                const instructor_id = document.getElementById('instructor-id').value;
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -563,7 +564,7 @@ if (!is_logged_in()) {
                         }
                     }
                 };
-                xhr.open("GET", `../includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&semester=${semester}&get_start_time=true`, true);
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?room_id=${room_id}&sy=${sy}&day=${day}&semester=${semester}&instructor_id=${instructor_id}&get_start_time=true`, true);
                 xhr.send();
             }
 
