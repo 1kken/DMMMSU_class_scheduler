@@ -52,6 +52,7 @@
         }
        
         try {
+            $subject_id = strtoupper($subject_id);
             insert_subject($pdo, $subject_id, $descriptive_title, $lecture_units, $laboratory_units, $total_units, $priority,$year_level,$semester);
             header("LOCATION: ../views/subject.php");
             exit();
@@ -119,8 +120,8 @@
             header("LOCATION: ../views/subject.php");
             exit();
         }
-
         try {
+            $subject_id = strtoupper($subject_id);
             update_subject($pdo, $subject_id, $descriptive_title, $lecture_units, $laboratory_units, $total_units, $priority,$old_subject_id,$year_level,$semester);
             header("LOCATION: ../views/subject.php");
             exit();
