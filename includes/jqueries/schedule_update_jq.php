@@ -62,18 +62,22 @@ if (isset($_GET['new_room_id']) && isset($_GET['get_day']) && isset($_GET['sy'])
 }
 
 if (isset($_GET['room_id']) && isset($_GET['sy']) &&isset($_GET['day']) && isset($_GET['semester']) && isset($_GET['instructor_id']) && isset($_GET['get_start_time'])) {
-    //get the schedule 
     $room_id = $_GET['room_id'];
     $sy = $_GET['sy'];
     $day = $_GET['day'];
     $semester = $_GET['semester'];
+    $instructor_id = $_GET['instructor_id'];
+
+    //get the schedule 
     $stmt = $pdo->prepare('SELECT start_time,end_time FROM schedule WHERE room_id = :room_id AND day = :day AND semester = :semester AND code LIKE :sy');
     $stmt->execute(['room_id' => $room_id, 'sy' => "%$sy", 'day' => $day, 'semester' => $semester]);
     $schedules = $stmt->fetchAll();
 
-    if($schedules == null){
-        echo "<option disabled selected value> -- no available time -- </option>";
-    }
+    //fetch the schedule where instructor is teaching
+    $stmt = $pdo->prepare('SELECT start_time,end_time FROM schedule WHERE instructor_id = :instructor_id AND day = :day AND semester = :semester AND code LIKE :sy');
+    $stmt->execute(['instructor_id' => $instructor_id, 'sy' => "%$sy", 'day' => $day, 'semester' => $semester]);
+    $instructor_schedules = $stmt->fetchAll();
+
     $availableSlots0800to1600 = [];
 
     // Loop from 8:00 to 16:00 and check availability
@@ -93,13 +97,22 @@ if (isset($_GET['room_id']) && isset($_GET['sy']) &&isset($_GET['day']) && isset
             }
         }
 
+        foreach ($instructor_schedules as $slot) {
+            $startTime = strtotime($slot['start_time']);
+            $endTime = strtotime($slot['end_time']);
+            if ($startTime <= $currTime && $endTime > $currTime) {
+                $slotAvailable = false;
+                break; // No need to continue checking if one slot overlaps
+            }
+        }
+
         if ($slotAvailable) {
             $availableSlots0800to1600[] = ['value' => $desiredStartTime, 'display' => $display_time];
         }
 
         $currTime += 1800; // Move to the next 30-minute slot
     }
-    if($availableSlots0800to1600 == null){
+    if ($availableSlots0800to1600 == null) {
         echo "<option disabled selected value> -- no available time -- </option>";
         exit();
     }

@@ -60,10 +60,12 @@ if (isset($_GET['subject_id']) && isset($_GET['type']) && isset($_GET['section_i
         echo "<option disabled selected value> -- no available schedule -- </option>";
     }
 }
-if (isset($_GET['type']) && isset($_GET['get_room'])) {
+if (isset($_GET['type']) && isset($_GET['subject_id']) && isset($_GET['get_room'])) {
     //get the room where the type of it correspond
-    $stmt = $pdo->prepare('SELECT * FROM rooms WHERE room_type = :type');
-    $stmt->execute(['type' => $_GET['type']]);
+    $stmt = $pdo->prepare('SELECT rooms.room_id FROM rooms 
+                            JOIN `subject` ON subject.priority = rooms.priority
+                            WHERE subject.subject_id = :subject_id AND room_type = :type;');
+    $stmt->execute(['type' => $_GET['type'], 'subject_id' => $_GET['subject_id']]);
     $rooms = $stmt->fetchAll();
     if ($rooms == null) {
         echo "<option disabled selected value> -- no available room -- </option>";
@@ -196,12 +198,6 @@ if (isset($_GET['room_id']) && isset($_GET['sy']) && isset($_GET['day']) && isse
     $stmt->execute(['instructor_id' => $instructor_id, 'sy' => "%$sy", 'day' => $day, 'semester' => $semester]);
     $instructor_schedules = $stmt->fetchAll();
 
-    if($schedules == null){
-        echo "<option disabled selected value> -- no available time  -- </option>";
-    }
-    if($instructor_schedules == null){
-        echo "<option disabled selected value> -- no available time -- </option>";
-    }
     $availableSlots0800to1600 = [];
 
     // Loop from 8:00 to 16:00 and check availability

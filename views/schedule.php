@@ -506,18 +506,21 @@ if (!is_logged_in()) {
 
             function getRoom() {
                 const type = document.getElementById('type').value;
+                const subject_id = document.getElementById('subject-id').value;
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             document.getElementById("room-id").innerHTML = '';
                             document.getElementById("room-id").innerHTML = xhr.responseText;
+                            console.log(xhr.responseText);
                         } else {
                             console.log("There was a problem with the request.");
                         }
                     }
                 };
-                xhr.open("GET", `../includes/jqueries/schedule_jq.php?type=${type}&get_room=true`, true);
+                console.log(`../includes/jqueries/schedule_jq.php?type=${type}&subject_id=${subject_id}&get_room=true`);
+                xhr.open("GET", `../includes/jqueries/schedule_jq.php?type=${type}&subject_id=${subject_id}&get_room=true`, true);
                 xhr.send();
             }
 
