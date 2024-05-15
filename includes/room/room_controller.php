@@ -11,7 +11,7 @@ function is_room_id_taken(object $pdo, string $room_id)
 
 function is_room_id_valid(string $room_id)
 {
-    return preg_match('/^(CLR|LR)\d{3}$/', $room_id);
+    return preg_match('/[A-Z]+[0-9]+/', $room_id);
 }
 
 function is_room_type_valid(string $room_type)
