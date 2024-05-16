@@ -151,7 +151,7 @@ if(isset($_POST['section']) && isset($_POST['semester']) && isset($_POST['sy']) 
             function get_schedules_based_on_time($pdo, $time)
             {
                 $sql = "SELECT subject.descriptive_title,schedule.day,schedule.start_time,schedule.end_time 
-                FROM SCHEDULE JOIN SUBJECT ON schedule.subject_id = subject.subject_id WHERE start_time =:time
+                FROM schedule JOIN SUBJECT ON schedule.subject_id = subject.subject_id WHERE start_time =:time
                 AND section_id = :section_id AND schedule.semester = :semester AND sy =:sy;";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute(['time' => $time, 'section_id' => $_POST['section'], 'semester' => $_POST['semester'], 'sy' => $_POST['sy']]);

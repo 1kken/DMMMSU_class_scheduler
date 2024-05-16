@@ -155,7 +155,7 @@ if (isset($_POST['instructor_id']) && isset($_POST['sy_instructor']) && isset($_
                     $section_id = $_POST['section_instructor'];
                     $semester = $_POST['semester_instructor'];
                     $sql = "SELECT subject.descriptive_title,schedule.day,schedule.start_time,schedule.end_time 
-                FROM SCHEDULE JOIN SUBJECT ON schedule.subject_id = subject.subject_id WHERE start_time =:time
+                FROM schedule JOIN SUBJECT ON schedule.subject_id = subject.subject_id WHERE start_time =:time
                 AND section_id = :section_id AND schedule.semester = :semester AND sy =:sy AND instructor_id = :instructor_id;";
                     $stmt = $pdo->prepare($sql);
                     $stmt->execute(['time' => $time, 'section_id' => $section_id, 'semester' => $semester, 'sy' => $sy, 'instructor_id' => $instructor_id]);

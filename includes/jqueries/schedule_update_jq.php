@@ -9,7 +9,7 @@ if (isset($_GET['type']) && isset($_GET['subject_id']) &&  isset($_GET['get_room
     $stmt = $pdo->prepare("SELECT DISTINCT rooms.room_id 
                             FROM rooms 
                             JOIN SUBJECT ON rooms.priority = subject.priority 
-                            JOIN SCHEDULE ON schedule.subject_id = subject.subject_id 
+                            JOIN schedule ON schedule.subject_id = subject.subject_id 
                             WHERE subject.subject_id = :subject_id AND rooms.room_type = :type");
     $stmt->bindParam(':subject_id', $subject_id);
     $stmt->bindParam(':type', $type);
