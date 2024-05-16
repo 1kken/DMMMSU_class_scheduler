@@ -200,7 +200,7 @@ if (!is_logged_in()) {
                     <input type="text" id="code" name="code" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="section">Section:</label>
+                    <label for="section-id">Section:</label>
                     <select id="section-id" name="section_id" required>
                         <?php
                         $sections = get_section_name_id($pdo);
@@ -212,7 +212,7 @@ if (!is_logged_in()) {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="section">Semester:</label>
+                    <label for="semester">Semester:</label>
                     <select id="semester" name="semester" required disabled>
                         <option disabled selected value> -- select an option -- </option>
                         <option value="1">First Semester</option>
@@ -220,7 +220,7 @@ if (!is_logged_in()) {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="subject">Subject:</label>
+                    <label for="subject-id">Subject:</label>
                     <select id="subject-id" name="subject_id" required disabled>
                         <?php
                         $subjects = get_subject_name_id($pdo);

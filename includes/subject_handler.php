@@ -53,6 +53,7 @@
        
         try {
             $subject_id = strtoupper($subject_id);
+            $subject_id = str_replace(' ', '', $subject_id);
             insert_subject($pdo, $subject_id, $descriptive_title, $lecture_units, $laboratory_units, $total_units, $priority,$year_level,$semester);
             header("LOCATION: ../views/subject.php");
             exit();
