@@ -186,14 +186,14 @@ if (!is_logged_in()) {
     </div>
         <div class="container" id="room_form">
         <h1>Create Report Rooms</h1>
-        <form action="../includes/instructor_report_handler.php" method="POST" id="instructor_form">
+        <form action="../includes/room_report_handler.php" method="POST" id="instructor_form">
             <div class="separator">
                 <h1>Filter</h1>
             </div>
             <div class="form-group">
                 <label for="room_id">Room ID:</label>
                 <select id="room_id" name="room_id">
-                    <option selected value disabled> -- select an option -- </option>;
+                    <option selected value > -- select an option -- </option>;
                     <?php
                     $rooms = get_rooms($pdo);
                     foreach ($rooms as $room) {
@@ -424,9 +424,10 @@ if (!is_logged_in()) {
 
 
             //Disable
+            const room_form = document.getElementById('room_form');
             studentIdInput.addEventListener('input', toggleReadOnly);
             instructorIdInput.addEventListener('input', toggleReadOnly);
-
+            roomSelect.addEventListener('input', toggleReadOnly);
             function toggleReadOnly() {
                 const student_form = document.getElementById('student_form');
                 const instructor_form = document.getElementById('instructor_form');
@@ -435,8 +436,10 @@ if (!is_logged_in()) {
                 const semesterSelect = document.getElementById('semester');
                 const hasStudentIdValue = studentIdInput.value.trim() !== '';
                 const hasInstructorIdValue = instructorIdInput.value.trim() !== '';
-                student_form.hidden = hasInstructorIdValue;
-                instructor_form.hidden = hasStudentIdValue;
+                const roomSelect = document.getElementById('room_id').value.trim() !== '';
+                student_form.hidden = hasInstructorIdValue ||   roomSelect; 
+                instructor_form.hidden = hasStudentIdValue || roomSelect;
+                room_form.hidden = hasStudentIdValue || hasInstructorIdValue;
             }
 
             // Initial call to set initial state
