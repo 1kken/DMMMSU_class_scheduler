@@ -28,3 +28,11 @@
         return $stmt->fetch();
     }
 
+    function get_rooms($pdo){
+        $sql = "SELECT room_id FROM rooms";
+        $sql = $pdo->prepare($sql);
+        $sql->execute();
+        $sql = $sql->fetchAll(PDO::FETCH_ASSOC);
+        return $sql;
+    }
+

@@ -63,7 +63,7 @@ if (isset($_GET['subject_id']) && isset($_GET['type']) && isset($_GET['section_i
 if (isset($_GET['type']) && isset($_GET['subject_id']) && isset($_GET['get_room'])) {
     //get the room where the type of it correspond
     $stmt = $pdo->prepare('SELECT rooms.room_id FROM rooms 
-                            JOIN `subject` ON subject.priority = rooms.priority
+                            JOIN `subject` ON rooms.priority <=  subject.priority
                             WHERE subject.subject_id = :subject_id AND room_type = :type;');
     $stmt->execute(['type' => $_GET['type'], 'subject_id' => $_GET['subject_id']]);
     $rooms = $stmt->fetchAll();

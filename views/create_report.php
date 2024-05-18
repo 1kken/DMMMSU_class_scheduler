@@ -30,7 +30,8 @@ if (!is_logged_in()) {
         }
 
         .container {
-            width: 80%;
+            width: 30%;
+            height: 600px;
             max-width: 600px;
             background-color: #fff;
             border-radius: 5px;
@@ -182,7 +183,41 @@ if (!is_logged_in()) {
             </div>
             <input type="submit" value="Generate Report">
         </form>
-
+    </div>
+        <div class="container" id="room_form">
+        <h1>Create Report Rooms</h1>
+        <form action="../includes/instructor_report_handler.php" method="POST" id="instructor_form">
+            <div class="separator">
+                <h1>Filter</h1>
+            </div>
+            <div class="form-group">
+                <label for="room_id">Room ID:</label>
+                <select id="room_id" name="room_id">
+                    <option selected value disabled> -- select an option -- </option>;
+                    <?php
+                    $rooms = get_rooms($pdo);
+                    foreach ($rooms as $room) {
+                        echo "<option value='{$room['room_id']}'>{$room['room_id']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sy_room">School Year:</label>
+                <select id="sy_room" name="sy_room" disabled>
+                    <option selected value disabled> -- select an option -- </option>;
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="semester">Semester:</label>
+                <select id="semester_room" name="semester_room" disabled>
+                    <option selected value disabled> -- select an option -- </option>;
+                    <option value="1">First Semester</option>
+                    <option value="2">Second Semester</option>
+                </select>
+            </div>
+            <input type="submit" value="Generate Report">
+        </form>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -338,6 +373,54 @@ if (!is_logged_in()) {
                 xhr.send();
             }
 
+            //room
+            const roomSelect = document.getElementById('room_id');
+            const sySelect = document.getElementById('sy_room');
+            const semesterSelect_room = document.getElementById('semester_room');
+
+            roomSelect.addEventListener('input', getSchoolYearsRoom);
+            function getSchoolYearsRoom() {
+                if (roomSelect.value.trim() === '') {
+                    return;
+                }
+                const room_id = roomSelect.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            sySelect.innerHTML = '';
+                            sySelect.innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../includes/jqueries/reports_jq.php?room_id=${room_id}&get_sy=true`, true);
+                xhr.send();
+            }
+
+            sySelect.addEventListener('input', getSemesterRoom);
+            function getSemesterRoom(){
+                if (roomSelect.value.trim() === '') {
+                    return;
+                }
+                const room_id = roomSelect.value.trim();
+                const sy = sySelect.value.trim();
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            semesterSelect_room.innerHTML = '';
+                            semesterSelect_room.innerHTML = xhr.responseText;
+                        } else {
+                            console.log("There was a problem with the request.");
+                        }
+                    }
+                };
+                xhr.open("GET", `../includes/jqueries/reports_jq.php?room_id=${room_id}&sy=${sy}&get_semester=true`, true);
+                xhr.send();
+            }
+
 
 
             //Disable
@@ -386,11 +469,19 @@ if (!is_logged_in()) {
         handleSelectChange(schoolYearSelect, [sectionSelect, semesterSelect]);
         handleSelectChange(sectionSelect, [semesterSelect]);
 
+        //instructor form
         const schoolYearSelect_instructor = document.getElementById('school-year_instructor');
         const sectionSelect_instructor = document.getElementById('section_instructor');
         const semesterSelect_instructor = document.getElementById('semester_instructor');
         handleSelectChange(schoolYearSelect_instructor, [sectionSelect_instructor, semesterSelect_instructor]);
         handleSelectChange(sectionSelect_instructor, [semesterSelect_instructor]);
+
+        //room form
+        const roomSelect = document.getElementById('room_id');
+        const sySelect = document.getElementById('sy_room');
+        const semesterSelect_room = document.getElementById('semester_room');
+        handleSelectChange(roomSelect, [sySelect, semesterSelect_room]);
+        handleSelectChange(sySelect, [semesterSelect_room]);
     </script>
 </body>
 
