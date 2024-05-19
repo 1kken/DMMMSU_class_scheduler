@@ -94,12 +94,38 @@ if (!is_logged_in()) {
             margin: 20px 0;
             text-align: center;
         }
+
+        .btn-tomato {
+            background-color: tomato;
+            color: #fff;
+        }
+
+        .btn-tomato:hover {
+            background-color: #ff6347;
+        }
+
+        .float_top {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 10px;
+        }
+ 
     </style>
 </head>
 
 <script src="../jquery.js"></script>
 
 <body>
+    <?php if (!is_admin()) { ?>
+        <div class="float_top">
+            <form action="../includes/change_password_handler.php" method="post">
+                <div class="button-group">
+                    <button type="submit" name="log_out" class="btn-tomato">Log Out</button>
+                </div>
+            </form>
+        </div>
+    <?php } ?>
     <div class="container" id="student_form">
         <h1>Create Report Student</h1>
         <form action="../includes/report_handler.php" method="POST">
@@ -184,7 +210,7 @@ if (!is_logged_in()) {
             <input type="submit" value="Generate Report">
         </form>
     </div>
-        <div class="container" id="room_form">
+    <div class="container" id="room_form">
         <h1>Create Report Rooms</h1>
         <form action="../includes/room_report_handler.php" method="POST" id="instructor_form">
             <div class="separator">
@@ -193,7 +219,7 @@ if (!is_logged_in()) {
             <div class="form-group">
                 <label for="room_id">Room ID:</label>
                 <select id="room_id" name="room_id">
-                    <option selected value > -- select an option -- </option>;
+                    <option selected value> -- select an option -- </option>;
                     <?php
                     $rooms = get_rooms($pdo);
                     foreach ($rooms as $room) {
@@ -308,6 +334,7 @@ if (!is_logged_in()) {
             const semesterSelect_instructor = document.getElementById('semester_instructor');
 
             instructorIdInput.addEventListener('input', getSchoolYearsInstructor);
+
             function getSchoolYearsInstructor() {
                 if (instructorIdInput.value.trim() === '') {
                     return;
@@ -329,7 +356,8 @@ if (!is_logged_in()) {
             }
 
             schoolYearSelect_instructor.addEventListener('input', getSectionsInstructor);
-            function getSectionsInstructor(){
+
+            function getSectionsInstructor() {
                 if (instructorIdInput.value.trim() === '') {
                     return;
                 }
@@ -351,7 +379,8 @@ if (!is_logged_in()) {
             }
 
             sectionSelect_instructor.addEventListener('input', getSemesterInstructor);
-            function getSemesterInstructor(){
+
+            function getSemesterInstructor() {
                 if (instructorIdInput.value.trim() === '') {
                     return;
                 }
@@ -379,6 +408,7 @@ if (!is_logged_in()) {
             const semesterSelect_room = document.getElementById('semester_room');
 
             roomSelect.addEventListener('input', getSchoolYearsRoom);
+
             function getSchoolYearsRoom() {
                 if (roomSelect.value.trim() === '') {
                     return;
@@ -400,7 +430,8 @@ if (!is_logged_in()) {
             }
 
             sySelect.addEventListener('input', getSemesterRoom);
-            function getSemesterRoom(){
+
+            function getSemesterRoom() {
                 if (roomSelect.value.trim() === '') {
                     return;
                 }
@@ -428,6 +459,7 @@ if (!is_logged_in()) {
             studentIdInput.addEventListener('input', toggleReadOnly);
             instructorIdInput.addEventListener('input', toggleReadOnly);
             roomSelect.addEventListener('input', toggleReadOnly);
+
             function toggleReadOnly() {
                 const student_form = document.getElementById('student_form');
                 const instructor_form = document.getElementById('instructor_form');
@@ -437,7 +469,7 @@ if (!is_logged_in()) {
                 const hasStudentIdValue = studentIdInput.value.trim() !== '';
                 const hasInstructorIdValue = instructorIdInput.value.trim() !== '';
                 const roomSelect = document.getElementById('room_id').value.trim() !== '';
-                student_form.hidden = hasInstructorIdValue ||   roomSelect; 
+                student_form.hidden = hasInstructorIdValue || roomSelect;
                 instructor_form.hidden = hasStudentIdValue || roomSelect;
                 room_form.hidden = hasStudentIdValue || hasInstructorIdValue;
             }

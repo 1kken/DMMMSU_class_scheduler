@@ -33,17 +33,29 @@ try {
         header("LOCATION: ../index.php");
         exit();
     }
-    if ($user_type == "student") {
-        $_SESSION["user_id"] = $user['student_id'];
-        $a = $_SESSION["user_id"];
-        header("LOCATION: ../views/dashboard.php");
-        exit();
+    if ($user['admin'] == 0) {
+        if ($user_type == "student") {
+            $_SESSION["user_id"] = $user['student_id'];
+            $a = $_SESSION["user_id"];
+            header("LOCATION: ../views/create_report.php");
+            exit();
+        }
+        if ($user_type == "instructor") {
+            $_SESSION["user_id"] = $user['instructor_id'];
+            $a = $_SESSION["user_id"];
+            header("LOCATION: ../views/create_report.php");
+            exit();
+        }
     }
-    if ($user_type == "instructor") {
-        $_SESSION["user_id"] = $user['instructor_id'];
-        $a = $_SESSION["user_id"];
-        header("LOCATION: ../views/dashboard.php");
-        exit();
+
+    if ($user['admin'] == 1) {
+        if ($user_type == "instructor") {
+            $_SESSION['admin'] = 1;
+            $_SESSION["user_id"] = $user['instructor_id'];
+            $a = $_SESSION["user_id"];
+            header("LOCATION: ../views/dashboard.php");
+            exit();
+        }
     }
 } catch (PDOException $e) {
     die("Log in failed" . $e->getMessage());

@@ -8,3 +8,11 @@ function is_logged_in()
     }
     return false;
 }
+
+function is_admin()
+{
+    if(isset($_SESSION["admin"])){
+        return true;
+    }
+    return false;
+}

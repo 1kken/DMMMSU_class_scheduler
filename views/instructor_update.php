@@ -11,6 +11,11 @@ if (!is_logged_in()) {
     header("LOCATION: ../index.php");
     exit();
 }
+
+if(!is_admin()){
+    header("LOCATION: ./create_report.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

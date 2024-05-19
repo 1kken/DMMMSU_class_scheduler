@@ -5,6 +5,15 @@ require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/subject_instructor/subject_instructor_model.php");
 require_once(APP_NAME . "includes/subject_instructor/subject_instructor_view.php");
+if (!is_logged_in()) {
+    header("LOCATION: ../index.php");
+    exit();
+}
+
+if(!is_admin()){
+    header("LOCATION: ./create_report.php");
+    exit();
+}
 
 // Check if subject ID and instructor ID are provided
 if (empty($_GET['si_id'])) {

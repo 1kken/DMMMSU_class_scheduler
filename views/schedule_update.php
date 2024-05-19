@@ -6,6 +6,15 @@ require_once(APP_NAME . "includes/database_header.php");
 require_once(APP_NAME . "includes/schedule/schedule_model.php");
 require_once(APP_NAME . "includes/schedule/schedule_view.php");
 require_once(APP_NAME . "includes/schedule/schedule_view.php");
+if (!is_logged_in()) {
+    header("LOCATION: ../index.php");
+    exit();
+}
+
+if(!is_admin()){
+    header("LOCATION: ./create_report.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

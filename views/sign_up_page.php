@@ -4,8 +4,13 @@ require_once(APP_NAME . "includes/config_session.inc.php");
 require_once(APP_NAME . "includes/signup/signup_view.php");
 require_once(APP_NAME . "includes/authorization.php");
 if (is_logged_in()) {
-    header("LOCATION: ./views/dashboard.php");
-    exit();
+    if (is_admin()) {
+        header("LOCATION: ./dashboard.php");
+        exit();
+    } else {
+        header("LOCATION: ./create_report.php");
+        exit();
+    }
 }
 ?>
 <!DOCTYPE html>
